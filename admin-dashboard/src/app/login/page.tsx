@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useAuthStore } from '@/store/authStore';
 import { authService } from '@/services/auth.service';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Waves, Lock, Mail, ArrowRight, Sparkles, ShieldCheck } from 'lucide-react';
+import { Lock, Mail, ArrowRight, Sparkles, ShieldCheck } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -50,9 +51,16 @@ export default function LoginPage() {
         {/* Logo Badge */}
         <div className="flex justify-center mb-8 animate-fade-in">
           <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
-            <div className="relative h-20 w-20 rounded-2xl bg-gradient-to-br from-cyan-400 via-cyan-500 to-blue-600 flex items-center justify-center shadow-2xl ring-4 ring-white/10 group-hover:scale-110 transition-transform duration-300">
-              <Waves className="h-10 w-10 text-white" />
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full blur-2xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
+            <div className="relative h-24 w-24 rounded-full bg-white flex items-center justify-center shadow-2xl ring-4 ring-white/10 group-hover:scale-110 transition-transform duration-300 overflow-hidden">
+              <Image
+                src="/logo/logo.png"
+                alt="Aguamarina Mosaicos Logo"
+                width={96}
+                height={96}
+                className="object-contain"
+                priority
+              />
             </div>
           </div>
         </div>
