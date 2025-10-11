@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import {
   LayoutDashboard,
@@ -12,7 +13,6 @@ import {
   Settings,
   LogOut,
   ChevronRight,
-  Waves,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '../ui/button';
@@ -42,8 +42,15 @@ export function Sidebar() {
         <div className="flex items-center gap-3 mb-2">
           <div className="relative">
             <div className="absolute inset-0 bg-cyan-500 blur-lg opacity-50 rounded-full"></div>
-            <div className="relative h-12 w-12 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-lg transform hover:scale-105 transition-transform">
-              <Waves className="h-7 w-7 text-white" />
+            <div className="relative h-16 w-16 rounded-full bg-white flex items-center justify-center shadow-lg transform hover:scale-105 transition-transform overflow-hidden">
+              <Image
+                src="/logo/logo.png"
+                alt="Aguamarina Mosaicos Logo"
+                width={64}
+                height={64}
+                className="object-contain"
+                priority
+              />
             </div>
           </div>
           <div>
