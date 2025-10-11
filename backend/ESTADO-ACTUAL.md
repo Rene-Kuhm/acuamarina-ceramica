@@ -1,4 +1,4 @@
-# 📊 Estado Actual del Backend - Acuamarina Cerámicos
+# 📊 Estado Actual del Backend - Aguamarina Mosaicos
 
 ## ✅ Completado hasta ahora:
 
@@ -50,7 +50,7 @@ El backend está diseñado para PostgreSQL. Tienes 2 opciones:
 - Instala también pgAdmin (viene incluido)
 
 **Paso 3: Crear la base de datos**
-- Opción 1: Abre pgAdmin → Create Database → Nombre: `acuamarina_ceramicos`
+- Opción 1: Abre pgAdmin → Create Database → Nombre: `aguamarina_mosaicos`
 - Opción 2: Usa el archivo `INSTRUCCIONES-DB.md` que creé
 
 **Paso 4: Actualizar .env**
@@ -147,7 +147,7 @@ npm run format        # Formatear código
 ## 📝 Usuario admin por defecto:
 
 Después de ejecutar seeds:
-- **Email:** admin@acuamarina.com
+- **Email:** admin@aguamarina.com
 - **Password:** Admin123!
 
 ## 💡 ¿Qué quieres hacer ahora?
@@ -155,7 +155,7 @@ Después de ejecutar seeds:
 1. **Instalar PostgreSQL** → Sigue las instrucciones arriba
 2. **Probar sin DB** → Te creo una versión simplificada
 3. **Ver el código** → Abre el proyecto en VSCode
-4. **Continuar más tarde** → Todo está guardado en `D:\acuamarina-ceramicos\backend`
+4. **Continuar más tarde** → Todo está guardado en `D:\aguamarina-mosaicos\backend`
 
 ## 📞 Si necesitas ayuda:
 

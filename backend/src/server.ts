@@ -62,7 +62,7 @@ app.use((req, res, next) => {
 // Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: 'API Acuamarina - Documentación',
+  customSiteTitle: 'API aguamarina - Documentación',
 }));
 
 // Swagger JSON
@@ -141,7 +141,7 @@ apiRouter.use('/export', exportRoutes);
 // API info endpoint
 apiRouter.get('/', (req, res) => {
   res.json({
-    message: 'API Acuamarina Cerámicos',
+    message: 'API Aguamarina Mosaicos',
     version: config.apiVersion,
     endpoints: {
       auth: '/auth',
@@ -186,7 +186,7 @@ const startServer = async () => {
     // Iniciar servidor
     server = app.listen(config.port, () => {
       logger.info('===========================================');
-      logger.info('🚀 Servidor Acuamarina Cerámicos iniciado');
+      logger.info('🚀 Servidor Aguamarina Mosaicos iniciado');
       logger.info(`   Entorno: ${config.nodeEnv}`);
       logger.info(`   Puerto: ${config.port}`);
       logger.info(`   API: http://localhost:${config.port}/api/${config.apiVersion}`);

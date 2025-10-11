@@ -6,7 +6,7 @@
 2. Conecta a tu servidor PostgreSQL (generalmente `localhost`)
 3. Click derecho en **"Databases"**
 4. Selecciona **"Create" → "Database..."**
-5. En el campo **"Database"** escribe: `acuamarina_ceramicos`
+5. En el campo **"Database"** escribe: `aguamarina_mosaicos`
 6. Click en **"Save"**
 
 ¡Listo! Ahora puedes ejecutar las migraciones.
@@ -16,7 +16,7 @@
 Si tienes PostgreSQL en el PATH:
 
 \`\`\`bash
-createdb -U postgres acuamarina_ceramicos
+createdb -U postgres aguamarina_mosaicos
 \`\`\`
 
 ## Opción 3: Desde psql
@@ -26,7 +26,7 @@ createdb -U postgres acuamarina_ceramicos
 psql -U postgres
 
 # Crear la base de datos
-CREATE DATABASE acuamarina_ceramicos;
+CREATE DATABASE aguamarina_mosaicos;
 
 # Verificar
 \l

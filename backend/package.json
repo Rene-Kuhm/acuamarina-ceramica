@@ -1,7 +1,7 @@
 {
-  "name": "acuamarina-ceramicos-backend",
+  "name": "aguamarina-mosaicos-backend",
   "version": "1.0.0",
-  "description": "Backend profesional para tienda Acuamarina Cerámicos con PostgreSQL",
+  "description": "Backend profesional para tienda Aguamarina Mosaicos con PostgreSQL",
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
@@ -23,7 +23,7 @@
     "typescript",
     "clean-architecture"
   ],
-  "author": "Acuamarina Cerámicos",
+  "author": "Aguamarina Mosaicos",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",

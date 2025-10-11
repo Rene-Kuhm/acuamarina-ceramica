@@ -5,7 +5,23 @@ import { useOrders } from '@/hooks/useOrders';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Eye, Download } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Search, Eye, Download, PackageX, Filter, ShoppingBag } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import Link from 'next/link';
 import { exportService } from '@/services/export.service';
@@ -82,35 +98,41 @@ export default function OrdersPage() {
     return labels[status] || status;
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6 animate-fade-in">
+      {/* Header */}
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Pedidos</h1>
-          <p className="text-muted-foreground">Gestiona todos los pedidos de la tienda</p>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+            Pedidos
+          </h1>
+          <p className="text-muted-foreground mt-1">
+            Gestiona todos los pedidos de la tienda
+          </p>
         </div>
-        <Button variant="outline" onClick={handleExport} disabled={isExporting}>
+        <Button
+          variant="outline"
+          onClick={handleExport}
+          disabled={isExporting}
+          className="border-cyan-500/20 hover:bg-cyan-500/10"
+        >
           <Download className="mr-2 h-4 w-4" />
-          {isExporting ? 'Exportando...' : 'Exportar CSV'}
+          {isExporting ? 'Exportando...' : 'Exportar'}
         </Button>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Filtros</CardTitle>
+      {/* Filtros */}
+      <Card className="border-slate-200">
+        <CardHeader className="border-b bg-slate-50/50">
+          <div className="flex items-center gap-2">
+            <Filter className="h-5 w-5 text-cyan-600" />
+            <CardTitle className="text-lg">Filtros</CardTitle>
+          </div>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <CardContent className="pt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
                 placeholder="Buscar por número de pedido..."
                 value={search}
@@ -118,114 +140,148 @@ export default function OrdersPage() {
                   setSearch(e.target.value);
                   setPage(1);
                 }}
-                className="pl-10"
+                className="pl-10 h-11"
               />
             </div>
-            <select
-              value={statusFilter}
-              onChange={(e) => {
-                setStatusFilter(e.target.value);
-                setPage(1);
-              }}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Todos los estados</option>
-              <option value="pending">Pendiente</option>
-              <option value="confirmed">Confirmado</option>
-              <option value="processing">Procesando</option>
-              <option value="shipped">Enviado</option>
-              <option value="delivered">Entregado</option>
-              <option value="cancelled">Cancelado</option>
-            </select>
+            <Select value={statusFilter} onValueChange={(value) => {
+              setStatusFilter(value);
+              setPage(1);
+            }}>
+              <SelectTrigger className="h-11">
+                <SelectValue placeholder="Todos los estados" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos los estados</SelectItem>
+                <SelectItem value="pending">Pendiente</SelectItem>
+                <SelectItem value="confirmed">Confirmado</SelectItem>
+                <SelectItem value="processing">Procesando</SelectItem>
+                <SelectItem value="shipped">Enviado</SelectItem>
+                <SelectItem value="delivered">Entregado</SelectItem>
+                <SelectItem value="cancelled">Cancelado</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Lista de Pedidos</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left py-3 px-4 font-medium">Número</th>
-                  <th className="text-left py-3 px-4 font-medium">Cliente</th>
-                  <th className="text-left py-3 px-4 font-medium">Total</th>
-                  <th className="text-left py-3 px-4 font-medium">Estado</th>
-                  <th className="text-left py-3 px-4 font-medium">Pago</th>
-                  <th className="text-left py-3 px-4 font-medium">Fecha</th>
-                  <th className="text-left py-3 px-4 font-medium">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {!data?.data || data.data.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="text-center py-8 text-muted-foreground">
-                      No se encontraron pedidos
-                    </td>
-                  </tr>
-                ) : (
-                  data.data.map((order) => (
-                    <tr key={order.id} className="border-b hover:bg-gray-50">
-                      <td className="py-3 px-4">
-                        <span className="font-mono font-medium">{order.order_number}</span>
-                      </td>
-                      <td className="py-3 px-4">
-                        <div>
-                          <p className="font-medium">{order.customer_name || 'N/A'}</p>
-                          <p className="text-sm text-muted-foreground">{order.customer_email}</p>
-                        </div>
-                      </td>
-                      <td className="py-3 px-4 font-medium">{formatCurrency(order.total_amount)}</td>
-                      <td className="py-3 px-4">
-                        <span className={`px-2 py-1 rounded-full text-xs ${getStatusBadgeColor(order.status)}`}>
-                          {getStatusLabel(order.status)}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4">
-                        <span className={`px-2 py-1 rounded-full text-xs ${getPaymentStatusBadgeColor(order.payment_status)}`}>
-                          {getPaymentStatusLabel(order.payment_status)}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-sm">
-                        {new Date(order.created_at).toLocaleDateString('es-ES')}
-                      </td>
-                      <td className="py-3 px-4">
-                        <Link href={`/dashboard/orders/${order.id}`}>
-                          <Button variant="outline" size="sm">
-                            <Eye className="h-4 w-4 mr-1" />
-                            Ver
-                          </Button>
-                        </Link>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+      {/* Lista de Pedidos */}
+      <Card className="border-slate-200 shadow-sm">
+        <CardHeader className="border-b bg-slate-50/50">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <ShoppingBag className="h-5 w-5 text-cyan-600" />
+              <CardTitle className="text-lg">Lista de Pedidos</CardTitle>
+            </div>
+            {data?.data && (
+              <Badge variant="secondary" className="font-mono">
+                {data.data.length} pedidos
+              </Badge>
+            )}
           </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          {isLoading ? (
+            <div className="text-center py-12">
+              <div className="inline-flex items-center gap-2 text-muted-foreground">
+                <div className="h-4 w-4 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin" />
+                Cargando pedidos...
+              </div>
+            </div>
+          ) : !data?.data || data.data.length === 0 ? (
+            <div className="text-center py-12">
+              <PackageX className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
+              <p className="text-lg font-medium text-slate-700">No hay pedidos</p>
+              <p className="text-sm text-muted-foreground">
+                Los pedidos aparecerán aquí cuando se realicen compras
+              </p>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="font-semibold">Número</TableHead>
+                  <TableHead className="font-semibold">Cliente</TableHead>
+                  <TableHead className="text-right font-semibold">Total</TableHead>
+                  <TableHead className="font-semibold">Estado</TableHead>
+                  <TableHead className="font-semibold">Pago</TableHead>
+                  <TableHead className="font-semibold">Fecha</TableHead>
+                  <TableHead className="text-right font-semibold">Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.data.map((order) => (
+                  <TableRow key={order.id} className="group">
+                    <TableCell className="font-mono font-semibold text-cyan-700">
+                      #{order.order_number}
+                    </TableCell>
+                    <TableCell>
+                      <div>
+                        <p className="font-medium text-slate-900">{order.customer_name || 'N/A'}</p>
+                        <p className="text-sm text-muted-foreground">{order.customer_email}</p>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right font-semibold">
+                      {formatCurrency(order.total_amount)}
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={getStatusBadgeColor(order.status)}>
+                        {getStatusLabel(order.status)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className={getPaymentStatusBadgeColor(order.payment_status)}>
+                        {getPaymentStatusLabel(order.payment_status)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {new Date(order.created_at).toLocaleDateString('es-ES', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                      })}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Link href={`/dashboard/orders/${order.id}`}>
+                        <Button variant="ghost" size="sm" className="group-hover:bg-slate-100">
+                          <Eye className="h-4 w-4 mr-1" />
+                          Ver Detalle
+                        </Button>
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
 
           {data?.pagination && data.pagination.totalPages > 1 && (
-            <div className="flex justify-center gap-2 mt-4">
-              <Button
-                variant="outline"
-                onClick={() => setPage(page - 1)}
-                disabled={page === 1}
-              >
-                Anterior
-              </Button>
-              <span className="px-4 py-2">
-                Página {page} de {data.pagination.totalPages}
-              </span>
-              <Button
-                variant="outline"
-                onClick={() => setPage(page + 1)}
-                disabled={page === data.pagination.totalPages}
-              >
-                Siguiente
-              </Button>
+            <div className="flex items-center justify-between p-4 border-t bg-slate-50/50">
+              <div className="text-sm text-muted-foreground">
+                Mostrando {(page - 1) * 20 + 1} - {Math.min(page * 20, data.pagination.total)} de {data.pagination.total} pedidos
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPage(page - 1)}
+                  disabled={page === 1}
+                >
+                  Anterior
+                </Button>
+                <div className="flex items-center gap-1 px-3">
+                  <span className="text-sm font-medium">{page}</span>
+                  <span className="text-sm text-muted-foreground">de</span>
+                  <span className="text-sm font-medium">{data.pagination.totalPages}</span>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPage(page + 1)}
+                  disabled={page === data.pagination.totalPages}
+                >
+                  Siguiente
+                </Button>
+              </div>
             </div>
           )}
         </CardContent>

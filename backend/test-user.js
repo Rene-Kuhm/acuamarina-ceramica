@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const pool = new Pool({
   host: 'localhost',
   port: 5432,
-  database: 'acuamarina_ceramicos',
+  database: 'aguamarina_mosaicos',
   user: 'postgres',
   password: '198540',
 });
@@ -14,7 +14,7 @@ async function testUser() {
     // Check if user exists
     const result = await pool.query(
       'SELECT id, email, password_hash, first_name, last_name, role, is_active FROM users WHERE email = $1',
-      ['admin@acuamarina.com']
+      ['admin@aguamarina.com']
     );
 
     console.log('Query result:', result.rows);
@@ -32,7 +32,7 @@ async function testUser() {
       const match = await bcrypt.compare(testPassword, user.password_hash);
       console.log('\nPassword "Admin123!" matches:', match);
     } else {
-      console.log('No user found with email admin@acuamarina.com');
+      console.log('No user found with email admin@aguamarina.com');
     }
 
     await pool.end();

@@ -1,11 +1,11 @@
-# Verificación del Backend - Acuamarina Cerámicos
+# Verificación del Backend - Aguamarina Mosaicos
 
 ## Estado del Servidor: ✅ FUNCIONANDO AL 100%
 
 ### Información del Servidor
 - **Puerto:** 3000
 - **Entorno:** development
-- **Base de Datos:** PostgreSQL (acuamarina_ceramicos)
+- **Base de Datos:** PostgreSQL (aguamarina_mosaicos)
 - **Host DB:** localhost:5432
 - **API Version:** v1
 
@@ -31,7 +31,7 @@ curl http://localhost:3000/api/v1
 **Respuesta:** ✅ OK
 ```json
 {
-  "message": "API Acuamarina Cerámicos",
+  "message": "API Aguamarina Mosaicos",
   "version": "v1",
   "endpoints": {
     "auth": "/auth",
@@ -145,10 +145,10 @@ Los logs muestran:
 ```
 2025-10-11 08:56:12 [info]: Nueva conexión establecida al pool de PostgreSQL
 2025-10-11 08:56:12 [info]: ✓ Conexión exitosa a PostgreSQL
-2025-10-11 08:56:12 [info]:   Base de datos: acuamarina_ceramicos
+2025-10-11 08:56:12 [info]:   Base de datos: aguamarina_mosaicos
 2025-10-11 08:56:12 [info]:   Host: localhost:5432
 2025-10-11 08:56:12 [info]: ===========================================
-2025-10-11 08:56:12 [info]: 🚀 Servidor Acuamarina Cerámicos iniciado
+2025-10-11 08:56:12 [info]: 🚀 Servidor Aguamarina Mosaicos iniciado
 2025-10-11 08:56:12 [info]:    Entorno: development
 2025-10-11 08:56:12 [info]:    Puerto: 3000
 2025-10-11 08:56:12 [info]:    API: http://localhost:3000/api/v1

@@ -4,12 +4,12 @@ export const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'API Acuamarina Cerámicos',
+      title: 'API Aguamarina Mosaicos',
       version: '1.0.0',
       description: 'API profesional para la gestión de tienda de cerámicos con PostgreSQL',
       contact: {
-        name: 'Acuamarina Cerámicos',
-        email: 'soporte@acuamarina.com',
+        name: 'Aguamarina Mosaicos',
+        email: 'soporte@aguamarina.com',
       },
       license: {
         name: 'MIT',
@@ -22,7 +22,7 @@ export const swaggerOptions = {
         description: 'Servidor de desarrollo',
       },
       {
-        url: `https://api.acuamarina.com/api/${config.apiVersion}`,
+        url: `https://api.aguamarina.com/api/${config.apiVersion}`,
         description: 'Servidor de producción',
       },
     ],
@@ -211,7 +211,7 @@ export const swaggerOptions = {
             email: {
               type: 'string',
               format: 'email',
-              example: 'admin@acuamarina.com',
+              example: 'admin@aguamarina.com',
             },
             password: {
               type: 'string',

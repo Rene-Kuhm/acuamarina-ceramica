@@ -1,4 +1,4 @@
-# Auditoría Backend Profesional - Acuamarina Cerámicos
+# Auditoría Backend Profesional - Aguamarina Mosaicos
 
 ## Resumen Ejecutivo
 

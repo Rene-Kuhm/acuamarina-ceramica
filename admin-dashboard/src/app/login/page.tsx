@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Waves, Lock, Mail, ArrowRight, Sparkles, ShieldCheck } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -36,60 +37,136 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
-            Acuamarina Cerámicos
-          </CardTitle>
-          <CardDescription className="text-center">
-            Panel de Administración
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="admin@acuamarina.com"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-                disabled={isLoading}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Contraseña</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                required
-                disabled={isLoading}
-              />
-            </div>
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 relative overflow-hidden">
+      {/* Animated background effects */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-700"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-full blur-3xl"></div>
+      </div>
 
-            {error && (
-              <div className="p-3 text-sm text-red-500 bg-red-50 rounded-md border border-red-200">
-                {error}
+      {/* Login Card */}
+      <div className="relative z-10 w-full max-w-md">
+        {/* Logo Badge */}
+        <div className="flex justify-center mb-8 animate-fade-in">
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+            <div className="relative h-20 w-20 rounded-2xl bg-gradient-to-br from-cyan-400 via-cyan-500 to-blue-600 flex items-center justify-center shadow-2xl ring-4 ring-white/10 group-hover:scale-110 transition-transform duration-300">
+              <Waves className="h-10 w-10 text-white" />
+            </div>
+          </div>
+        </div>
+
+        <Card className="border-slate-700/50 bg-slate-900/90 backdrop-blur-xl shadow-2xl animate-slide-in">
+          <CardHeader className="space-y-3 text-center pb-8">
+            <div className="flex justify-center">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-medium">
+                <Sparkles className="h-3.5 w-3.5" />
+                Sistema Premium
+              </span>
+            </div>
+            <CardTitle className="text-3xl font-bold">
+              <span className="bg-gradient-to-r from-cyan-400 via-cyan-300 to-blue-400 bg-clip-text text-transparent">
+                Aguamarina Mosaicos
+              </span>
+            </CardTitle>
+            <CardDescription className="text-slate-400 text-base">
+              Panel de Administración Empresarial
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Email Field */}
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-slate-300 font-medium flex items-center gap-2">
+                  <Mail className="h-4 w-4 text-cyan-400" />
+                  Email
+                </Label>
+                <div className="relative group">
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="admin@acuamarina.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                    disabled={isLoading}
+                    className="bg-slate-800/50 border-slate-700/50 text-white placeholder:text-slate-500 focus:border-cyan-500/50 focus:ring-cyan-500/20 h-12 px-4 group-hover:border-cyan-500/30 transition-colors"
+                  />
+                </div>
               </div>
-            )}
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
-            </Button>
+              {/* Password Field */}
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-slate-300 font-medium flex items-center gap-2">
+                  <Lock className="h-4 w-4 text-cyan-400" />
+                  Contraseña
+                </Label>
+                <div className="relative group">
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    required
+                    disabled={isLoading}
+                    className="bg-slate-800/50 border-slate-700/50 text-white placeholder:text-slate-500 focus:border-cyan-500/50 focus:ring-cyan-500/20 h-12 px-4 group-hover:border-cyan-500/30 transition-colors"
+                  />
+                </div>
+              </div>
 
-            <div className="text-xs text-center text-muted-foreground mt-4">
-              <p>Credenciales de prueba:</p>
-              <p className="font-mono">admin@acuamarina.com / Admin123!</p>
+              {/* Error Message */}
+              {error && (
+                <div className="p-4 text-sm text-red-300 bg-red-500/10 rounded-xl border border-red-500/20 flex items-start gap-3 animate-fade-in">
+                  <ShieldCheck className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
+                  <span>{error}</span>
+                </div>
+              )}
+
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                className="w-full h-12 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold shadow-lg hover:shadow-cyan-500/50 transition-all duration-300 group relative overflow-hidden"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <span className="flex items-center gap-2">
+                    <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    Iniciando sesión...
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    Iniciar Sesión
+                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                )}
+              </Button>
+            </form>
+
+            {/* Demo Credentials */}
+            <div className="pt-4 border-t border-slate-700/50">
+              <div className="text-center space-y-2">
+                <p className="text-xs text-slate-400 font-medium">Credenciales de prueba</p>
+                <div className="inline-flex flex-col gap-1 px-4 py-3 bg-slate-800/30 rounded-lg border border-slate-700/30">
+                  <p className="text-xs text-cyan-400 font-mono">admin@aguamarina.com</p>
+                  <p className="text-xs text-slate-400">•••••••</p>
+                  <p className="text-xs text-cyan-400 font-mono">Admin123!</p>
+                </div>
+              </div>
             </div>
-          </form>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+
+        {/* Footer Badge */}
+        <div className="mt-8 text-center animate-fade-in">
+          <p className="text-sm text-slate-400">
+            Protegido con{' '}
+            <span className="text-cyan-400 font-semibold">autenticación JWT</span>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

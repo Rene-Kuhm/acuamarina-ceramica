@@ -1,4 +1,4 @@
-name: CI - Backend Acuamarina
+name: CI - Backend aguamarina
 
 on:
   push:
@@ -42,7 +42,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: acuamarina_ceramicos_test
+          POSTGRES_DB: aguamarina_mosaicos_test
         ports:
           - 5432:5432
         options: >-
@@ -70,7 +70,7 @@ jobs:
           NODE_ENV: test
           DB_HOST: localhost
           DB_PORT: 5432
-          DB_NAME: acuamarina_ceramicos_test
+          DB_NAME: aguamarina_mosaicos_test
           DB_USER: postgres
           DB_PASSWORD: postgres
           JWT_SECRET: test_secret
@@ -155,7 +155,7 @@ jobs:
         with:
           context: .
           push: false
-          tags: acuamarina-backend:test
+          tags: aguamarina-backend:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -164,7 +164,7 @@ jobs:
           docker run -d -p 3000:3000 --name test-container \
             -e NODE_ENV=production \
             -e PORT=3000 \
-            acuamarina-backend:test
+            aguamarina-backend:test
 
           echo "Waiting for container to start..."
           sleep 10

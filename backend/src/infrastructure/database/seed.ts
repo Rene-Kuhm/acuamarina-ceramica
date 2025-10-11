@@ -16,7 +16,7 @@ const seedDatabase = async () => {
       `INSERT INTO users (email, password_hash, role, first_name, last_name, is_active, email_verified)
        VALUES ($1, $2, $3, $4, $5, $6, $7)
        ON CONFLICT (email) DO NOTHING`,
-      ['admin@acuamarina.com', hashedPassword, 'admin', 'Admin', 'Acuamarina', true, true]
+      ['admin@aguamarina.com', hashedPassword, 'admin', 'Admin', 'aguamarina', true, true]
     );
 
     logger.info('✓ Usuario admin creado');
@@ -25,7 +25,7 @@ const seedDatabase = async () => {
     const categoriesData = [
       {
         name: 'Pisos Cerámicos',
-        slug: 'pisos-ceramicos',
+        slug: 'pisos-mosaicos',
         description: 'Cerámicos de alta calidad para pisos interiores y exteriores',
         displayOrder: 1,
       },
@@ -69,7 +69,7 @@ const seedDatabase = async () => {
     // Obtener ID de categoría para productos de ejemplo
     const categoryResult = await pool.query(
       `SELECT id FROM categories WHERE slug = $1`,
-      ['pisos-ceramicos']
+      ['pisos-mosaicos']
     );
 
     if (categoryResult.rows.length > 0) {

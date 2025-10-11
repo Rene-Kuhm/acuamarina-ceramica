@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Acuamarina Cerámicos - Admin Dashboard",
+  title: "Aguamarina Mosaicos - Admin Dashboard",
   description: "Panel de administración para gestión de productos y pedidos",
 };
 

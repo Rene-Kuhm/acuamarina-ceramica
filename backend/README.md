@@ -1,4 +1,4 @@
-# Backend Acuamarina Cerámicos
+# Backend Aguamarina Mosaicos
 
 Backend profesional para tienda de cerámicos construido con Node.js, TypeScript, PostgreSQL y Clean Architecture.
 
@@ -53,7 +53,7 @@ backend/
 ### 1. Instalar dependencias
 
 \`\`\`bash
-cd D:\\acuamarina-ceramicos\\backend
+cd D:\\aguamarina-mosaicos\\backend
 npm install
 \`\`\`
 
@@ -71,7 +71,7 @@ Edita el archivo \`.env\` con tus credenciales:
 # Base de datos PostgreSQL
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=acuamarina_ceramicos
+DB_NAME=aguamarina_mosaicos
 DB_USER=postgres
 DB_PASSWORD=tu_contraseña
 
@@ -92,7 +92,7 @@ CLOUDINARY_API_SECRET=tu_api_secret
 psql -U postgres
 
 # Crear la base de datos
-CREATE DATABASE acuamarina_ceramicos;
+CREATE DATABASE aguamarina_mosaicos;
 
 # Salir
 \\q
@@ -153,7 +153,7 @@ npm test              # Tests (cuando se implementen)
 
 Después de ejecutar los seeds, puedes acceder con:
 
-- **Email**: admin@acuamarina.com
+- **Email**: admin@aguamarina.com
 - **Password**: Admin123!
 
 ⚠️ **IMPORTANTE**: Cambia esta contraseña inmediatamente en producción.
@@ -265,4 +265,4 @@ MIT
 
 ## Contacto
 
-Para soporte o preguntas, contacta al equipo de desarrollo de Acuamarina Cerámicos.
+Para soporte o preguntas, contacta al equipo de desarrollo de Aguamarina Mosaicos.

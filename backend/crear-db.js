@@ -19,14 +19,14 @@ async function createDatabase() {
     // Verificar si la base de datos ya existe
     const result = await client.query(
       `SELECT 1 FROM pg_database WHERE datname = $1`,
-      [process.env.DB_NAME || 'acuamarina_ceramicos']
+      [process.env.DB_NAME || 'aguamarina_mosaicos']
     );
 
     if (result.rows.length > 0) {
       console.log(`✓ La base de datos '${process.env.DB_NAME}' ya existe`);
     } else {
       // Crear la base de datos
-      await client.query(`CREATE DATABASE ${process.env.DB_NAME || 'acuamarina_ceramicos'}`);
+      await client.query(`CREATE DATABASE ${process.env.DB_NAME || 'aguamarina_mosaicos'}`);
       console.log(`✓ Base de datos '${process.env.DB_NAME}' creada exitosamente`);
     }
 

@@ -1,11 +1,11 @@
-# 🎉 ¡BACKEND ACUAMARINA CERÁMICOS FUNCIONANDO!
+# 🎉 ¡BACKEND Aguamarina Mosaicos FUNCIONANDO!
 
 ## ✅ Todo está configurado y funcionando
 
 ### Lo que se completó exitosamente:
 
 1. ✅ **Dependencias instaladas** (615 paquetes)
-2. ✅ **Base de datos PostgreSQL creada** (`acuamarina_ceramicos`)
+2. ✅ **Base de datos PostgreSQL creada** (`aguamarina_mosaicos`)
 3. ✅ **Migraciones ejecutadas** (11 tablas creadas)
 4. ✅ **Seeds ejecutados** (datos de prueba cargados)
 5. ✅ **Servidor funcionando** en puerto 3000
@@ -17,13 +17,13 @@
 ### Iniciar el servidor:
 
 \`\`\`bash
-cd D:\\acuamarina-ceramicos\\backend
+cd D:\\aguamarina-mosaicos\\backend
 npm run dev
 \`\`\`
 
 Verás este mensaje cuando esté corriendo:
 \`\`\`
-🚀 Servidor Acuamarina Cerámicos iniciado
+🚀 Servidor Aguamarina Mosaicos iniciado
    Entorno: development
    Puerto: 3000
    API: http://localhost:3000/api/v1
@@ -53,7 +53,7 @@ GET http://localhost:3000/api/v1
 Respuesta:
 \`\`\`json
 {
-  "message": "API Acuamarina Cerámicos",
+  "message": "API Aguamarina Mosaicos",
   "version": "v1",
   "endpoints": {
     "auth": "/auth",
@@ -72,7 +72,7 @@ Respuesta:
 ### Conexión:
 - **Host:** localhost
 - **Puerto:** 5432
-- **Base de datos:** acuamarina_ceramicos
+- **Base de datos:** aguamarina_mosaicos
 - **Usuario:** postgres
 - **Password:** 198540
 
@@ -92,7 +92,7 @@ Respuesta:
 ### Datos de prueba cargados:
 
 **Usuario Admin:**
-- Email: `admin@acuamarina.com`
+- Email: `admin@aguamarina.com`
 - Password: `Admin123!`
 - Rol: admin
 
@@ -182,13 +182,13 @@ node test-api.js
 ### Con pgAdmin:
 1. Abre pgAdmin
 2. Servers → PostgreSQL → Databases
-3. Busca `acuamarina_ceramicos`
+3. Busca `aguamarina_mosaicos`
 4. Schemas → public → Tables
 5. Click derecho en cualquier tabla → View/Edit Data → All Rows
 
 ### Con psql (línea de comandos):
 \`\`\`bash
-psql -U postgres -d acuamarina_ceramicos
+psql -U postgres -d aguamarina_mosaicos
 
 # Ver usuarios
 SELECT * FROM users;
@@ -281,4 +281,4 @@ Tu backend profesional está completamente funcional. Ahora puedes:
 
 ---
 
-**¡Éxito con tu proyecto Acuamarina Cerámicos!** 🏺✨
+**¡Éxito con tu proyecto Aguamarina Mosaicos!** 🏺✨

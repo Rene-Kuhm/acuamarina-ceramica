@@ -1,9 +1,9 @@
-# Estructura Completa del Backend - Acuamarina Cerámicos
+# Estructura Completa del Backend - Aguamarina Mosaicos
 
 ## 📁 Árbol de Directorios
 
 \`\`\`
-D:\\acuamarina-ceramicos\\backend\\
+D:\\aguamarina-mosaicos\\backend\\
 │
 ├── 📄 package.json                    # Dependencias y scripts
 ├── 📄 tsconfig.json                   # Configuración TypeScript
@@ -247,7 +247,7 @@ cp .env.example .env
 # Editar .env con tus credenciales
 
 # 3. Crear DB
-createdb acuamarina_ceramicos
+createdb aguamarina_mosaicos
 
 # 4. Migrar
 npm run db:migrate

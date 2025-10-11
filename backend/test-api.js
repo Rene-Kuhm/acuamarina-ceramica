@@ -1,7 +1,7 @@
 // Script para probar el API
 const http = require('http');
 
-console.log('🧪 Probando el backend Acuamarina Cerámicos...\n');
+console.log('🧪 Probando el backend Aguamarina Mosaicos...\n');
 
 // Función helper para hacer requests
 function makeRequest(path) {
@@ -75,7 +75,7 @@ async function runTests() {
 
   console.log('\n\n🎉 ¡Backend funcionando correctamente!');
   console.log('\n📚 Datos creados:');
-  console.log('   - Usuario admin: admin@acuamarina.com / Admin123!');
+  console.log('   - Usuario admin: admin@aguamarina.com / Admin123!');
   console.log('   - 5 categorías de productos');
   console.log('   - 2 productos de ejemplo');
   console.log('\n💡 Próximos pasos:');

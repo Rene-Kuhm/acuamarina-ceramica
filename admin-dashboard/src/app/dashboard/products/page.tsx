@@ -6,24 +6,72 @@ import { useProducts, useDeleteProduct } from '@/hooks/useProducts';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Plus, Search, Edit, Trash2, Download } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/dialog';
+import { Plus, Search, Edit, Trash2, Download, MoreHorizontal, Eye, PackageX } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import { exportService } from '@/services/export.service';
 import { toast } from 'sonner';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
 
 export default function ProductsPage() {
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
   const [isExporting, setIsExporting] = useState(false);
-  const { data, isLoading } = useProducts({ search });
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState<{ id: string; name: string } | null>(null);
+
+  const { data, isLoading } = useProducts({ search, page, limit: 10 });
   const deleteProduct = useDeleteProduct();
 
-  const handleDelete = async (id: string, name: string) => {
-    if (window.confirm(`¿Estás seguro de eliminar "${name}"?`)) {
-      try {
-        await deleteProduct.mutateAsync(id);
-      } catch (error) {
-        alert('Error al eliminar el producto');
-      }
+  const handleDeleteClick = (id: string, name: string) => {
+    setProductToDelete({ id, name });
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!productToDelete) return;
+
+    try {
+      await deleteProduct.mutateAsync(productToDelete.id);
+      toast.success('Producto eliminado correctamente');
+      setDeleteDialogOpen(false);
+      setProductToDelete(null);
+    } catch (error) {
+      toast.error('Error al eliminar el producto');
     }
   };
 
@@ -40,19 +88,29 @@ export default function ProductsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Productos</h1>
-          <p className="text-muted-foreground">Gestiona el catálogo de productos</p>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+            Productos
+          </h1>
+          <p className="text-muted-foreground mt-1">
+            Gestiona el catálogo de productos y mosaicos
+          </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={handleExport} disabled={isExporting}>
+          <Button
+            variant="outline"
+            onClick={handleExport}
+            disabled={isExporting}
+            className="border-cyan-500/20 hover:bg-cyan-500/10"
+          >
             <Download className="mr-2 h-4 w-4" />
-            {isExporting ? 'Exportando...' : 'Exportar CSV'}
+            {isExporting ? 'Exportando...' : 'Exportar'}
           </Button>
           <Link href="/dashboard/products/new">
-            <Button>
+            <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 shadow-lg shadow-cyan-500/20">
               <Plus className="mr-2 h-4 w-4" />
               Nuevo Producto
             </Button>
@@ -60,102 +118,246 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {/* Search */}
-      <div className="flex items-center gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Buscar productos..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-      </div>
+      {/* Search Bar */}
+      <Card className="border-slate-200">
+        <CardContent className="pt-6">
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Buscar por nombre, SKU o categoría..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-10 h-11"
+            />
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Products Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Lista de Productos</CardTitle>
+      <Card className="border-slate-200 shadow-sm">
+        <CardHeader className="border-b bg-slate-50/50">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg">Lista de Productos</CardTitle>
+            {data?.data && (
+              <Badge variant="secondary" className="font-mono">
+                {data.data.length} productos
+              </Badge>
+            )}
+          </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           {isLoading ? (
-            <div className="text-center py-8 text-muted-foreground">Cargando productos...</div>
+            <div className="text-center py-12">
+              <div className="inline-flex items-center gap-2 text-muted-foreground">
+                <div className="h-4 w-4 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin" />
+                Cargando productos...
+              </div>
+            </div>
           ) : !data?.data || data.data.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              No hay productos. Crea uno nuevo para empezar.
+            <div className="text-center py-12">
+              <PackageX className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
+              <p className="text-lg font-medium text-slate-700">No hay productos</p>
+              <p className="text-sm text-muted-foreground mb-4">
+                Comienza agregando tu primer producto
+              </p>
+              <Link href="/dashboard/products/new">
+                <Button>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Crear Producto
+                </Button>
+              </Link>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left p-4 font-medium">SKU</th>
-                    <th className="text-left p-4 font-medium">Nombre</th>
-                    <th className="text-left p-4 font-medium">Categoría</th>
-                    <th className="text-right p-4 font-medium">Precio</th>
-                    <th className="text-right p-4 font-medium">Stock</th>
-                    <th className="text-center p-4 font-medium">Estado</th>
-                    <th className="text-right p-4 font-medium">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.data.map((product) => (
-                    <tr key={product.id} className="border-b hover:bg-muted/50">
-                      <td className="p-4 font-mono text-sm">{product.sku}</td>
-                      <td className="p-4">{product.name}</td>
-                      <td className="p-4 text-sm text-muted-foreground">
-                        {product.categoryId || '-'}
-                      </td>
-                      <td className="p-4 text-right font-medium">
-                        {formatCurrency(product.price)}
-                      </td>
-                      <td className="p-4 text-right">
-                        <span
-                          className={
-                            product.stockQuantity <= product.lowStockThreshold
-                              ? 'text-red-600 font-medium'
-                              : ''
-                          }
-                        >
-                          {product.stockQuantity}
-                        </span>
-                      </td>
-                      <td className="p-4 text-center">
-                        <span
-                          className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                            product.isActive
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-gray-100 text-gray-800'
-                          }`}
-                        >
-                          {product.isActive ? 'Activo' : 'Inactivo'}
-                        </span>
-                      </td>
-                      <td className="p-4">
-                        <div className="flex items-center justify-end gap-2">
-                          <Link href={`/dashboard/products/${product.id}/edit`}>
-                            <Button variant="ghost" size="icon">
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                          </Link>
+            <Table>
+              <TableHeader>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="font-semibold">SKU</TableHead>
+                  <TableHead className="font-semibold">Nombre</TableHead>
+                  <TableHead className="font-semibold">Categoría</TableHead>
+                  <TableHead className="text-right font-semibold">Precio</TableHead>
+                  <TableHead className="text-right font-semibold">Stock</TableHead>
+                  <TableHead className="text-center font-semibold">Estado</TableHead>
+                  <TableHead className="text-right font-semibold">Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.data.map((product) => (
+                  <TableRow key={product.id} className="group">
+                    <TableCell className="font-mono text-sm text-slate-600">
+                      {product.sku}
+                    </TableCell>
+                    <TableCell className="font-medium">{product.name}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {product.categoryId || '-'}
+                    </TableCell>
+                    <TableCell className="text-right font-semibold">
+                      {formatCurrency(product.price)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Badge
+                        variant={
+                          product.stockQuantity <= product.lowStockThreshold
+                            ? 'destructive'
+                            : 'secondary'
+                        }
+                      >
+                        {product.stockQuantity}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <Badge
+                        variant={product.isActive ? 'default' : 'secondary'}
+                        className={
+                          product.isActive
+                            ? 'bg-green-500 hover:bg-green-600'
+                            : ''
+                        }
+                      >
+                        {product.isActive ? 'Activo' : 'Inactivo'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => handleDelete(product.id, product.name)}
+                            className="opacity-0 group-hover:opacity-100 transition-opacity"
                           >
-                            <Trash2 className="h-4 w-4 text-red-600" />
+                            <MoreHorizontal className="h-4 w-4" />
                           </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-48">
+                          <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <Link href={`/dashboard/products/${product.id}`}>
+                            <DropdownMenuItem>
+                              <Eye className="mr-2 h-4 w-4" />
+                              Ver detalles
+                            </DropdownMenuItem>
+                          </Link>
+                          <Link href={`/dashboard/products/${product.id}/edit`}>
+                            <DropdownMenuItem>
+                              <Edit className="mr-2 h-4 w-4" />
+                              Editar
+                            </DropdownMenuItem>
+                          </Link>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            className="text-red-600 focus:text-red-600"
+                            onClick={() => handleDeleteClick(product.id, product.name)}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Eliminar
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+
+          {data?.pagination && data.pagination.totalPages > 1 && (
+            <div className="border-t bg-slate-50/50 p-4">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (page > 1) setPage(page - 1);
+                      }}
+                      className={page === 1 ? 'pointer-events-none opacity-50' : ''}
+                    />
+                  </PaginationItem>
+
+                  {[...Array(data.pagination.totalPages)].map((_, index) => {
+                    const pageNumber = index + 1;
+                    // Mostrar solo algunas páginas
+                    if (
+                      pageNumber === 1 ||
+                      pageNumber === data.pagination.totalPages ||
+                      (pageNumber >= page - 1 && pageNumber <= page + 1)
+                    ) {
+                      return (
+                        <PaginationItem key={pageNumber}>
+                          <PaginationLink
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setPage(pageNumber);
+                            }}
+                            isActive={page === pageNumber}
+                          >
+                            {pageNumber}
+                          </PaginationLink>
+                        </PaginationItem>
+                      );
+                    } else if (
+                      pageNumber === page - 2 ||
+                      pageNumber === page + 2
+                    ) {
+                      return (
+                        <PaginationItem key={pageNumber}>
+                          <PaginationEllipsis />
+                        </PaginationItem>
+                      );
+                    }
+                    return null;
+                  })}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (page < data.pagination.totalPages) setPage(page + 1);
+                      }}
+                      className={
+                        page === data.pagination.totalPages
+                          ? 'pointer-events-none opacity-50'
+                          : ''
+                      }
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+
+              <div className="text-center mt-3 text-sm text-muted-foreground">
+                Página {page} de {data.pagination.totalPages} ({data.pagination.total} productos)
+              </div>
             </div>
           )}
         </CardContent>
       </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. Se eliminará permanentemente el producto{' '}
+              <span className="font-semibold text-slate-900">
+                "{productToDelete?.name}"
+              </span>{' '}
+              de la base de datos.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

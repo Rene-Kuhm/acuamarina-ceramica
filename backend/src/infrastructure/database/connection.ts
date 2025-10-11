@@ -9,7 +9,7 @@ dotenv.config({ path: path.join(__dirname, '../../../.env') });
 const poolConfig: PoolConfig = {
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT || '5432'),
-  database: process.env.DB_NAME || 'acuamarina_ceramicos',
+  database: process.env.DB_NAME || 'aguamarina_mosaicos',
   user: process.env.DB_USER || 'postgres',
   password: String(process.env.DB_PASSWORD || ''),
   max: parseInt(process.env.DB_MAX_CONNECTIONS || '20'),

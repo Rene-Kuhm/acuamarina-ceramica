@@ -1,4 +1,4 @@
-# 🚀 Inicio Rápido - Backend Acuamarina Cerámicos
+# 🚀 Inicio Rápido - Backend Aguamarina Mosaicos
 
 ## ⚡ Pasos para empezar EN 5 MINUTOS
 
@@ -17,7 +17,7 @@ psql --version
 ### 2️⃣ Instalar dependencias Node
 
 \`\`\`bash
-cd D:\\acuamarina-ceramicos\\backend
+cd D:\\aguamarina-mosaicos\\backend
 npm install
 \`\`\`
 
@@ -44,7 +44,7 @@ Copy-Item .env.example .env
 
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=acuamarina_ceramicos
+DB_NAME=aguamarina_mosaicos
 DB_USER=postgres
 DB_PASSWORD=TU_CONTRASEÑA_POSTGRES_AQUI  ⬅️ CÁMBIALA
 
@@ -62,7 +62,7 @@ JWT_REFRESH_SECRET=mi_refresh_secret_123  ⬅️ CÁMBIALA
 psql -U postgres
 
 # Crear la base de datos
-CREATE DATABASE acuamarina_ceramicos;
+CREATE DATABASE aguamarina_mosaicos;
 
 # Verificar que se creó
 \\l
@@ -75,7 +75,7 @@ CREATE DATABASE acuamarina_ceramicos;
 1. Abre pgAdmin
 2. Click derecho en "Databases"
 3. Create → Database
-4. Nombre: `acuamarina_ceramicos`
+4. Nombre: `aguamarina_mosaicos`
 5. Save
 
 ### 5️⃣ Ejecutar migraciones (crear tablas)
@@ -98,7 +98,7 @@ npm run db:seed
 \`\`\`
 
 Esto creará:
-- ✅ Usuario admin (admin@acuamarina.com / Admin123!)
+- ✅ Usuario admin (admin@aguamarina.com / Admin123!)
 - ✅ 5 categorías de productos
 - ✅ 2 productos de ejemplo
 
@@ -111,7 +111,7 @@ npm run dev
 Verás algo como:
 \`\`\`
 ===========================================
-🚀 Servidor Acuamarina Cerámicos iniciado
+🚀 Servidor Aguamarina Mosaicos iniciado
    Entorno: development
    Puerto: 3000
    API: http://localhost:3000/api/v1
@@ -182,13 +182,13 @@ npm start
 
 ### Con pgAdmin:
 1. Servers → PostgreSQL → Databases
-2. Busca `acuamarina_ceramicos`
+2. Busca `aguamarina_mosaicos`
 3. Explora las tablas en Schemas → public → Tables
 
 ### Con DBeaver / DataGrip / etc:
 - Host: localhost
 - Port: 5432
-- Database: acuamarina_ceramicos
+- Database: aguamarina_mosaicos
 - User: postgres
 - Password: (la que pusiste)
 
@@ -219,8 +219,8 @@ npm start
 - Verifica la contraseña en .env
 - Asegúrate que PostgreSQL está corriendo
 
-### Error: "database acuamarina_ceramicos does not exist"
-- Ejecuta: \`createdb acuamarina_ceramicos\`
+### Error: "database aguamarina_mosaicos does not exist"
+- Ejecuta: \`createdb aguamarina_mosaicos\`
 - O créala desde pgAdmin
 
 ### Error: "Cannot find module"
@@ -267,4 +267,4 @@ npm start
 
 ---
 
-**¡Éxito con tu proyecto Acuamarina Cerámicos!** 🏺✨
+**¡Éxito con tu proyecto Aguamarina Mosaicos!** 🏺✨

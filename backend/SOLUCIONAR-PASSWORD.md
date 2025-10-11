@@ -13,7 +13,7 @@ Esto significa que la contraseña en `.env` no coincide con la contraseña real 
 
 1. **Abre el archivo `.env`** en:
    ```
-   D:\acuamarina-ceramicos\backend\.env
+   D:\aguamarina-mosaicos\backend\.env
    ```
 
 2. **Cambia la línea de DB_PASSWORD:**
@@ -78,14 +78,14 @@ Si prefieres no tocar el usuario postgres:
 
 2. **Crea un nuevo usuario:**
    ```sql
-   CREATE USER acuamarina WITH PASSWORD 'MiPassword123!';
-   ALTER USER acuamarina CREATEDB;
-   GRANT ALL PRIVILEGES ON DATABASE acuamarina_ceramicos TO acuamarina;
+   CREATE USER aguamarina WITH PASSWORD 'MiPassword123!';
+   ALTER USER aguamarina CREATEDB;
+   GRANT ALL PRIVILEGES ON DATABASE aguamarina_mosaicos TO aguamarina;
    ```
 
 3. **Actualiza `.env`:**
    ```env
-   DB_USER=acuamarina
+   DB_USER=aguamarina
    DB_PASSWORD=MiPassword123!
    ```
 
@@ -123,7 +123,7 @@ Después de actualizar la contraseña, prueba:
 cat .env | grep DB_PASSWORD
 
 # Intenta conectar manualmente (reemplaza con tu contraseña)
-psql -U postgres -d acuamarina_ceramicos -h localhost -p 5432
+psql -U postgres -d aguamarina_mosaicos -h localhost -p 5432
 
 # Si funciona, sal con:
 \q

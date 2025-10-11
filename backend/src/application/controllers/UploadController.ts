@@ -23,7 +23,7 @@ export class UploadController {
       const result = await new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           {
-            folder: 'acuamarina/products',
+            folder: 'aguamarina/products',
             transformation: [
               { width: 1200, height: 1200, crop: 'limit' },
               { quality: 'auto' },
@@ -174,7 +174,7 @@ export class UploadController {
       const result = await new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           {
-            folder: 'acuamarina/categories',
+            folder: 'aguamarina/categories',
             transformation: [
               { width: 800, height: 800, crop: 'limit' },
               { quality: 'auto' },

@@ -1,5 +1,5 @@
 -- ========================================
--- ACUAMARINA CERÁMICOS - SCHEMA DATABASE
+-- Aguamarina Mosaicos - SCHEMA DATABASE
 -- PostgreSQL 14+
 -- ========================================
 
@@ -410,7 +410,7 @@ GROUP BY p.id;
 
 -- Usuario admin por defecto (password: Admin123!)
 INSERT INTO users (email, password_hash, role, first_name, last_name, is_active, email_verified)
-VALUES ('admin@acuamarina.com', '$2a$10$YourHashedPasswordHere', 'admin', 'Admin', 'Acuamarina', true, true);
+VALUES ('admin@aguamarina.com', '$2a$10$YourHashedPasswordHere', 'admin', 'Admin', 'aguamarina', true, true);
 
 -- Categorías iniciales
 INSERT INTO categories (name, slug, description, display_order, is_active) VALUES
@@ -419,4 +419,4 @@ INSERT INTO categories (name, slug, description, display_order, is_active) VALUE
 ('Porcellanatos', 'porcellanatos', 'Porcellanatos de primera calidad', 3, true),
 ('Sanitarios', 'sanitarios', 'Sanitarios y accesorios para baño', 4, true);
 
-COMMENT ON DATABASE acuamarina_ceramicos IS 'Base de datos para tienda Acuamarina Cerámicos - Sistema de gestión completo';
+COMMENT ON DATABASE aguamarina_mosaicos IS 'Base de datos para tienda Aguamarina Mosaicos - Sistema de gestión completo';

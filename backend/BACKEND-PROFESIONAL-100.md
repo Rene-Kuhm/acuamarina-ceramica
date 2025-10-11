@@ -1,4 +1,4 @@
-# Backend Profesional 100% - Acuamarina Cerámicos
+# Backend Profesional 100% - Aguamarina Mosaicos
 
 ## Estado Final: BACKEND PROFESIONAL COMPLETO
 
@@ -53,7 +53,7 @@ docker-compose --profile production up backend
 docker-compose --profile tools up pgadmin
 
 # Build manual
-docker build -t acuamarina-backend .
+docker build -t aguamarina-backend .
 ```
 
 ### 3. Swagger/OpenAPI Documentation ✅
@@ -252,14 +252,14 @@ docker-compose down -v
 
 ```bash
 # Build de imagen
-docker build -t acuamarina-backend:latest .
+docker build -t aguamarina-backend:latest .
 
 # Run
 docker run -p 3000:3000 \
   -e NODE_ENV=production \
   -e DB_HOST=your-db-host \
   -e DB_PASSWORD=your-password \
-  acuamarina-backend:latest
+  aguamarina-backend:latest
 
 # O con docker-compose
 docker-compose --profile production up -d
@@ -410,16 +410,16 @@ npm run db:setup
 ### Docker
 ```bash
 # Build sin cache
-docker build --no-cache -t acuamarina-backend .
+docker build --no-cache -t aguamarina-backend .
 
 # Ver imágenes
-docker images | grep acuamarina
+docker images | grep aguamarina
 
 # Limpiar volúmenes
 docker volume prune
 
 # Logs del contenedor
-docker logs acuamarina-backend
+docker logs aguamarina-backend
 ```
 
 ---
