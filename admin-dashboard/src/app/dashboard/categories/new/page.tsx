@@ -13,7 +13,7 @@ import Link from 'next/link';
 export default function NewCategoryPage() {
   const router = useRouter();
   const createCategory = useCreateCategory();
-  const { data: categories } = useCategories(true);
+  const { data: categories } = useCategories();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -29,9 +29,8 @@ export default function NewCategoryPage() {
 
     try {
       await createCategory.mutateAsync({
-        ...formData,
-        parentId: formData.parentId || null,
-        displayOrder: parseInt(formData.displayOrder),
+        name: formData.name,
+        parentId: formData.parentId || undefined,
       });
 
       router.push('/dashboard/categories');
@@ -83,7 +82,7 @@ export default function NewCategoryPage() {
                         slug: generateSlug(name),
                       });
                     }}
-                    placeholder="Pisos Cerámicos"
+                    placeholder="Mosaicos Decorativos"
                   />
                 </div>
 
@@ -93,7 +92,7 @@ export default function NewCategoryPage() {
                     id="slug"
                     value={formData.slug}
                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    placeholder="pisos-ceramicos"
+                    placeholder="mosaicos-decorativos"
                   />
                   <p className="text-xs text-muted-foreground">
                     URL amigable para la categoría

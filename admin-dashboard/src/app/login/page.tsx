@@ -86,7 +86,7 @@ export default function LoginPage() {
           <CardContent className="space-y-6">
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Email Field */}
-              <div className="space-y-2">
+              <div className="space-y-2" suppressHydrationWarning>
                 <Label htmlFor="email" className="text-slate-300 font-medium flex items-center gap-2">
                   <Mail className="h-4 w-4 text-cyan-400" />
                   Email
@@ -101,12 +101,13 @@ export default function LoginPage() {
                     required
                     disabled={isLoading}
                     className="bg-slate-800/50 border-slate-700/50 text-white placeholder:text-slate-500 focus:border-cyan-500/50 focus:ring-cyan-500/20 h-12 px-4 group-hover:border-cyan-500/30 transition-colors"
+                    suppressHydrationWarning
                   />
                 </div>
               </div>
 
               {/* Password Field */}
-              <div className="space-y-2">
+              <div className="space-y-2" suppressHydrationWarning>
                 <Label htmlFor="password" className="text-slate-300 font-medium flex items-center gap-2">
                   <Lock className="h-4 w-4 text-cyan-400" />
                   Contraseña
@@ -121,6 +122,7 @@ export default function LoginPage() {
                     required
                     disabled={isLoading}
                     className="bg-slate-800/50 border-slate-700/50 text-white placeholder:text-slate-500 focus:border-cyan-500/50 focus:ring-cyan-500/20 h-12 px-4 group-hover:border-cyan-500/30 transition-colors"
+                    suppressHydrationWarning
                   />
                 </div>
               </div>

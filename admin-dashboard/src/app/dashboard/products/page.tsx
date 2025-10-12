@@ -32,7 +32,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/dialog';
+} from '@/components/ui/alert-dialog';
 import { Plus, Search, Edit, Trash2, Download, MoreHorizontal, Eye, PackageX } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import { exportService } from '@/services/export.service';
@@ -109,6 +109,14 @@ export default function ProductsPage() {
             <Download className="mr-2 h-4 w-4" />
             {isExporting ? 'Exportando...' : 'Exportar'}
           </Button>
+
+          {/* UPDATED: Link to categories page */}
+          <Link href="/dashboard/categories">
+            <Button variant="ghost" className="border-slate-200">
+              Categorías
+            </Button>
+          </Link>
+
           <Link href="/dashboard/products/new">
             <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 shadow-lg shadow-cyan-500/20">
               <Plus className="mr-2 h-4 w-4" />
@@ -259,7 +267,7 @@ export default function ProductsPage() {
             </Table>
           )}
 
-          {data?.pagination && data.pagination.totalPages > 1 && (
+          {data?.totalPages && data.totalPages > 1 && (
             <div className="border-t bg-slate-50/50 p-4">
               <Pagination>
                 <PaginationContent>
@@ -274,12 +282,12 @@ export default function ProductsPage() {
                     />
                   </PaginationItem>
 
-                  {[...Array(data.pagination.totalPages)].map((_, index) => {
+                  {[...Array(data.totalPages)].map((_, index) => {
                     const pageNumber = index + 1;
                     // Mostrar solo algunas páginas
                     if (
                       pageNumber === 1 ||
-                      pageNumber === data.pagination.totalPages ||
+                      pageNumber === data.totalPages ||
                       (pageNumber >= page - 1 && pageNumber <= page + 1)
                     ) {
                       return (
@@ -314,10 +322,10 @@ export default function ProductsPage() {
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
-                        if (page < data.pagination.totalPages) setPage(page + 1);
+                        if (page < data.totalPages) setPage(page + 1);
                       }}
                       className={
-                        page === data.pagination.totalPages
+                        page === data.totalPages
                           ? 'pointer-events-none opacity-50'
                           : ''
                       }
@@ -327,7 +335,7 @@ export default function ProductsPage() {
               </Pagination>
 
               <div className="text-center mt-3 text-sm text-muted-foreground">
-                Página {page} de {data.pagination.totalPages} ({data.pagination.total} productos)
+                Página {page} de {data.totalPages} ({data.total} productos)
               </div>
             </div>
           )}

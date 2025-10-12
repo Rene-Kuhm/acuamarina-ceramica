@@ -6,7 +6,7 @@ export const productFormSchema = z.object({
   slug: z.string().optional(),
   description: z.string().optional(),
   shortDescription: z.string().max(500).optional(),
-  price: z.number({ required_error: 'El precio es requerido' }).positive('El precio debe ser mayor a 0'),
+  price: z.number().positive('El precio debe ser mayor a 0'),
   comparePrice: z.number().positive().optional(),
   categoryId: z.string().optional(),
   dimensions: z.string().max(100).optional(),

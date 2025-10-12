@@ -18,7 +18,7 @@ export default function EditProductPage() {
 
   const { data: productData, isLoading: isLoadingProduct } = useProduct(id);
   const updateProduct = useUpdateProduct();
-  const { data: categories } = useCategories(true);
+  const { data: categories } = useCategories();
 
   const [formData, setFormData] = useState({
     sku: '',
@@ -44,16 +44,16 @@ export default function EditProductPage() {
         name: productData.name || '',
         slug: productData.slug || '',
         description: productData.description || '',
-        shortDescription: productData.short_description || '',
+        shortDescription: productData.shortDescription || '',
         price: productData.price?.toString() || '',
-        comparePrice: productData.compare_price?.toString() || '',
-        categoryId: productData.category_id || '',
+        comparePrice: productData.comparePrice?.toString() || '',
+        categoryId: productData.categoryId || '',
         dimensions: productData.dimensions || '',
         material: productData.material || '',
         finish: productData.finish || '',
         color: productData.color || '',
-        stockQuantity: productData.stock_quantity?.toString() || '0',
-        lowStockThreshold: productData.low_stock_threshold?.toString() || '5',
+        stockQuantity: productData.stockQuantity?.toString() || '0',
+        lowStockThreshold: productData.lowStockThreshold?.toString() || '5',
       });
     }
   }, [productData]);

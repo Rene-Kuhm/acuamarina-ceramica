@@ -1,119 +1,167 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { useCategories, useDeleteCategory } from '@/hooks/useCategories';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Plus, Search, Edit, Trash2, FolderTree } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Plus, Trash2, Loader2 } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { useCategories, useCreateCategory, useDeleteCategory } from '@/hooks/useCategories';
 
 export default function CategoriesPage() {
-  const [search, setSearch] = useState('');
-  const { data: categories, isLoading } = useCategories(true);
+  const [newParentName, setNewParentName] = useState('');
+  const [newChildByParent, setNewChildByParent] = useState<Record<string, string>>({});
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<{ id: string; name: string } | null>(null);
+
+  const { data: categories, isLoading } = useCategories();
+  const createCategory = useCreateCategory();
   const deleteCategory = useDeleteCategory();
 
-  const filteredCategories = categories?.filter(
-    (cat) =>
-      cat.name.toLowerCase().includes(search.toLowerCase()) ||
-      cat.description?.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const handleDelete = async (id: string, name: string) => {
-    if (window.confirm(`¿Estás seguro de eliminar la categoría "${name}"?`)) {
-      try {
-        await deleteCategory.mutateAsync(id);
-      } catch (error: any) {
-        alert(error.response?.data?.message || 'Error al eliminar la categoría');
-      }
-    }
+  const handleAddParent = () => {
+    if (!newParentName.trim()) return;
+    createCategory.mutate({ name: newParentName.trim() });
+    setNewParentName('');
   };
 
+  const handleAddSubcategory = (parentId: string) => {
+    const childName = (newChildByParent[parentId] || '').trim();
+    if (!childName) return;
+    createCategory.mutate({ name: childName, parentId });
+    setNewChildByParent((prev) => ({ ...prev, [parentId]: '' }));
+  };
+
+  const handleDeleteClick = (id: string, name: string) => {
+    setItemToDelete({ id, name });
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (!itemToDelete) return;
+    deleteCategory.mutate(itemToDelete.id);
+    setDeleteDialogOpen(false);
+    setItemToDelete(null);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Categorías</h1>
-          <p className="text-muted-foreground">Gestiona las categorías de productos</p>
-        </div>
-        <Link href="/dashboard/categories/new">
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            Nueva Categoría
-          </Button>
-        </Link>
-      </div>
-
-      {/* Search */}
-      <div className="flex items-center gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Buscar categorías..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-10"
-          />
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+            Categorías
+          </h1>
+          <p className="text-muted-foreground mt-1">
+            Gestiona las categorías y subcategorías de tus productos.
+          </p>
         </div>
       </div>
 
-      {/* Categories Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {isLoading ? (
-          <div className="col-span-full text-center py-8 text-muted-foreground">
-            Cargando categorías...
+      <Card>
+        <CardHeader>
+          <CardTitle>Crear Nueva Categoría Padre</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex gap-2 items-center">
+            <Input
+              placeholder="Nombre de la categoría padre"
+              value={newParentName}
+              onChange={(e) => setNewParentName(e.target.value)}
+              className="flex-1"
+              disabled={createCategory.isPending}
+            />
+            <Button onClick={handleAddParent} disabled={createCategory.isPending}>
+              {createCategory.isPending && !newChildByParent[Object.keys(newChildByParent)[0]] ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />}
+              Agregar
+            </Button>
           </div>
-        ) : !filteredCategories || filteredCategories.length === 0 ? (
-          <div className="col-span-full text-center py-8 text-muted-foreground">
-            No hay categorías. Crea una nueva para empezar.
-          </div>
+        </CardContent>
+      </Card>
+
+      <div className="space-y-4">
+        {!categories || categories.length === 0 ? (
+          <p className="text-center text-muted-foreground py-8">No hay categorías aún.</p>
         ) : (
-          filteredCategories.map((category) => (
-            <Card key={category.id} className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-                <div className="flex items-center gap-2">
-                  <FolderTree className="h-5 w-5 text-muted-foreground" />
-                  <CardTitle className="text-lg">{category.name}</CardTitle>
-                </div>
-                <div className="flex gap-1">
-                  <Link href={`/dashboard/categories/${category.id}/edit`}>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8"
-                    onClick={() => handleDelete(category.id, category.name)}
-                  >
-                    <Trash2 className="h-4 w-4 text-red-600" />
+          categories.map((parent) => (
+            <Card key={parent.id}>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>{parent.name}</CardTitle>
+                <div className="flex items-center gap-4">
+                  <Badge variant={parent.isActive ? 'default' : 'secondary'}>
+                    {parent.isActive ? 'Activa' : 'Inactiva'}
+                  </Badge>
+                  <Badge variant="outline">{parent.children.length} subcategorías</Badge>
+                  <Button variant="ghost" size="icon" onClick={() => handleDeleteClick(parent.id, parent.name)}>
+                    <Trash2 className="h-4 w-4 text-red-500" />
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground line-clamp-2">
-                  {category.description || 'Sin descripción'}
-                </p>
-                <div className="mt-3 flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">
-                    {category.products_count || 0} productos
-                  </span>
-                  <span
-                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                      category.is_active
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-gray-100 text-gray-800'
-                    }`}
-                  >
-                    {category.is_active ? 'Activa' : 'Inactiva'}
-                  </span>
+              <CardContent className="space-y-3">
+                {parent.children.map((child) => (
+                  <div key={child.id} className="flex items-center justify-between p-2 bg-slate-50 rounded-md">
+                    <span>{child.name}</span>
+                    <div className="flex items-center gap-2">
+                      <Badge variant={child.isActive ? 'default' : 'secondary'} className="text-xs">
+                        {child.isActive ? 'Activa' : 'Inactiva'}
+                      </Badge>
+                      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleDeleteClick(child.id, child.name)}>
+                        <Trash2 className="h-4 w-4 text-red-500" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+                <div className="flex gap-2 pt-2">
+                  <Input
+                    placeholder="Añadir subcategoría..."
+                    value={newChildByParent[parent.id] || ''}
+                    onChange={(e) => setNewChildByParent((prev) => ({ ...prev, [parent.id]: e.target.value }))}
+                    disabled={createCategory.isPending}
+                  />
+                  <Button onClick={() => handleAddSubcategory(parent.id)} disabled={createCategory.isPending}>
+                    {createCategory.isPending && newChildByParent[parent.id] ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Agregar'}
+                  </Button>
                 </div>
               </CardContent>
             </Card>
           ))
         )}
       </div>
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. Se eliminará permanentemente la categoría{' '}
+              <span className="font-semibold text-slate-900">"{itemToDelete?.name}"</span>.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-red-600 hover:bg-red-700" disabled={deleteCategory.isPending}>
+              {deleteCategory.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

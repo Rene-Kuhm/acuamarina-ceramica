@@ -36,9 +36,9 @@ export function Sidebar() {
   };
 
   return (
-    <div className="flex h-full w-72 flex-col bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-white shadow-2xl">
+    <div className="flex h-full w-72 flex-col bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 dark:from-slate-950 dark:via-slate-950 dark:to-black text-white shadow-2xl">
       {/* Logo Section - Premium */}
-      <div className="p-6 border-b border-slate-800/50">
+      <div className="p-6 border-b border-slate-800/50 dark:border-slate-900/50">
         <div className="flex items-center gap-3 mb-2">
           <div className="relative">
             <div className="absolute inset-0 bg-cyan-500 blur-lg opacity-50 rounded-full"></div>

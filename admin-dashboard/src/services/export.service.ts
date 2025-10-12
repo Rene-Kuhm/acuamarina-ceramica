@@ -20,8 +20,18 @@ export const exportService = {
     a.download = `productos_${new Date().toISOString().split('T')[0]}.csv`;
     document.body.appendChild(a);
     a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
+
+    // Cleanup seguro con timeout para evitar errores de removeChild
+    setTimeout(() => {
+      try {
+        window.URL.revokeObjectURL(url);
+        if (a.parentNode) {
+          document.body.removeChild(a);
+        }
+      } catch (e) {
+        // Ignorar error si el elemento ya fue removido
+      }
+    }, 100);
   },
 
   exportOrders: async (params?: {
@@ -55,8 +65,18 @@ export const exportService = {
     a.download = `pedidos_${new Date().toISOString().split('T')[0]}.csv`;
     document.body.appendChild(a);
     a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
+
+    // Cleanup seguro con timeout para evitar errores de removeChild
+    setTimeout(() => {
+      try {
+        window.URL.revokeObjectURL(url);
+        if (a.parentNode) {
+          document.body.removeChild(a);
+        }
+      } catch (e) {
+        // Ignorar error si el elemento ya fue removido
+      }
+    }, 100);
   },
 
   exportCustomers: async (): Promise<void> => {
@@ -78,7 +98,17 @@ export const exportService = {
     a.download = `clientes_${new Date().toISOString().split('T')[0]}.csv`;
     document.body.appendChild(a);
     a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
+
+    // Cleanup seguro con timeout para evitar errores de removeChild
+    setTimeout(() => {
+      try {
+        window.URL.revokeObjectURL(url);
+        if (a.parentNode) {
+          document.body.removeChild(a);
+        }
+      } catch (e) {
+        // Ignorar error si el elemento ya fue removido
+      }
+    }, 100);
   },
 };

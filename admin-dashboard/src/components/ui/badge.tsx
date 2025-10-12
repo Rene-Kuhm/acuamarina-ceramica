@@ -4,17 +4,21 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900",
   {
     variants: {
       variant: {
         default:
-          "border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80",
+          "border-transparent bg-cyan-600 dark:bg-cyan-500 text-white shadow hover:bg-cyan-700 dark:hover:bg-cyan-600",
         secondary:
-          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "border-transparent bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100 hover:bg-slate-300 dark:hover:bg-slate-600",
         destructive:
-          "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
-        outline: "text-foreground",
+          "border-transparent bg-red-600 dark:bg-red-500 text-white shadow hover:bg-red-700 dark:hover:bg-red-600",
+        outline: "text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-700 bg-transparent",
+        success:
+          "border-transparent bg-emerald-600 dark:bg-emerald-500 text-white shadow hover:bg-emerald-700 dark:hover:bg-emerald-600",
+        warning:
+          "border-transparent bg-amber-600 dark:bg-amber-500 text-white shadow hover:bg-amber-700 dark:hover:bg-amber-600",
       },
     },
     defaultVariants: {
@@ -25,7 +29,9 @@ const badgeVariants = cva(
 
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {}
+    VariantProps<typeof badgeVariants> {
+  variant?: "default" | "secondary" | "destructive" | "outline" | "success" | "warning"
+}
 
 function Badge({ className, variant, ...props }: BadgeProps) {
   return (
