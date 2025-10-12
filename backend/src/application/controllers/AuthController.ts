@@ -27,13 +27,13 @@ interface JwtPayload {
 
 // Generar tokens
 const generateTokens = (payload: JwtPayload) => {
-  const accessToken = jwt.sign(payload, config.jwt.secret, {
+  const accessToken = jwt.sign(payload, config.jwt.secret as jwt.Secret, {
     expiresIn: config.jwt.expiresIn,
-  });
+  } as jwt.SignOptions);
 
-  const refreshToken = jwt.sign(payload, config.jwt.refreshSecret, {
+  const refreshToken = jwt.sign(payload, config.jwt.refreshSecret as jwt.Secret, {
     expiresIn: config.jwt.refreshExpiresIn,
-  });
+  } as jwt.SignOptions);
 
   return { accessToken, refreshToken };
 };
@@ -55,7 +55,7 @@ export class AuthController {
    * Login
    * POST /api/v1/auth/login
    */
-  static async login(req: Request, res: Response, next: NextFunction) {
+  static async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       // Validar datos de entrada
       const { email, password } = loginSchema.parse(req.body);
@@ -69,29 +69,32 @@ export class AuthController {
       );
 
       if (result.rows.length === 0) {
-        return res.status(401).json({
+        res.status(401).json({
           success: false,
           message: 'Credenciales inválidas',
         });
+        return;
       }
 
       const user = result.rows[0];
 
       // Verificar si el usuario está activo
       if (!user.is_active) {
-        return res.status(401).json({
+        res.status(401).json({
           success: false,
           message: 'Usuario inactivo',
         });
+        return;
       }
 
       // Verificar contraseña
       const isValidPassword = await bcrypt.compare(password, user.password_hash);
       if (!isValidPassword) {
-        return res.status(401).json({
+        res.status(401).json({
           success: false,
           message: 'Credenciales inválidas',
         });
+        return;
       }
 
       // Generar tokens
@@ -132,11 +135,12 @@ export class AuthController {
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           message: 'Datos inválidos',
           errors: error.errors,
         });
+        return;
       }
       next(error);
     }
@@ -146,7 +150,7 @@ export class AuthController {
    * Register
    * POST /api/v1/auth/register
    */
-  static async register(req: Request, res: Response, next: NextFunction) {
+  static async register(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       // Validar datos de entrada
       const data = registerSchema.parse(req.body);
@@ -158,10 +162,11 @@ export class AuthController {
       );
 
       if (existingUser.rows.length > 0) {
-        return res.status(409).json({
+        res.status(409).json({
           success: false,
           message: 'El email ya está registrado',
         });
+        return;
       }
 
       // Hash de la contraseña
@@ -208,11 +213,12 @@ export class AuthController {
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           message: 'Datos inválidos',
           errors: error.errors,
         });
+        return;
       }
       next(error);
     }
@@ -222,15 +228,16 @@ export class AuthController {
    * Refresh Token
    * POST /api/v1/auth/refresh
    */
-  static async refresh(req: Request, res: Response, next: NextFunction) {
+  static async refresh(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { refreshToken } = req.body;
 
       if (!refreshToken) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           message: 'Refresh token requerido',
         });
+        return;
       }
 
       // Verificar token
@@ -238,10 +245,11 @@ export class AuthController {
       try {
         payload = jwt.verify(refreshToken, config.jwt.refreshSecret) as JwtPayload;
       } catch (error) {
-        return res.status(401).json({
+        res.status(401).json({
           success: false,
           message: 'Token inválido o expirado',
         });
+        return;
       }
 
       // Verificar que el token existe en la base de datos
@@ -252,10 +260,11 @@ export class AuthController {
       );
 
       if (result.rows.length === 0) {
-        return res.status(401).json({
+        res.status(401).json({
           success: false,
           message: 'Token inválido o expirado',
         });
+        return;
       }
 
       // Generar nuevo access token
@@ -265,9 +274,9 @@ export class AuthController {
         role: payload.role,
       };
 
-      const accessToken = jwt.sign(newPayload, config.jwt.secret, {
+      const accessToken = jwt.sign(newPayload, config.jwt.secret as jwt.Secret, {
         expiresIn: config.jwt.expiresIn,
-      });
+      } as jwt.SignOptions);
 
       // Responder
       res.json({
@@ -285,7 +294,7 @@ export class AuthController {
    * Logout
    * POST /api/v1/auth/logout
    */
-  static async logout(req: Request, res: Response, next: NextFunction) {
+  static async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { refreshToken } = req.body;
 
@@ -312,16 +321,17 @@ export class AuthController {
    * Get current user
    * GET /api/v1/auth/me
    */
-  static async me(req: Request, res: Response, next: NextFunction) {
+  static async me(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       // El userId viene del middleware de autenticación
       const userId = (req as any).user?.userId;
 
       if (!userId) {
-        return res.status(401).json({
+        res.status(401).json({
           success: false,
           message: 'No autenticado',
         });
+        return;
       }
 
       const result = await getPool().query(
@@ -332,10 +342,11 @@ export class AuthController {
       );
 
       if (result.rows.length === 0) {
-        return res.status(404).json({
+        res.status(404).json({
           success: false,
           message: 'Usuario no encontrado',
         });
+        return;
       }
 
       const user = result.rows[0];

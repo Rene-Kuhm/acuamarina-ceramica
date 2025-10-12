@@ -18,23 +18,23 @@ const poolConfig: PoolConfig = {
   ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
 };
 
-let pool: Pool | null = null;
+let poolInstance: Pool | null = null;
 
 export const getPool = (): Pool => {
-  if (!pool) {
-    pool = new Pool(poolConfig);
+  if (!poolInstance) {
+    poolInstance = new Pool(poolConfig);
 
-    pool.on('connect', () => {
+    poolInstance.on('connect', () => {
       logger.info('Nueva conexión establecida al pool de PostgreSQL');
     });
 
-    pool.on('error', (err) => {
+    poolInstance.on('error', (err) => {
       logger.error('Error inesperado en el pool de PostgreSQL:', err);
       process.exit(-1);
     });
   }
 
-  return pool;
+  return poolInstance;
 };
 
 export const connectDatabase = async (): Promise<void> => {
@@ -51,12 +51,15 @@ export const connectDatabase = async (): Promise<void> => {
 };
 
 export const disconnectDatabase = async (): Promise<void> => {
-  if (pool) {
-    await pool.end();
-    pool = null;
+  if (poolInstance) {
+    await poolInstance.end();
+    poolInstance = null;
     logger.info('Conexión a PostgreSQL cerrada');
   }
 };
+
+// Exportar el pool directamente para server.ts
+export const pool = getPool();
 
 export const query = async (text: string, params?: any[]) => {
   const start = Date.now();

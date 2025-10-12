@@ -10,15 +10,15 @@ export interface TokenPayload {
 
 export class JWTService {
   static generateAccessToken(payload: TokenPayload): string {
-    return jwt.sign(payload, config.jwt.secret, {
+    return jwt.sign(payload, config.jwt.secret as jwt.Secret, {
       expiresIn: config.jwt.expiresIn,
-    });
+    } as jwt.SignOptions);
   }
 
   static generateRefreshToken(payload: TokenPayload): string {
-    return jwt.sign(payload, config.jwt.refreshSecret, {
+    return jwt.sign(payload, config.jwt.refreshSecret as jwt.Secret, {
       expiresIn: config.jwt.refreshExpiresIn,
-    });
+    } as jwt.SignOptions);
   }
 
   static verifyAccessToken(token: string): TokenPayload {
