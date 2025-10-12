@@ -18,21 +18,15 @@ export function NewsletterSignup() {
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // TODO: Conectar con API real
-      // await fetch('/api/v1/newsletter', {
-      //   method: 'POST',
-      //   body: JSON.stringify({ email })
-      // });
+      const { newsletterApi } = await import("@/lib/api/newsletter");
+      await newsletterApi.subscribe(email);
 
       setSuccess(true);
       setEmail("");
 
       setTimeout(() => setSuccess(false), 5000);
-    } catch (err) {
-      setError("Error al suscribirse. Por favor, intenta nuevamente.");
+    } catch (err: any) {
+      setError(err?.response?.data?.message || "Error al suscribirse. Por favor, intenta nuevamente.");
     } finally {
       setIsSubmitting(false);
     }
