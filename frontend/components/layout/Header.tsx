@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useCart } from "@/lib/hooks/useCart";
 import { useAuth } from "@/lib/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 const navLinks = [
   { href: "/", label: "Inicio" },
@@ -42,6 +43,7 @@ const navLinks = [
 ];
 
 export function Header() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { totalItems } = useCart();
@@ -50,10 +52,8 @@ export function Header() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // TODO: Implement search functionality
-      console.log("Searching for:", searchQuery);
-      // Navigate to search results page
-      // router.push(`/buscar?q=${encodeURIComponent(searchQuery)}`);
+      router.push(`/buscar?q=${encodeURIComponent(searchQuery)}`);
+      setMobileMenuOpen(false);
     }
   };
 
@@ -105,18 +105,29 @@ export function Header() {
           {/* Right Side Actions */}
           <div className="flex items-center gap-2">
             {/* Search Button - Mobile */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="lg:hidden"
-              onClick={() => {
-                // TODO: Open search modal/sheet
-                console.log("Open search");
-              }}
-            >
-              <Search className="h-5 w-5" />
-              <span className="sr-only">Buscar</span>
-            </Button>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="lg:hidden">
+                  <Search className="h-5 w-5" />
+                  <span className="sr-only">Buscar</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="top" className="p-4">
+                <form onSubmit={handleSearch} className="mt-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      type="search"
+                      placeholder="Buscar productos..."
+                      className="w-full pl-10"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      autoFocus
+                    />
+                  </div>
+                </form>
+              </SheetContent>
+            </Sheet>
 
             {/* User Menu */}
             <DropdownMenu>
@@ -156,13 +167,13 @@ export function Header() {
                 ) : (
                   <>
                     <DropdownMenuItem asChild>
-                      <Link href="/login" className="cursor-pointer">
+                      <Link href="/auth/login" className="cursor-pointer">
                         <LogIn className="mr-2 h-4 w-4" />
                         Iniciar Sesión
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/registro" className="cursor-pointer">
+                      <Link href="/auth/register" className="cursor-pointer">
                         <UserCircle className="mr-2 h-4 w-4" />
                         Registrarse
                       </Link>
@@ -272,7 +283,7 @@ export function Header() {
                     ) : (
                       <div className="space-y-2">
                         <Link
-                          href="/login"
+                          href="/auth/login"
                           onClick={() => setMobileMenuOpen(false)}
                           className="flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-cyan-50 hover:text-cyan-600"
                         >
@@ -280,7 +291,7 @@ export function Header() {
                           Iniciar Sesión
                         </Link>
                         <Link
-                          href="/registro"
+                          href="/auth/register"
                           onClick={() => setMobileMenuOpen(false)}
                           className="flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-cyan-50 hover:text-cyan-600"
                         >

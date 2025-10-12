@@ -1,25 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { authApi, type User } from "@/lib/api/auth";
 
-/**
- * Authentication state interface
- */
 interface AuthState {
   isAuthenticated: boolean;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  } | null;
+  user: User | null;
   isLoading: boolean;
 }
 
-/**
- * Custom hook to manage authentication state
- * This is a placeholder implementation that will be replaced with real auth logic
- */
+const TOKEN_KEY = "auth_token";
+
 export function useAuth() {
+  const router = useRouter();
   const [authState, setAuthState] = useState<AuthState>({
     isAuthenticated: false,
     user: null,
@@ -27,41 +21,95 @@ export function useAuth() {
   });
 
   useEffect(() => {
-    // Simulate auth check
-    // In a real app, this would check for a valid session/token
-    const checkAuth = async () => {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
+    checkAuth();
+  }, []);
 
-      // For now, always return unauthenticated
+  const checkAuth = async () => {
+    const token = localStorage.getItem(TOKEN_KEY);
+
+    if (!token) {
       setAuthState({
         isAuthenticated: false,
         user: null,
         isLoading: false,
       });
-    };
+      return;
+    }
 
-    checkAuth();
-  }, []);
-
-  const login = async (email: string, password: string) => {
-    // Placeholder login function
-    console.log("Login attempt:", email, password);
-    // TODO: Implement actual login logic
+    try {
+      const user = await authApi.getProfile();
+      setAuthState({
+        isAuthenticated: true,
+        user,
+        isLoading: false,
+      });
+    } catch (error) {
+      localStorage.removeItem(TOKEN_KEY);
+      setAuthState({
+        isAuthenticated: false,
+        user: null,
+        isLoading: false,
+      });
+    }
   };
 
-  const logout = () => {
-    setAuthState({
-      isAuthenticated: false,
-      user: null,
-      isLoading: false,
-    });
-    // TODO: Clear session/tokens
+  const login = async (email: string, password: string) => {
+    try {
+      const response = await authApi.login({ email, password });
+      localStorage.setItem(TOKEN_KEY, response.token);
+      setAuthState({
+        isAuthenticated: true,
+        user: response.user,
+        isLoading: false,
+      });
+      return { success: true };
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || "Error al iniciar sesión"
+      };
+    }
+  };
+
+  const register = async (name: string, email: string, password: string, phone?: string) => {
+    try {
+      const response = await authApi.register({ name, email, password, phone });
+      localStorage.setItem(TOKEN_KEY, response.token);
+      setAuthState({
+        isAuthenticated: true,
+        user: response.user,
+        isLoading: false,
+      });
+      return { success: true };
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || "Error al registrarse"
+      };
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await authApi.logout();
+    } catch (error) {
+      // Continue with logout even if API call fails
+    } finally {
+      localStorage.removeItem(TOKEN_KEY);
+      setAuthState({
+        isAuthenticated: false,
+        user: null,
+        isLoading: false,
+      });
+      router.push("/");
+    }
   };
 
   return {
     ...authState,
     login,
+    register,
     logout,
+    checkAuth,
   };
 }

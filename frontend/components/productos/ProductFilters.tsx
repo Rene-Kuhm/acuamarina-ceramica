@@ -47,7 +47,7 @@ export function ProductFilters({ className, categories = [] }: ProductFiltersPro
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchValue]);
+  }, [searchValue, filters.search, updateFilters]);
 
   // Sync local state with URL changes
   useEffect(() => {
@@ -215,7 +215,7 @@ export function ProductFilters({ className, categories = [] }: ProductFiltersPro
           value={filters.availability || "all"}
           onValueChange={(value) =>
             updateFilters({
-              availability: value === "all" ? undefined : (value as any),
+              availability: value === "all" ? undefined : (value as "in_stock" | "out_of_stock"),
             })
           }
         >
