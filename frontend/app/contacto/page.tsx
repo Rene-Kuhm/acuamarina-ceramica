@@ -37,8 +37,9 @@ export default function ContactoPage() {
       await contactApi.send(formData);
       setSuccess(true);
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Error al enviar el mensaje");
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setError(error.response?.data?.message || "Error al enviar el mensaje");
     } finally {
       setIsSubmitting(false);
     }

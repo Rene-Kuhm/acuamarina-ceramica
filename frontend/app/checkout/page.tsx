@@ -95,8 +95,9 @@ export default function CheckoutPage() {
       await ordersApi.create(orderData);
       clearCart();
       router.push("/pedidos?success=true");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Error al procesar el pedido");
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setError(error.response?.data?.message || "Error al procesar el pedido");
     } finally {
       setIsProcessing(false);
     }
@@ -274,7 +275,7 @@ export default function CheckoutPage() {
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={handlePaymentSubmit} className="space-y-4">
-                    <RadioGroup value={paymentMethod} onValueChange={(value: any) => setPaymentMethod(value)}>
+                    <RadioGroup value={paymentMethod} onValueChange={(value) => setPaymentMethod(value as typeof paymentMethod)}>
                       <div className="flex items-center space-x-2 border rounded-lg p-4 cursor-pointer hover:bg-gray-50">
                         <RadioGroupItem value="credit_card" id="credit_card" />
                         <Label htmlFor="credit_card" className="flex-1 cursor-pointer">

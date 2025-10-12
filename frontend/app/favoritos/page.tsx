@@ -36,7 +36,7 @@ export default function FavoritosPage() {
     }
   };
 
-  const handleAddToCart = (item: any) => {
+  const handleAddToCart = (item: { id: number; name: string; slug: string; price: number; image: string }) => {
     addToCart({
       id: item.id,
       name: item.name,

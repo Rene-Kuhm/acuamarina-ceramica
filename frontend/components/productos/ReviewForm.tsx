@@ -51,7 +51,7 @@ export function ReviewForm({ productId, onSuccess, onCancel }: ReviewFormProps) 
       setComment("");
 
       onSuccess?.();
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error creating review:", error);
     }
   };

@@ -63,7 +63,8 @@ export function useAuth() {
         isLoading: false,
       });
       return { success: true };
-    } catch (error: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       return {
         success: false,
         error: error.response?.data?.message || "Error al iniciar sesión"
@@ -81,7 +82,8 @@ export function useAuth() {
         isLoading: false,
       });
       return { success: true };
-    } catch (error: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       return {
         success: false,
         error: error.response?.data?.message || "Error al registrarse"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Package, CheckCircle, Truck, Clock, XCircle, Eye } from "lucide-react";
@@ -14,7 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ordersApi } from "@/lib/api/orders";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function PedidosPage() {
+function PedidosContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const success = searchParams.get("success");
@@ -210,5 +210,24 @@ export default function PedidosPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function PedidosPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50">
+        <div className="container mx-auto px-4 py-8">
+          <Skeleton className="h-8 w-64 mb-8" />
+          <div className="space-y-4">
+            {[1, 2, 3].map((i) => (
+              <Skeleton key={i} className="h-48 w-full" />
+            ))}
+          </div>
+        </div>
+      </div>
+    }>
+      <PedidosContent />
+    </Suspense>
   );
 }

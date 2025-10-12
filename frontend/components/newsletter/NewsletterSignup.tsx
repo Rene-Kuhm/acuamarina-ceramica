@@ -25,8 +25,9 @@ export function NewsletterSignup() {
       setEmail("");
 
       setTimeout(() => setSuccess(false), 5000);
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "Error al suscribirse. Por favor, intenta nuevamente.");
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setError(error?.response?.data?.message || "Error al suscribirse. Por favor, intenta nuevamente.");
     } finally {
       setIsSubmitting(false);
     }

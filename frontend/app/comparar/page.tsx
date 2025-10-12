@@ -30,19 +30,19 @@ export default function ComparacionPage() {
     }).format(price);
   };
 
-  const handleAddToCart = (item: any) => {
+  const handleAddToCart = (item: { id: number; name: string; slug: string; price: number; image: string; stock?: number }) => {
     addToCart({
       id: item.id,
       name: item.name,
       slug: item.slug,
       price: item.price,
       image: item.image,
-      stock: item.stock,
+      stock: item.stock || 100,
       quantity: 1,
     });
   };
 
-  const handleToggleWishlist = (item: any) => {
+  const handleToggleWishlist = (item: { id: number; name: string; slug: string; price: number; image: string }) => {
     toggleWishlist({
       id: item.id,
       name: item.name,
