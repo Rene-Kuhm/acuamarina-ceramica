@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup";
 
 const footerLinks = {
   quickLinks: [
@@ -42,6 +43,23 @@ export function Footer() {
 
   return (
     <footer className="border-t bg-muted/50">
+      {/* Newsletter Section */}
+      <div className="bg-gradient-to-r from-cyan-600 to-cyan-800 text-white">
+        <div className="container mx-auto px-4 py-12">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-2">
+              Suscríbete a nuestro Newsletter
+            </h2>
+            <p className="text-cyan-100 mb-6">
+              Recibe ofertas exclusivas, novedades y consejos para tus proyectos
+            </p>
+            <div className="max-w-md mx-auto">
+              <NewsletterSignup />
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4 py-12">
         {/* Main Footer Content - 4 columns */}
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">

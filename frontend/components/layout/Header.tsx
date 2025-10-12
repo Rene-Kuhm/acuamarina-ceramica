@@ -11,6 +11,7 @@ import {
   LogIn,
   LogOut,
   UserCircle,
+  Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,6 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useCart } from "@/lib/hooks/useCart";
 import { useAuth } from "@/lib/hooks/useAuth";
+import { useWishlist } from "@/lib/hooks/useWishlist";
 import { useRouter } from "next/navigation";
 
 const navLinks = [
@@ -47,6 +49,7 @@ export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { totalItems } = useCart();
+  const { totalItems: wishlistTotal } = useWishlist();
   const { isAuthenticated, user, logout } = useAuth();
 
   const handleSearch = (e: React.FormEvent) => {
@@ -182,6 +185,22 @@ export function Header() {
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
+
+            {/* Wishlist Button */}
+            <Button variant="ghost" size="icon" className="relative" asChild>
+              <Link href="/favoritos">
+                <Heart className="h-5 w-5" />
+                {wishlistTotal > 0 && (
+                  <Badge
+                    variant="default"
+                    className="absolute -right-1 -top-1 h-5 min-w-5 items-center justify-center rounded-full bg-pink-600 p-0 text-xs hover:bg-pink-700"
+                  >
+                    {wishlistTotal > 99 ? "99+" : wishlistTotal}
+                  </Badge>
+                )}
+                <span className="sr-only">Favoritos</span>
+              </Link>
+            </Button>
 
             {/* Cart Button */}
             <Button variant="ghost" size="icon" className="relative" asChild>

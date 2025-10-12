@@ -8,7 +8,7 @@ import {
   ChevronLeft,
   ShoppingCart,
   Heart,
-  Share2,
+  Scale,
   Minus,
   Plus,
   Package,
@@ -24,7 +24,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useProduct } from "@/lib/hooks/useProducts";
 import { useCartStore } from "@/lib/store/cart";
+import { useWishlist } from "@/lib/hooks/useWishlist";
+import { useComparison } from "@/lib/hooks/useComparison";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { ReviewSection } from "@/components/productos/ReviewSection";
 
 function ProductDetailContent() {
   const params = useParams();
@@ -35,6 +38,8 @@ function ProductDetailContent() {
 
   const { data: product, isLoading, error } = useProduct(slug);
   const { addItem } = useCartStore();
+  const { toggleWishlist, isInWishlist } = useWishlist();
+  const { toggleComparison, isInComparison, totalItems: comparisonCount } = useComparison();
 
   if (isLoading) {
     return <ProductDetailSkeleton />;
@@ -81,6 +86,33 @@ function ProductDetailContent() {
     const newQuantity = quantity + delta;
     if (newQuantity >= 1 && newQuantity <= product.stock) {
       setQuantity(newQuantity);
+    }
+  };
+
+  const handleToggleWishlist = () => {
+    toggleWishlist({
+      id: product.id,
+      name: product.name,
+      slug: product.slug,
+      price: product.price,
+      image: product.images[0] || "/placeholder.jpg",
+    });
+  };
+
+  const handleToggleComparison = () => {
+    const result = toggleComparison({
+      id: product.id,
+      name: product.name,
+      slug: product.slug,
+      price: product.price,
+      image: product.images[0] || "/placeholder.jpg",
+      category: product.category,
+      specifications: product.specifications || {},
+      stock: product.stock,
+    });
+
+    if (!result.added && comparisonCount >= 4) {
+      alert("Solo puedes comparar hasta 4 productos a la vez");
     }
   };
 
@@ -243,11 +275,41 @@ function ProductDetailContent() {
                     <ShoppingCart className="w-5 h-5 mr-2" />
                     Agregar al Carrito
                   </Button>
-                  <Button variant="outline" size="lg">
-                    <Heart className="w-5 h-5" />
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    onClick={handleToggleWishlist}
+                    className={
+                      isInWishlist(product.id)
+                        ? "border-pink-600 text-pink-600 hover:bg-pink-50"
+                        : ""
+                    }
+                  >
+                    <Heart
+                      className={
+                        isInWishlist(product.id)
+                          ? "w-5 h-5 fill-pink-600"
+                          : "w-5 h-5"
+                      }
+                    />
                   </Button>
-                  <Button variant="outline" size="lg">
-                    <Share2 className="w-5 h-5" />
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    onClick={handleToggleComparison}
+                    className={
+                      isInComparison(product.id)
+                        ? "border-cyan-600 text-cyan-600 hover:bg-cyan-50"
+                        : ""
+                    }
+                  >
+                    <Scale
+                      className={
+                        isInComparison(product.id)
+                          ? "w-5 h-5 text-cyan-600"
+                          : "w-5 h-5"
+                      }
+                    />
                   </Button>
                 </div>
               </div>
@@ -280,6 +342,11 @@ function ProductDetailContent() {
               </CardContent>
             </Card>
           </div>
+        </div>
+
+        {/* Reviews Section */}
+        <div className="mt-12">
+          <ReviewSection productId={product.id} />
         </div>
       </div>
     </div>

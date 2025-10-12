@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Heart } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/lib/hooks/useCart";
+import { useWishlist } from "@/lib/hooks/useWishlist";
 import { Producto } from "@/lib/api/productos";
 import { cn } from "@/lib/utils";
 
@@ -22,6 +23,7 @@ export interface ProductCardProps {
  */
 export function ProductCard({ product, featured = false, className }: ProductCardProps) {
   const { addItem } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
 
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // Prevent navigation when clicking the button
@@ -34,6 +36,19 @@ export function ProductCard({ product, featured = false, className }: ProductCar
       price: product.price,
       image: product.images[0] || "/placeholder-product.jpg",
       stock: product.stock,
+    });
+  };
+
+  const handleToggleWishlist = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    toggleWishlist({
+      id: product.id,
+      name: product.name,
+      slug: product.slug,
+      price: product.price,
+      image: product.images[0] || "/placeholder-product.jpg",
     });
   };
 
@@ -82,6 +97,22 @@ export function ProductCard({ product, featured = false, className }: ProductCar
               </Badge>
             )}
           </div>
+
+          {/* Wishlist Button */}
+          <button
+            onClick={handleToggleWishlist}
+            className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-white transition-colors"
+            aria-label={isInWishlist(product.id) ? "Quitar de favoritos" : "Agregar a favoritos"}
+          >
+            <Heart
+              className={cn(
+                "w-5 h-5 transition-colors",
+                isInWishlist(product.id)
+                  ? "fill-pink-600 text-pink-600"
+                  : "text-gray-600 hover:text-pink-600"
+              )}
+            />
+          </button>
         </div>
 
         {/* Content */}
