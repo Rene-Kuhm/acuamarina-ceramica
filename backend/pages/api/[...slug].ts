@@ -300,5 +300,10 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-// Export para Vercel
-export default app;
+// Export para Vercel - Necesita ser un handler de VercelRequest/VercelResponse
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+
+export default async (req: VercelRequest, res: VercelResponse) => {
+  // Pass request to Express app
+  return app(req as any, res as any);
+};
