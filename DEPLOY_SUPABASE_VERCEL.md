@@ -75,7 +75,7 @@ DB_HOST=db.umyrvlzhvdsibpzvfnal.supabase.co
 DB_PORT=5432
 DB_NAME=postgres
 DB_USER=postgres
-DB_PASSWORD=[TU-PASSWORD-AQUI]
+DB_PASSWORD=Aguamarina@mosaicos
 DB_SSL=true
 DB_MAX_CONNECTIONS=5
 
@@ -140,13 +140,14 @@ vercel env add DB_PORT production
 # Pega: 5432
 
 vercel env add DB_NAME production
-# Pega: postgres
+# Pega: backend
 
 vercel env add DB_USER production
-# Pega: postgres
+# Pega: backend
 
 vercel env add DB_PASSWORD production
-# Pega: [TU-PASSWORD]
+# Pega: Aguamarina@mosaicos
+
 
 vercel env add DB_SSL production
 # Pega: true
