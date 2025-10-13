@@ -83,7 +83,7 @@ export default function CarritoPage() {
             <CardContent>
               <div className="flex justify-center mb-6">
                 <div className="p-4 bg-gray-100 rounded-full">
-                  <ShoppingCart className="w-16 h-16 text-gray-400" />
+                  <ShoppingCart className="w-16 h-16 text-gray-500" />
                 </div>
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -95,7 +95,7 @@ export default function CarritoPage() {
               <Button
                 asChild
                 size="lg"
-                className="bg-cyan-600 hover:bg-cyan-700"
+                className="bg-primary hover:bg-primary-hover"
               >
                 <Link href="/productos">
                   <ShoppingBag className="w-5 h-5 mr-2" />
@@ -142,8 +142,8 @@ export default function CarritoPage() {
 
         {/* Free Shipping Alert */}
         {subtotal < 50000 && (
-          <Alert className="mb-6 border-cyan-200 bg-cyan-50">
-            <AlertCircle className="h-4 w-4 text-cyan-600" />
+          <Alert className="mb-6 border-cyan-200 bg-primary-light">
+            <AlertCircle className="h-4 w-4 text-primary" />
             <AlertDescription className="text-cyan-800">
               Agrega {formatPrice(50000 - subtotal)} más para obtener{" "}
               <strong>envío gratis</strong>
@@ -179,11 +179,11 @@ export default function CarritoPage() {
                         <div className="flex-1">
                           <Link
                             href={`/productos/${item.slug}`}
-                            className="font-semibold text-gray-900 hover:text-cyan-600 transition-colors line-clamp-2"
+                            className="font-semibold text-gray-900 hover:text-primary transition-colors line-clamp-2"
                           >
                             {item.name}
                           </Link>
-                          <p className="text-lg font-bold text-cyan-600 mt-2">
+                          <p className="text-lg font-bold text-primary mt-2">
                             {formatPrice(item.price)}
                           </p>
                         </div>
@@ -273,13 +273,13 @@ export default function CarritoPage() {
 
                 <div className="flex justify-between text-lg font-bold">
                   <span>Total</span>
-                  <span className="text-cyan-600">{formatPrice(total)}</span>
+                  <span className="text-primary">{formatPrice(total)}</span>
                 </div>
 
                 <Button
                   onClick={handleCheckout}
                   size="lg"
-                  className="w-full bg-cyan-600 hover:bg-cyan-700 text-white"
+                  className="w-full bg-primary hover:bg-primary-hover text-white"
                 >
                   Proceder al Pago
                   <ArrowRight className="w-5 h-5 ml-2" />

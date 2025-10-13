@@ -1,6 +1,12 @@
 import Link from "next/link";
-import { Home, Search, ArrowLeft } from "lucide-react";
+import { Home, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "404 - Página no encontrada | Aguamarina Mosaicos",
+  description: "La página que buscas no existe. Explora nuestro catálogo de cerámicos y encuentra el producto perfecto para tu proyecto.",
+};
 
 export default function NotFound() {
   return (
@@ -16,7 +22,7 @@ export default function NotFound() {
         {/* Icon */}
         <div className="mb-6 flex justify-center">
           <div className="p-6 bg-white rounded-full shadow-lg">
-            <Search className="w-16 h-16 text-cyan-600" />
+            <Search className="w-16 h-16 text-primary" />
           </div>
         </div>
 
@@ -31,7 +37,7 @@ export default function NotFound() {
 
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" className="bg-cyan-600 hover:bg-cyan-700">
+          <Button asChild size="lg" className="bg-primary hover:bg-primary-hover">
             <Link href="/">
               <Home className="w-5 h-5 mr-2" />
               Ir al Inicio
@@ -49,13 +55,13 @@ export default function NotFound() {
         <div className="mt-12 pt-8 border-t border-gray-200">
           <p className="text-sm text-gray-500 mb-4">Enlaces rápidos:</p>
           <div className="flex flex-wrap gap-4 justify-center text-sm">
-            <Link href="/categorias" className="text-cyan-600 hover:text-cyan-700 hover:underline">
+            <Link href="/categorias" className="text-primary hover:text-primary-hover hover:underline">
               Categorías
             </Link>
-            <Link href="/nosotros" className="text-cyan-600 hover:text-cyan-700 hover:underline">
+            <Link href="/nosotros" className="text-primary hover:text-primary-hover hover:underline">
               Nosotros
             </Link>
-            <Link href="/contacto" className="text-cyan-600 hover:text-cyan-700 hover:underline">
+            <Link href="/contacto" className="text-primary hover:text-primary-hover hover:underline">
               Contacto
             </Link>
           </div>

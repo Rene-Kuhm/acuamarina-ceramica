@@ -56,7 +56,7 @@ export default function RegisterPage() {
       } else {
         setError(result.error || "Error al registrarse");
       }
-    } catch (err) {
+    } catch {
       setError("Error al registrarse. Por favor, intenta nuevamente.");
     } finally {
       setIsLoading(false);
@@ -75,7 +75,7 @@ export default function RegisterPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-center mb-4">
-            <div className="p-3 bg-gradient-to-br from-cyan-500 to-cyan-700 rounded-full">
+            <div className="p-3 bg-gradient-to-br bg-gradient-primary rounded-full">
               <UserPlus className="w-6 h-6 text-white" />
             </div>
           </div>
@@ -209,11 +209,11 @@ export default function RegisterPage() {
 
             <div className="text-xs text-gray-600">
               Al registrarte, aceptas nuestros{" "}
-              <Link href="/terminos" className="text-cyan-600 hover:underline">
+              <Link href="/terminos" className="text-primary hover:underline">
                 Términos de Servicio
               </Link>{" "}
               y{" "}
-              <Link href="/privacidad" className="text-cyan-600 hover:underline">
+              <Link href="/privacidad" className="text-primary hover:underline">
                 Política de Privacidad
               </Link>
             </div>
@@ -222,7 +222,7 @@ export default function RegisterPage() {
           <CardFooter className="flex flex-col space-y-4">
             <Button
               type="submit"
-              className="w-full bg-cyan-600 hover:bg-cyan-700"
+              className="w-full bg-primary hover:bg-primary-hover"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -242,7 +242,7 @@ export default function RegisterPage() {
               ¿Ya tienes una cuenta?{" "}
               <Link
                 href="/auth/login"
-                className="text-cyan-600 hover:text-cyan-700 font-medium hover:underline"
+                className="text-primary hover:text-primary-hover font-medium hover:underline"
               >
                 Inicia sesión aquí
               </Link>

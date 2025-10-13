@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { User, Mail, Phone, MapPin, Package, Heart, Settings } from "lucide-react";
+import { Mail, Phone, MapPin, Package, Heart, Settings } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -23,7 +23,7 @@ export default function CuentaPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-cyan-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -58,7 +58,7 @@ export default function CuentaPage() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-700 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                    <div className="w-16 h-16 bg-gradient-to-br bg-gradient-primary rounded-full flex items-center justify-center text-white text-2xl font-bold">
                       {user.name.charAt(0).toUpperCase()}
                     </div>
                     <div>
@@ -99,8 +99,8 @@ export default function CuentaPage() {
               <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
                 <CardContent className="p-6">
                   <div className="flex flex-col items-center text-center space-y-3">
-                    <div className="p-3 bg-cyan-100 rounded-full">
-                      <Package className="w-6 h-6 text-cyan-600" />
+                    <div className="p-3 bg-primary-light rounded-full">
+                      <Package className="w-6 h-6 text-primary" />
                     </div>
                     <div>
                       <h3 className="font-semibold">Mis Pedidos</h3>

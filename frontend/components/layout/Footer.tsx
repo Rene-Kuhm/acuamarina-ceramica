@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup";
@@ -44,13 +45,13 @@ export function Footer() {
   return (
     <footer className="border-t bg-muted/50">
       {/* Newsletter Section */}
-      <div className="bg-gradient-to-r from-cyan-600 to-cyan-800 text-white">
+      <div className="bg-gradient-hero text-white">
         <div className="container mx-auto px-4 py-12">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold mb-2">
               Suscríbete a nuestro Newsletter
             </h2>
-            <p className="text-cyan-100 mb-6">
+            <p className="text-white mb-6">
               Recibe ofertas exclusivas, novedades y consejos para tus proyectos
             </p>
             <div className="max-w-md mx-auto">
@@ -65,15 +66,21 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Column 1: About */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500 to-cyan-700 text-white font-bold text-xl">
-                A
+            <Link href="/" className="flex items-center space-x-2">
+              <div className="relative h-10 w-10 flex-shrink-0">
+                <Image
+                  src="/logo-aguamarina.png"
+                  alt="Aguamarina Mosaicos"
+                  width={40}
+                  height={40}
+                  className="object-contain"
+                />
               </div>
-              <span className="font-bold text-lg bg-gradient-to-r from-cyan-600 to-cyan-800 bg-clip-text text-transparent">
+              <span className="font-bold text-lg bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">
                 Aguamarina Mosaicos
               </span>
-            </div>
-            <p className="text-sm text-muted-foreground">
+            </Link>
+            <p className="text-sm text-gray-600">
               Tu tienda de confianza para cerámicos de alta calidad.
               Transformamos espacios con diseño y elegancia.
             </p>
@@ -92,7 +99,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-cyan-600"
+                    className="text-sm text-gray-600 transition-colors hover:text-primary"
                   >
                     {link.label}
                   </Link>
@@ -111,7 +118,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-cyan-600"
+                    className="text-sm text-gray-600 transition-colors hover:text-primary"
                   >
                     {link.label}
                   </Link>
@@ -127,26 +134,26 @@ export function Footer() {
             </h3>
             <ul className="space-y-3">
               <li className="flex items-start space-x-3">
-                <Mail className="h-4 w-4 mt-0.5 text-cyan-600 flex-shrink-0" />
+                <Mail className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
                 <a
                   href="mailto:info@acuamarina.com"
-                  className="text-sm text-muted-foreground transition-colors hover:text-cyan-600"
+                  className="text-sm text-gray-600 transition-colors hover:text-primary"
                 >
                   info@acuamarina.com
                 </a>
               </li>
               <li className="flex items-start space-x-3">
-                <Phone className="h-4 w-4 mt-0.5 text-cyan-600 flex-shrink-0" />
+                <Phone className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
                 <a
                   href="tel:+541123456789"
-                  className="text-sm text-muted-foreground transition-colors hover:text-cyan-600"
+                  className="text-sm text-gray-600 transition-colors hover:text-primary"
                 >
                   +54 telefono
                 </a>
               </li>
               <li className="flex items-start space-x-3">
-                <MapPin className="h-4 w-4 mt-0.5 text-cyan-600 flex-shrink-0" />
-                <span className="text-sm text-muted-foreground">
+                <MapPin className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
+                <span className="text-sm text-gray-600">
                   Av. Ejemplo 1234
                   <br />
                   ejemplo, Argentina
@@ -168,7 +175,7 @@ export function Footer() {
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-600/10 text-cyan-600 transition-colors hover:bg-cyan-600 hover:text-white"
+                      className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors hover:bg-primary hover:text-white"
                       aria-label={social.label}
                     >
                       <Icon className="h-4 w-4" />
@@ -184,28 +191,28 @@ export function Footer() {
 
         {/* Copyright Row */}
         <div className="flex flex-col items-center justify-between space-y-4 text-center sm:flex-row sm:space-y-0 sm:text-left">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-gray-600">
             &copy; {currentYear} Aguamarina Mosaicos. Todos los derechos
             reservados.
           </p>
           <div className="flex items-center space-x-4">
             <Link
               href="/terminos"
-              className="text-sm text-muted-foreground transition-colors hover:text-cyan-600"
+              className="text-sm text-gray-600 transition-colors hover:text-primary"
             >
               Términos
             </Link>
             <Separator orientation="vertical" className="h-4" />
             <Link
               href="/privacidad"
-              className="text-sm text-muted-foreground transition-colors hover:text-cyan-600"
+              className="text-sm text-gray-600 transition-colors hover:text-primary"
             >
               Privacidad
             </Link>
             <Separator orientation="vertical" className="h-4" />
             <Link
               href="/cookies"
-              className="text-sm text-muted-foreground transition-colors hover:text-cyan-600"
+              className="text-sm text-gray-600 transition-colors hover:text-primary"
             >
               Cookies
             </Link>

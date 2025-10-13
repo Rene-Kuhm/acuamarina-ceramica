@@ -35,7 +35,7 @@ export default function HomePage() {
           <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-in">
             {/* Title with Gradient */}
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-100 rounded-full text-cyan-700 text-sm font-medium mb-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-light rounded-full text-primary-hover text-sm font-medium mb-4">
                 <Sparkles className="w-4 h-4" />
                 Bienvenido a tu tienda de confianza
               </div>
@@ -51,8 +51,9 @@ export default function HomePage() {
 
             {/* Description */}
             <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              Transformamos espacios con la mejor selección de cerámicos, azulejos y revestimientos.
-              Diseño excepcional y durabilidad garantizada para tu hogar o proyecto.
+             &ldquo;Somos mosaicos —pedazos de luz, amor, historia, estrellas— pegados con magia y música y palabras.&rdquo;
+              <br />
+              <span className="block mt-2 text-base">—Anita Krizsan</span>
             </p>
 
             {/* CTA Buttons */}
@@ -60,7 +61,7 @@ export default function HomePage() {
               <Button
                 asChild
                 size="lg"
-                className="bg-cyan-600 hover:bg-cyan-700 text-white px-8 py-6 text-lg shadow-lg hover:shadow-xl transition-all"
+                className="bg-primary hover:bg-primary-hover text-white px-8 py-6 text-lg shadow-lg hover:shadow-xl transition-all"
               >
                 <Link href="/productos">
                   Ver Productos
@@ -71,7 +72,7 @@ export default function HomePage() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="border-cyan-600 text-cyan-600 hover:bg-cyan-50 px-8 py-6 text-lg"
+                className="border-primary text-primary hover:bg-cyan-50 px-8 py-6 text-lg"
               >
                 <Link href="/categorias">
                   Explorar Categorías
@@ -89,7 +90,7 @@ export default function HomePage() {
       <section className="py-16 md:py-24 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
               Explora Nuestras Categorías
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -130,7 +131,7 @@ export default function HomePage() {
       <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
               Productos Destacados
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -152,7 +153,7 @@ export default function HomePage() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="border-cyan-600 text-cyan-600 hover:bg-cyan-50"
+                className="border-primary text-primary hover:bg-cyan-50"
               >
                 <Link href="/productos">
                   Ver Todos los Productos
@@ -191,7 +192,7 @@ export default function HomePage() {
       <section className="py-16 md:py-20 bg-gradient-to-r from-cyan-600 to-blue-600 text-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center space-y-6">
-            <h2 className="text-3xl md:text-4xl font-bold">
+            <h2 className="text-3xl md:text-4xl font-bold text-white">
               ¿Necesitas Asesoramiento?
             </h2>
             <p className="text-lg md:text-xl text-cyan-50">
@@ -203,7 +204,7 @@ export default function HomePage() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="bg-white text-cyan-600 border-white hover:bg-cyan-50 px-8 py-6 text-lg"
+                className="bg-white text-primary border-white hover:bg-cyan-50 px-8 py-6 text-lg"
               >
                 <Link href="/contacto">
                   Contactar Ahora
@@ -234,10 +235,10 @@ function CategoryCard({ icon, title, description, href }: CategoryCardProps) {
     <Link href={href} className="block group">
       <Card className="h-full transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-cyan-500/50 cursor-pointer">
         <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center text-cyan-600 group-hover:bg-cyan-600 group-hover:text-white transition-colors">
+          <div className="mx-auto w-16 h-16 bg-primary-light rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
             {icon}
           </div>
-          <CardTitle className="text-xl group-hover:text-cyan-600 transition-colors">
+          <CardTitle className="text-xl group-hover:text-primary transition-colors">
             {title}
           </CardTitle>
         </CardHeader>
@@ -245,7 +246,7 @@ function CategoryCard({ icon, title, description, href }: CategoryCardProps) {
           <CardDescription className="text-base">
             {description}
           </CardDescription>
-          <div className="mt-4 text-cyan-600 font-medium flex items-center justify-center gap-2 group-hover:gap-3 transition-all">
+          <div className="mt-4 text-primary font-medium flex items-center justify-center gap-2 group-hover:gap-3 transition-all">
             Ver más
             <ArrowRight className="w-4 h-4" />
           </div>
@@ -268,7 +269,7 @@ interface BenefitCardProps {
 function BenefitCard({ icon, title, description }: BenefitCardProps) {
   return (
     <div className="text-center space-y-4 p-6">
-      <div className="mx-auto w-20 h-20 bg-cyan-100 rounded-full flex items-center justify-center text-cyan-600">
+      <div className="mx-auto w-20 h-20 bg-primary-light rounded-full flex items-center justify-center text-primary">
         {icon}
       </div>
       <h3 className="text-xl font-bold text-gray-900">

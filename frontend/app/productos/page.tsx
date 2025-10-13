@@ -56,35 +56,35 @@ function ProductosContent() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-cyan-600 to-cyan-800 text-white py-8 sm:py-12">
+      <section className="bg-gradient-hero text-white py-8 sm:py-12">
         <div className="container mx-auto px-4">
-          <Breadcrumb items={breadcrumbItems} className="mb-4 text-cyan-100" />
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold">
+          <Breadcrumb items={breadcrumbItems} className="text-white mb-4" />
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 text-white">
             Nuestros Productos
           </h1>
-          <p className="mt-2 text-cyan-100 text-sm sm:text-base max-w-2xl">
+          <p className="text-white/90 text-sm sm:text-base max-w-2xl">
             Explora nuestra amplia selección de cerámicos de alta calidad
           </p>
         </div>
       </section>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
         {/* Error State */}
         {error && (
-          <Alert variant="destructive" className="mb-6">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
+          <Alert variant="destructive" className="mb-6 border-red-600 bg-red-50">
+            <AlertCircle className="h-5 w-5 text-red-600" />
+            <AlertDescription className="text-red-900 font-medium text-sm sm:text-base">
               Error al cargar los productos. Por favor, intenta nuevamente.
             </AlertDescription>
           </Alert>
         )}
 
         {/* Layout: Sidebar + Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] xl:grid-cols-[320px_1fr] gap-4 sm:gap-6 lg:gap-8">
           {/* Sidebar Filters - Desktop Only */}
-          <aside className="hidden lg:block lg:col-span-1">
-            <div className="sticky top-4">
+          <aside className="hidden lg:block">
+            <div className="sticky top-20">
               {categoriesLoading ? (
                 <div className="space-y-4">
                   <Skeleton className="h-8 w-32" />
@@ -99,7 +99,7 @@ function ProductosContent() {
           </aside>
 
           {/* Main Content */}
-          <main className="lg:col-span-3">
+          <main className="min-w-0">
             {/* List Header */}
             <ProductListHeader
               total={meta.total}
@@ -115,7 +115,7 @@ function ProductosContent() {
 
             {/* Pagination */}
             {!productsLoading && products.length > 0 && (
-              <div className="mt-8">
+              <div className="mt-6 sm:mt-8">
                 <ProductPagination
                   currentPage={meta.page}
                   totalPages={meta.totalPages}
@@ -142,15 +142,15 @@ export default function ProductosPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-gray-50">
-        <section className="bg-gradient-to-r from-cyan-600 to-cyan-800 text-white py-8 sm:py-12">
+        <section className="bg-gradient-hero text-white py-8 sm:py-12">
           <div className="container mx-auto px-4">
-            <Skeleton className="h-8 w-64 mb-4 bg-cyan-700" />
-            <Skeleton className="h-10 w-96 bg-cyan-700" />
+            <Skeleton className="h-8 w-64 mb-4 bg-primary/30" />
+            <Skeleton className="h-10 w-96 bg-primary/30" />
           </div>
         </section>
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <aside className="hidden lg:block lg:col-span-1">
+        <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] xl:grid-cols-[320px_1fr] gap-4 sm:gap-6 lg:gap-8">
+            <aside className="hidden lg:block">
               <div className="space-y-4">
                 <Skeleton className="h-8 w-32" />
                 <Skeleton className="h-10 w-full" />
@@ -158,11 +158,11 @@ export default function ProductosPage() {
                 <Skeleton className="h-24 w-full" />
               </div>
             </aside>
-            <main className="lg:col-span-3">
+            <main className="min-w-0">
               <Skeleton className="h-12 w-full mb-6" />
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <Skeleton key={i} className="h-96 w-full" />
+                  <Skeleton key={i} className="h-80 sm:h-96 w-full" />
                 ))}
               </div>
             </main>

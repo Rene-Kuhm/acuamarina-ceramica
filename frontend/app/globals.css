@@ -1,76 +1,122 @@
 @import "tailwindcss";
 
 @theme {
-  /* Tema Acuamarina - Colores profesionales */
-  --color-background: #fafbfc;
-  --color-foreground: #0f172a;
+  /* ============================================
+     AGUAMARINA MOSAICOS - Premium Color Palette
+     Inspired by: Luxury Ceramics & Natural Elements
+     ============================================ */
+
+  /* Base Colors */
+  --color-background: #f8fafb;
+  --color-foreground: #1a2332;
   --color-card: #ffffff;
-  --color-card-foreground: #0f172a;
+  --color-card-foreground: #1a2332;
   --color-popover: #ffffff;
-  --color-popover-foreground: #0f172a;
+  --color-popover-foreground: #1a2332;
 
-  /* Primary - Azul Acuamarina */
-  --color-primary: #0891b2;
+  /* Primary - Aquamarine Blue (Luxury Teal) */
+  --color-primary: #0d9488;        /* Rich Teal */
   --color-primary-foreground: #ffffff;
+  --color-primary-hover: #0f766e;  /* Darker Teal */
+  --color-primary-light: #ccfbf1;  /* Soft Teal Background */
 
-  /* Secondary */
-  --color-secondary: #f0fdfa;
-  --color-secondary-foreground: #0f766e;
+  /* Secondary - Ceramic Clay */
+  --color-secondary: #f4f7f9;      /* Porcelain White */
+  --color-secondary-foreground: #475569;
+  --color-secondary-hover: #e7eef3;
 
-  /* Accent - Teal */
-  --color-accent: #14b8a6;
+  /* Accent - Ocean Depth */
+  --color-accent: #0891b2;         /* Deep Aqua */
   --color-accent-foreground: #ffffff;
+  --color-accent-hover: #0e7490;
 
-  /* Muted */
+  /* Muted - Natural Stone */
   --color-muted: #f1f5f9;
   --color-muted-foreground: #64748b;
 
-  /* Destructive */
-  --color-destructive: #ef4444;
-  --color-destructive-foreground: #ffffff;
+  /* Success - Fresh Mint */
+  --color-success: #10b981;
+  --color-success-foreground: #ffffff;
+  --color-success-light: #d1fae5;
 
-  /* Borders */
+  /* Warning - Warm Sand */
+  --color-warning: #f59e0b;
+  --color-warning-foreground: #ffffff;
+  --color-warning-light: #fef3c7;
+
+  /* Destructive - Terracotta */
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #ffffff;
+  --color-destructive-light: #fee2e2;
+
+  /* Borders & Inputs */
   --color-border: #e2e8f0;
-  --color-input: #e2e8f0;
-  --color-ring: #0891b2;
+  --color-input: #e5e7eb;
+  --color-ring: #0d9488;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
   /* Radius */
   --radius: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
 }
 
-/* Dark mode variables */
+/* ============================================
+   DARK MODE - Sophisticated Night Theme
+   ============================================ */
 .dark {
-  --color-background: #0f172a;
-  --color-foreground: #f1f5f9;
-  --color-card: #1e293b;
-  --color-card-foreground: #f1f5f9;
-  --color-popover: #1e293b;
-  --color-popover-foreground: #f1f5f9;
+  /* Base Colors - Deep Navy with Warmth */
+  --color-background: #0a1628;
+  --color-foreground: #f0f4f8;
+  --color-card: #152238;
+  --color-card-foreground: #f0f4f8;
+  --color-popover: #152238;
+  --color-popover-foreground: #f0f4f8;
 
-  /* Primary más brillante en dark */
-  --color-primary: #06b6d4;
-  --color-primary-foreground: #0f172a;
+  /* Primary - Luminous Aquamarine */
+  --color-primary: #14b8a6;
+  --color-primary-foreground: #0a1628;
+  --color-primary-hover: #0d9488;
+  --color-primary-light: #134e4a;
 
-  /* Secondary */
-  --color-secondary: #0e7490;
-  --color-secondary-foreground: #f0fdfa;
+  /* Secondary - Slate Blue */
+  --color-secondary: #1e293b;
+  --color-secondary-foreground: #cbd5e1;
+  --color-secondary-hover: #293548;
 
-  /* Accent */
-  --color-accent: #14b8a6;
-  --color-accent-foreground: #0f172a;
+  /* Accent - Bright Cyan */
+  --color-accent: #22d3ee;
+  --color-accent-foreground: #0a1628;
+  --color-accent-hover: #06b6d4;
 
-  /* Muted */
+  /* Muted - Cool Gray */
   --color-muted: #1e293b;
   --color-muted-foreground: #94a3b8;
 
-  /* Destructive */
-  --color-destructive: #dc2626;
-  --color-destructive-foreground: #f1f5f9;
+  /* Success */
+  --color-success: #10b981;
+  --color-success-foreground: #0a1628;
+  --color-success-light: #064e3b;
 
-  /* Borders */
-  --color-border: #334155;
-  --color-input: #334155;
-  --color-ring: #06b6d4;
+  /* Warning */
+  --color-warning: #fbbf24;
+  --color-warning-foreground: #0a1628;
+  --color-warning-light: #78350f;
+
+  /* Destructive */
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #f0f4f8;
+  --color-destructive-light: #7f1d1d;
+
+  /* Borders & Inputs */
+  --color-border: #2d3f5f;
+  --color-input: #2d3f5f;
+  --color-ring: #14b8a6;
 }
 
 /* Base styles */
@@ -161,19 +207,75 @@ html {
   animation: slide-in 0.4s ease-out;
 }
 
-/* Gradient backgrounds */
-.bg-gradient-acuamarina {
-  background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+/* ============================================
+   PREMIUM GRADIENTS
+   ============================================ */
+
+/* Primary Gradients - Aquamarine Theme */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #0891b2 100%);
 }
 
+.bg-gradient-primary-soft {
+  background: linear-gradient(135deg, #ccfbf1 0%, #a7f3d0 100%);
+}
+
+/* Hero Gradients - Deep Ocean */
+.bg-gradient-hero {
+  background: linear-gradient(135deg, #0e7490 0%, #0d9488 50%, #14b8a6 100%);
+}
+
+.bg-gradient-hero-dark {
+  background: linear-gradient(135deg, #155e75 0%, #0e7490 50%, #0f766e 100%);
+}
+
+/* Ceramic Inspired */
 .bg-gradient-ceramic {
-  background: linear-gradient(135deg, #0e7490 0%, #14b8a6 100%);
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
 }
 
-/* Glass morphism effect */
+.bg-gradient-luxury {
+  background: linear-gradient(135deg, #0d9488 0%, #0891b2 50%, #06b6d4 100%);
+  box-shadow: 0 10px 40px -10px rgba(13, 148, 136, 0.4);
+}
+
+/* Glass Morphism - Premium Effect */
 .glass-effect {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.glass-effect-dark {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Shimmer Effect - Luxury Loading */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    #f1f5f9 0%,
+    #e2e8f0 20%,
+    #f1f5f9 40%,
+    #f1f5f9 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Premium Hover Effects */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -8px rgba(13, 148, 136, 0.3);
 }

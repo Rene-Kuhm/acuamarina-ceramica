@@ -83,10 +83,10 @@ export function ProductFilters({ className, categories = [] }: ProductFiltersPro
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Filter className="w-5 h-5 text-cyan-600" />
-          <h2 className="text-lg font-semibold">Filtros</h2>
+          <Filter className="w-5 h-5 text-primary" />
+          <h2 className="text-lg font-semibold text-gray-900">Filtros</h2>
           {activeFilterCount > 0 && (
-            <span className="flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-cyan-600 rounded-full">
+            <span className="flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-primary rounded-full">
               {activeFilterCount}
             </span>
           )}
@@ -96,7 +96,7 @@ export function ProductFilters({ className, categories = [] }: ProductFiltersPro
             variant="ghost"
             size="sm"
             onClick={clearFilters}
-            className="text-xs text-muted-foreground hover:text-cyan-600"
+            className="text-xs text-gray-700 hover:text-primary font-medium"
           >
             Limpiar
           </Button>
@@ -105,11 +105,11 @@ export function ProductFilters({ className, categories = [] }: ProductFiltersPro
 
       {/* Search */}
       <div className="space-y-2">
-        <Label htmlFor="search" className="text-sm font-medium">
+        <Label htmlFor="search" className="text-sm font-medium text-gray-900">
           Buscar
         </Label>
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
           <Input
             id="search"
             type="text"
@@ -121,7 +121,7 @@ export function ProductFilters({ className, categories = [] }: ProductFiltersPro
           {searchValue && (
             <button
               onClick={() => setSearchValue("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-900"
               aria-label="Limpiar búsqueda"
             >
               <X className="w-4 h-4" />
@@ -133,7 +133,7 @@ export function ProductFilters({ className, categories = [] }: ProductFiltersPro
       {/* Category */}
       {categories.length > 0 && (
         <div className="space-y-2">
-          <Label htmlFor="category" className="text-sm font-medium">
+          <Label htmlFor="category" className="text-sm font-medium text-gray-900">
             Categoría
           </Label>
           <Select
@@ -159,10 +159,10 @@ export function ProductFilters({ className, categories = [] }: ProductFiltersPro
 
       {/* Price Range */}
       <div className="space-y-2">
-        <Label className="text-sm font-medium">Rango de Precio</Label>
+        <Label className="text-sm font-medium text-gray-900">Rango de Precio</Label>
         <div className="grid grid-cols-2 gap-2">
           <div className="space-y-1">
-            <Label htmlFor="minPrice" className="text-xs text-muted-foreground">
+            <Label htmlFor="minPrice" className="text-xs text-gray-700 font-medium">
               Mínimo
             </Label>
             <Input
@@ -181,7 +181,7 @@ export function ProductFilters({ className, categories = [] }: ProductFiltersPro
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="maxPrice" className="text-xs text-muted-foreground">
+            <Label htmlFor="maxPrice" className="text-xs text-gray-700 font-medium">
               Máximo
             </Label>
             <Input
@@ -201,7 +201,7 @@ export function ProductFilters({ className, categories = [] }: ProductFiltersPro
           </div>
         </div>
         {(filters.minPrice || filters.maxPrice) && (
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-gray-600">
             {filters.minPrice ? formatPrice(filters.minPrice.toString()) : "$0"} -{" "}
             {filters.maxPrice ? formatPrice(filters.maxPrice.toString()) : "∞"}
           </p>
@@ -210,7 +210,7 @@ export function ProductFilters({ className, categories = [] }: ProductFiltersPro
 
       {/* Availability */}
       <div className="space-y-3">
-        <Label className="text-sm font-medium">Disponibilidad</Label>
+        <Label className="text-sm font-medium text-gray-900">Disponibilidad</Label>
         <RadioGroup
           value={filters.availability || "all"}
           onValueChange={(value) =>
@@ -221,19 +221,19 @@ export function ProductFilters({ className, categories = [] }: ProductFiltersPro
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="all" id="all" />
-            <Label htmlFor="all" className="font-normal cursor-pointer">
+            <Label htmlFor="all" className="font-normal cursor-pointer text-gray-700">
               Todas
             </Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="in_stock" id="in_stock" />
-            <Label htmlFor="in_stock" className="font-normal cursor-pointer">
+            <Label htmlFor="in_stock" className="font-normal cursor-pointer text-gray-700">
               En stock
             </Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="out_of_stock" id="out_of_stock" />
-            <Label htmlFor="out_of_stock" className="font-normal cursor-pointer">
+            <Label htmlFor="out_of_stock" className="font-normal cursor-pointer text-gray-700">
               Sin stock
             </Label>
           </div>
@@ -242,7 +242,7 @@ export function ProductFilters({ className, categories = [] }: ProductFiltersPro
 
       {/* Sort By */}
       <div className="space-y-2">
-        <Label htmlFor="sortBy" className="text-sm font-medium">
+        <Label htmlFor="sortBy" className="text-sm font-medium text-gray-900">
           Ordenar por
         </Label>
         <Select
@@ -277,7 +277,7 @@ export function ProductFilters({ className, categories = [] }: ProductFiltersPro
         <Button
           variant="outline"
           onClick={clearFilters}
-          className="w-full border-cyan-600 text-cyan-600 hover:bg-cyan-50"
+          className="w-full border-primary text-primary hover:bg-primary-light"
         >
           Limpiar todos los filtros
         </Button>

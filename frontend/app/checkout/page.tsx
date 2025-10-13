@@ -115,14 +115,14 @@ export default function CheckoutPage() {
         <div className="container mx-auto px-4 py-16">
           <Card className="max-w-2xl mx-auto text-center py-12">
             <CardContent>
-              <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <Package className="w-16 h-16 text-gray-500 mx-auto mb-4" />
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 Tu carrito está vacío
               </h2>
               <p className="text-gray-600 mb-8">
                 Agrega productos antes de realizar el checkout
               </p>
-              <Button asChild size="lg" className="bg-cyan-600 hover:bg-cyan-700">
+              <Button asChild size="lg" className="bg-primary hover:bg-primary-hover">
                 <Link href="/productos">Ir a Productos</Link>
               </Button>
             </CardContent>
@@ -154,27 +154,27 @@ export default function CheckoutPage() {
         {/* Progress Steps */}
         <div className="mb-8">
           <div className="flex items-center justify-center space-x-4">
-            <div className={`flex items-center ${currentStep === "address" ? "text-cyan-600" : "text-gray-400"}`}>
+            <div className={`flex items-center ${currentStep === "address" ? "text-primary" : "text-gray-600"}`}>
               <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${
-                currentStep === "address" ? "border-cyan-600 bg-cyan-50" : "border-gray-300"
+                currentStep === "address" ? "border-primary bg-primary-light" : "border-gray-300"
               }`}>
                 <MapPin className="w-4 h-4" />
               </div>
               <span className="ml-2 font-medium">Dirección</span>
             </div>
             <div className="h-px w-16 bg-gray-300" />
-            <div className={`flex items-center ${currentStep === "payment" ? "text-cyan-600" : "text-gray-400"}`}>
+            <div className={`flex items-center ${currentStep === "payment" ? "text-primary" : "text-gray-600"}`}>
               <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${
-                currentStep === "payment" ? "border-cyan-600 bg-cyan-50" : "border-gray-300"
+                currentStep === "payment" ? "border-primary bg-primary-light" : "border-gray-300"
               }`}>
                 <CreditCard className="w-4 h-4" />
               </div>
               <span className="ml-2 font-medium">Pago</span>
             </div>
             <div className="h-px w-16 bg-gray-300" />
-            <div className={`flex items-center ${currentStep === "confirm" ? "text-cyan-600" : "text-gray-400"}`}>
+            <div className={`flex items-center ${currentStep === "confirm" ? "text-primary" : "text-gray-600"}`}>
               <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${
-                currentStep === "confirm" ? "border-cyan-600 bg-cyan-50" : "border-gray-300"
+                currentStep === "confirm" ? "border-primary bg-primary-light" : "border-gray-300"
               }`}>
                 <CheckCircle className="w-4 h-4" />
               </div>
@@ -198,7 +198,7 @@ export default function CheckoutPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center">
-                    <MapPin className="w-5 h-5 mr-2 text-cyan-600" />
+                    <MapPin className="w-5 h-5 mr-2 text-primary" />
                     Dirección de Envío
                   </CardTitle>
                 </CardHeader>
@@ -256,7 +256,7 @@ export default function CheckoutPage() {
                         />
                       </div>
                     </div>
-                    <Button type="submit" className="w-full bg-cyan-600 hover:bg-cyan-700">
+                    <Button type="submit" className="w-full bg-primary hover:bg-primary-hover">
                       Continuar al Pago
                     </Button>
                   </form>
@@ -269,7 +269,7 @@ export default function CheckoutPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center">
-                    <CreditCard className="w-5 h-5 mr-2 text-cyan-600" />
+                    <CreditCard className="w-5 h-5 mr-2 text-primary" />
                     Método de Pago
                   </CardTitle>
                 </CardHeader>
@@ -307,7 +307,7 @@ export default function CheckoutPage() {
                       >
                         Volver
                       </Button>
-                      <Button type="submit" className="flex-1 bg-cyan-600 hover:bg-cyan-700">
+                      <Button type="submit" className="flex-1 bg-primary hover:bg-primary-hover">
                         Continuar a Confirmación
                       </Button>
                     </div>
@@ -321,7 +321,7 @@ export default function CheckoutPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center">
-                    <CheckCircle className="w-5 h-5 mr-2 text-cyan-600" />
+                    <CheckCircle className="w-5 h-5 mr-2 text-primary" />
                     Confirmar Pedido
                   </CardTitle>
                 </CardHeader>
@@ -380,7 +380,7 @@ export default function CheckoutPage() {
                     </Button>
                     <Button
                       onClick={handleConfirmOrder}
-                      className="flex-1 bg-cyan-600 hover:bg-cyan-700"
+                      className="flex-1 bg-primary hover:bg-primary-hover"
                       disabled={isProcessing}
                     >
                       {isProcessing ? "Procesando..." : "Confirmar Pedido"}
@@ -417,7 +417,7 @@ export default function CheckoutPage() {
                 <Separator />
                 <div className="flex justify-between text-lg font-bold">
                   <span>Total</span>
-                  <span className="text-cyan-600">{formatPrice(total)}</span>
+                  <span className="text-primary">{formatPrice(total)}</span>
                 </div>
               </CardContent>
             </Card>

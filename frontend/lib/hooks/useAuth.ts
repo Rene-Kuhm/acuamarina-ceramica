@@ -43,7 +43,7 @@ export function useAuth() {
         user,
         isLoading: false,
       });
-    } catch (error) {
+    } catch {
       localStorage.removeItem(TOKEN_KEY);
       setAuthState({
         isAuthenticated: false,
@@ -94,7 +94,7 @@ export function useAuth() {
   const logout = async () => {
     try {
       await authApi.logout();
-    } catch (error) {
+    } catch {
       // Continue with logout even if API call fails
     } finally {
       localStorage.removeItem(TOKEN_KEY);

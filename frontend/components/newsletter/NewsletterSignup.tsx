@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Mail, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,11 @@ export function NewsletterSignup() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,6 +49,17 @@ export function NewsletterSignup() {
     );
   }
 
+  if (!mounted) {
+    return (
+      <div className="h-[120px] flex items-center justify-center">
+        <div className="animate-pulse flex gap-2 w-full">
+          <div className="h-10 bg-gray-200 rounded flex-1"></div>
+          <div className="h-10 bg-gray-200 rounded w-32"></div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       {error && (
@@ -55,7 +71,7 @@ export function NewsletterSignup() {
 
       <form onSubmit={handleSubmit} className="flex gap-2">
         <div className="relative flex-1">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-200" />
           <Input
             type="email"
             placeholder="tu@email.com"
@@ -69,13 +85,13 @@ export function NewsletterSignup() {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="bg-cyan-600 hover:bg-cyan-700"
+          className="bg-primary hover:bg-primary-hover"
         >
           {isSubmitting ? "Suscribiendo..." : "Suscribirse"}
         </Button>
       </form>
 
-      <p className="text-xs text-gray-500 mt-2">
+      <p className="text-xs text-gray-200 mt-2">
         Al suscribirte, aceptas recibir nuestras ofertas y novedades.
       </p>
     </div>

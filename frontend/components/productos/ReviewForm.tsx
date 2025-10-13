@@ -135,7 +135,7 @@ export function ReviewForm({ productId, onSuccess, onCancel }: ReviewFormProps) 
           <div className="flex gap-3">
             <Button
               type="submit"
-              className="flex-1 bg-cyan-600 hover:bg-cyan-700"
+              className="flex-1 bg-primary hover:bg-primary-hover"
               disabled={createReview.isPending}
             >
               {createReview.isPending ? "Enviando..." : "Publicar Reseña"}

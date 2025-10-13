@@ -42,8 +42,8 @@ export function MobileFilters({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="h-[90vh] flex flex-col">
         <SheetHeader>
-          <SheetTitle>Filtros de Productos</SheetTitle>
-          <SheetDescription>
+          <SheetTitle className="text-gray-900">Filtros de Productos</SheetTitle>
+          <SheetDescription className="text-gray-700">
             Refina tu búsqueda con los filtros disponibles
           </SheetDescription>
         </SheetHeader>
@@ -66,7 +66,7 @@ export function MobileFilters({
           )}
           <Button
             onClick={handleApply}
-            className="flex-1 sm:flex-1 bg-cyan-600 hover:bg-cyan-700"
+            className="flex-1 sm:flex-1 bg-primary hover:bg-primary-hover"
           >
             Aplicar filtros
           </Button>

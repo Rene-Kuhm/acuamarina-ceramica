@@ -142,14 +142,14 @@ function PedidosContent() {
           {!orders || orders.length === 0 ? (
             <Card>
               <CardContent className="py-16 text-center">
-                <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <Package className="w-16 h-16 text-gray-500 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   No tienes pedidos aún
                 </h3>
                 <p className="text-gray-600 mb-6">
                   Empieza a comprar y tus pedidos aparecerán aquí
                 </p>
-                <Button asChild className="bg-cyan-600 hover:bg-cyan-700">
+                <Button asChild className="bg-primary hover:bg-primary-hover">
                   <Link href="/productos">Explorar Productos</Link>
                 </Button>
               </CardContent>
@@ -196,7 +196,7 @@ function PedidosContent() {
                         </div>
                         <div className="text-right">
                           <p className="text-sm text-gray-500">Total</p>
-                          <p className="text-lg font-bold text-cyan-600">
+                          <p className="text-lg font-bold text-primary">
                             {formatPrice(order.total)}
                           </p>
                         </div>

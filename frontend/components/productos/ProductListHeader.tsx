@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +31,11 @@ export function ProductListHeader({
   className,
 }: ProductListHeaderProps) {
   const { filters, updateFilters, activeFilterCount } = useProductFilters();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div
@@ -40,14 +46,16 @@ export function ProductListHeader({
     >
       {/* Total Count */}
       <div className="flex items-center gap-2">
-        <h2 className="text-lg sm:text-xl font-semibold">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
           {total > 0 ? (
             <>
-              <span className="text-cyan-600">{total}</span>{" "}
-              {total === 1 ? "producto encontrado" : "productos encontrados"}
+              <span className="text-primary">{total}</span>{" "}
+              <span className="text-gray-900">
+                {total === 1 ? "producto encontrado" : "productos encontrados"}
+              </span>
             </>
           ) : (
-            "No se encontraron productos"
+            <span className="text-gray-900">No se encontraron productos</span>
           )}
         </h2>
       </div>
@@ -64,7 +72,7 @@ export function ProductListHeader({
             <SlidersHorizontal className="w-4 h-4 mr-2" />
             Filtros
             {activeFilterCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-cyan-600 rounded-full">
+              <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-primary rounded-full">
                 {activeFilterCount}
               </span>
             )}
@@ -73,34 +81,38 @@ export function ProductListHeader({
 
         {/* Sort Select */}
         <div className="flex items-center gap-2">
-          <span className="hidden sm:inline text-sm text-muted-foreground">
+          <span className="hidden sm:inline text-sm text-gray-700">
             Ordenar:
           </span>
-          <Select
-            value={
-              filters.sortBy && filters.sortOrder
-                ? `${filters.sortBy}_${filters.sortOrder}`
-                : "createdAt_desc"
-            }
-            onValueChange={(value) => {
-              const [sortBy, sortOrder] = value.split("_") as [
-                "createdAt" | "price" | "name",
-                "asc" | "desc"
-              ];
-              updateFilters({ sortBy, sortOrder });
-            }}
-          >
-            <SelectTrigger className="w-[180px] sm:w-[200px]">
-              <SelectValue placeholder="Ordenar por" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="createdAt_desc">Más recientes</SelectItem>
-              <SelectItem value="price_asc">Precio: menor a mayor</SelectItem>
-              <SelectItem value="price_desc">Precio: mayor a menor</SelectItem>
-              <SelectItem value="name_asc">Nombre: A-Z</SelectItem>
-              <SelectItem value="name_desc">Nombre: Z-A</SelectItem>
-            </SelectContent>
-          </Select>
+          {mounted ? (
+            <Select
+              value={
+                filters.sortBy && filters.sortOrder
+                  ? `${filters.sortBy}_${filters.sortOrder}`
+                  : "createdAt_desc"
+              }
+              onValueChange={(value) => {
+                const [sortBy, sortOrder] = value.split("_") as [
+                  "createdAt" | "price" | "name",
+                  "asc" | "desc"
+                ];
+                updateFilters({ sortBy, sortOrder });
+              }}
+            >
+              <SelectTrigger className="w-[180px] sm:w-[200px]">
+                <SelectValue placeholder="Ordenar por" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="createdAt_desc">Más recientes</SelectItem>
+                <SelectItem value="price_asc">Precio: menor a mayor</SelectItem>
+                <SelectItem value="price_desc">Precio: mayor a menor</SelectItem>
+                <SelectItem value="name_asc">Nombre: A-Z</SelectItem>
+                <SelectItem value="name_desc">Nombre: Z-A</SelectItem>
+              </SelectContent>
+            </Select>
+          ) : (
+            <div className="w-[180px] sm:w-[200px] h-10 border rounded-md bg-background" />
+          )}
         </div>
       </div>
     </div>

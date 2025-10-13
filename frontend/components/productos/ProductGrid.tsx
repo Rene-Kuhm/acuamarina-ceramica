@@ -32,7 +32,7 @@ export function ProductGrid({
 }: ProductGridProps) {
   // Generate grid column classes based on breakpoints
   const gridCols = cn(
-    "grid gap-6",
+    "grid gap-4 sm:gap-6",
     columns.sm === 1 && "grid-cols-1",
     columns.sm === 2 && "grid-cols-2",
     columns.md === 2 && "md:grid-cols-2",
@@ -61,10 +61,10 @@ export function ProductGrid({
   if (!products || products.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-        <div className="rounded-full bg-cyan-100 p-6 mb-4">
+        <div className="rounded-full bg-primary-light p-6 mb-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-12 w-12 text-cyan-600"
+            className="h-12 w-12 text-primary"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

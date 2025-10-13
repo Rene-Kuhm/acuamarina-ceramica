@@ -35,7 +35,7 @@ export default function LoginPage() {
       } else {
         setError(result.error || "Error al iniciar sesión");
       }
-    } catch (err) {
+    } catch {
       setError("Error al iniciar sesión. Por favor, intenta nuevamente.");
     } finally {
       setIsLoading(false);
@@ -54,7 +54,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-center mb-4">
-            <div className="p-3 bg-gradient-to-br from-cyan-500 to-cyan-700 rounded-full">
+            <div className="p-3 bg-gradient-to-br bg-gradient-primary rounded-full">
               <LogIn className="w-6 h-6 text-white" />
             </div>
           </div>
@@ -96,7 +96,7 @@ export default function LoginPage() {
                 <Label htmlFor="password">Contraseña</Label>
                 <Link
                   href="/auth/forgot-password"
-                  className="text-sm text-cyan-600 hover:text-cyan-700 hover:underline"
+                  className="text-sm text-primary hover:text-primary-hover hover:underline"
                 >
                   ¿Olvidaste tu contraseña?
                 </Link>
@@ -132,7 +132,7 @@ export default function LoginPage() {
           <CardFooter className="flex flex-col space-y-4">
             <Button
               type="submit"
-              className="w-full bg-cyan-600 hover:bg-cyan-700"
+              className="w-full bg-primary hover:bg-primary-hover"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -152,7 +152,7 @@ export default function LoginPage() {
               ¿No tienes una cuenta?{" "}
               <Link
                 href="/auth/register"
-                className="text-cyan-600 hover:text-cyan-700 font-medium hover:underline"
+                className="text-primary hover:text-primary-hover font-medium hover:underline"
               >
                 Regístrate aquí
               </Link>

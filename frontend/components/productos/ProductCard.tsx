@@ -66,7 +66,7 @@ export function ProductCard({ product, featured = false, className }: ProductCar
     <Link href={`/productos/${product.slug}`} className="block">
       <Card
         className={cn(
-          "group h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:border-cyan-500/50",
+          "group h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:border-primary/50",
           isOutOfStock && "opacity-60",
           className
         )}
@@ -84,7 +84,7 @@ export function ProductCard({ product, featured = false, className }: ProductCar
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {featured && (
-              <Badge className="bg-cyan-500 text-white hover:bg-cyan-600">
+              <Badge className="bg-primary text-white hover:bg-primary-hover">
                 Destacado
               </Badge>
             )}
@@ -119,19 +119,19 @@ export function ProductCard({ product, featured = false, className }: ProductCar
         <CardContent className="p-4 space-y-2">
           {/* Category */}
           {product.category && (
-            <p className="text-xs text-muted-foreground uppercase tracking-wide">
+            <p className="text-xs text-gray-600 uppercase tracking-wide">
               {product.category.name}
             </p>
           )}
 
           {/* Product Name */}
-          <h3 className="font-semibold text-base line-clamp-2 min-h-[3rem] group-hover:text-cyan-600 transition-colors">
+          <h3 className="font-semibold text-base line-clamp-2 min-h-[3rem] group-hover:text-primary transition-colors">
             {product.name}
           </h3>
 
           {/* Price */}
           <div className="flex items-baseline gap-2">
-            <p className="text-2xl font-bold text-cyan-600">
+            <p className="text-2xl font-bold text-primary">
               {formatPrice(product.price)}
             </p>
           </div>
@@ -142,7 +142,7 @@ export function ProductCard({ product, featured = false, className }: ProductCar
           <Button
             onClick={handleAddToCart}
             disabled={isOutOfStock}
-            className="w-full bg-cyan-600 hover:bg-cyan-700 text-white transition-colors"
+            className="w-full bg-primary hover:bg-primary-hover text-white transition-colors"
             size="lg"
           >
             <ShoppingCart className="w-4 h-4" />

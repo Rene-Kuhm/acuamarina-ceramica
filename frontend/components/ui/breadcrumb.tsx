@@ -16,7 +16,7 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
   return (
     <nav
       aria-label="Breadcrumb"
-      className={cn("flex items-center text-sm text-muted-foreground", className)}
+      className={cn("flex items-center text-sm text-gray-600", className)}
     >
       <ol className="flex items-center gap-2">
         {items.map((item, index) => {
@@ -30,7 +30,7 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
               {item.href && !isLast ? (
                 <Link
                   href={item.href}
-                  className="hover:text-cyan-600 transition-colors"
+                  className="hover:text-primary transition-colors"
                 >
                   {item.label}
                 </Link>

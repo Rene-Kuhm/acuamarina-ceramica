@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { Shapes, ArrowRight, Grid3x3 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -20,9 +19,9 @@ export default function CategoriasPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-cyan-600 to-cyan-800 text-white py-12 sm:py-16">
+      <section className="bg-gradient-hero text-white py-12 sm:py-16">
         <div className="container mx-auto px-4">
-          <Breadcrumb items={breadcrumbItems} className="mb-6 text-cyan-100" />
+          <Breadcrumb items={breadcrumbItems} className="text-white" />
           <div className="max-w-3xl">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-3 bg-white/10 rounded-lg backdrop-blur-sm">
@@ -30,7 +29,7 @@ export default function CategoriasPage() {
               </div>
               <h1 className="text-4xl sm:text-5xl font-bold">Categorías</h1>
             </div>
-            <p className="text-lg text-cyan-100">
+            <p className="text-white">
               Explora nuestra colección completa de productos organizados por categoría.
               Encuentra exactamente lo que necesitas para tu proyecto.
             </p>
@@ -78,17 +77,17 @@ export default function CategoriasPage() {
                   href={`/categorias/${category.slug}`}
                   className="group"
                 >
-                  <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-cyan-500/50 cursor-pointer">
+                  <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-primary/50 cursor-pointer">
                     {/* Category Image - Placeholder for now */}
                     <div className="relative h-48 bg-gradient-to-br from-cyan-100 via-cyan-50 to-blue-50 overflow-hidden">
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <Shapes className="w-16 h-16 text-cyan-600/30" />
+                        <Shapes className="w-16 h-16 text-primary/30" />
                       </div>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
 
                     <CardHeader>
-                      <CardTitle className="text-xl group-hover:text-cyan-600 transition-colors flex items-center justify-between">
+                      <CardTitle className="text-xl group-hover:text-primary transition-colors flex items-center justify-between">
                         {category.name}
                         <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
                       </CardTitle>
@@ -98,7 +97,7 @@ export default function CategoriasPage() {
                     </CardHeader>
 
                     <CardContent>
-                      <div className="flex items-center text-sm text-cyan-600 font-medium">
+                      <div className="flex items-center text-sm text-primary font-medium">
                         Ver productos
                         <ArrowRight className="w-4 h-4 ml-1" />
                       </div>
@@ -110,7 +109,7 @@ export default function CategoriasPage() {
           </>
         ) : (
           <div className="text-center py-16">
-            <Shapes className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <Shapes className="w-16 h-16 text-gray-500 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
               No hay categorías disponibles
             </h3>
@@ -132,7 +131,7 @@ export default function CategoriasPage() {
           </p>
           <Link
             href="/contacto"
-            className="inline-flex items-center px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white font-medium rounded-lg transition-colors"
+            className="inline-flex items-center px-6 py-3 bg-primary hover:bg-primary-hover text-white font-medium rounded-lg transition-colors"
           >
             Contáctanos
             <ArrowRight className="w-5 h-5 ml-2" />

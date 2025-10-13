@@ -164,7 +164,7 @@ function ProductDetailContent() {
                     onClick={() => setSelectedImage(index)}
                     className={`relative aspect-square bg-white rounded-lg overflow-hidden border-2 transition-all ${
                       selectedImage === index
-                        ? "border-cyan-600"
+                        ? "border-primary"
                         : "border-gray-200 hover:border-cyan-300"
                     }`}
                   >
@@ -180,7 +180,7 @@ function ProductDetailContent() {
             <div>
               <Link
                 href={`/categorias/${product.category?.slug}`}
-                className="text-cyan-600 hover:text-cyan-700 text-sm font-medium"
+                className="text-primary hover:text-primary-hover text-sm font-medium"
               >
                 {product.category?.name}
               </Link>
@@ -191,7 +191,7 @@ function ProductDetailContent() {
 
             {/* Price */}
             <div className="flex items-baseline gap-4">
-              <span className="text-4xl font-bold text-cyan-600">
+              <span className="text-4xl font-bold text-primary">
                 {formattedPrice}
               </span>
               {inStock ? (
@@ -270,7 +270,7 @@ function ProductDetailContent() {
                   <Button
                     onClick={handleAddToCart}
                     size="lg"
-                    className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white"
+                    className="flex-1 bg-primary hover:bg-primary-hover text-white"
                   >
                     <ShoppingCart className="w-5 h-5 mr-2" />
                     Agregar al Carrito
@@ -299,14 +299,14 @@ function ProductDetailContent() {
                     onClick={handleToggleComparison}
                     className={
                       isInComparison(product.id)
-                        ? "border-cyan-600 text-cyan-600 hover:bg-cyan-50"
+                        ? "border-primary text-primary hover:bg-cyan-50"
                         : ""
                     }
                   >
                     <Scale
                       className={
                         isInComparison(product.id)
-                          ? "w-5 h-5 text-cyan-600"
+                          ? "w-5 h-5 text-primary"
                           : "w-5 h-5"
                       }
                     />
@@ -319,21 +319,21 @@ function ProductDetailContent() {
             <Card>
               <CardContent className="p-6 space-y-4">
                 <div className="flex items-start gap-3">
-                  <Truck className="w-5 h-5 text-cyan-600 mt-0.5" />
+                  <Truck className="w-5 h-5 text-primary mt-0.5" />
                   <div>
                     <h4 className="font-medium">Envío Gratis</h4>
                     <p className="text-sm text-gray-600">En compras mayores a $50.000</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Package className="w-5 h-5 text-cyan-600 mt-0.5" />
+                  <Package className="w-5 h-5 text-primary mt-0.5" />
                   <div>
                     <h4 className="font-medium">Entrega Rápida</h4>
                     <p className="text-sm text-gray-600">Recibe tu pedido en 3-5 días hábiles</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Shield className="w-5 h-5 text-cyan-600 mt-0.5" />
+                  <Shield className="w-5 h-5 text-primary mt-0.5" />
                   <div>
                     <h4 className="font-medium">Compra Protegida</h4>
                     <p className="text-sm text-gray-600">Garantía de calidad y devoluciones</p>

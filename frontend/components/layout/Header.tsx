@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import Image from "next/image";
+import { useState, useEffect } from "react";
 import {
   Search,
   ShoppingCart,
@@ -48,9 +49,14 @@ export function Header() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { totalItems } = useCart();
   const { totalItems: wishlistTotal } = useWishlist();
   const { isAuthenticated, user, logout } = useAuth();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,10 +73,17 @@ export function Header() {
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500 to-cyan-700 text-white font-bold text-xl">
-              A
+            <div className="relative h-10 w-10 flex-shrink-0">
+              <Image
+                src="/logo-aguamarina.png"
+                alt="Aguamarina Mosaicos"
+                width={40}
+                height={40}
+                className="object-contain"
+                priority
+              />
             </div>
-            <span className="hidden font-bold text-xl sm:inline-block bg-gradient-to-r from-cyan-600 to-cyan-800 bg-clip-text text-transparent">
+            <span className="hidden font-bold text-xl sm:inline-block  bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-blue-600">
               Aguamarina Mosaicos
             </span>
           </Link>
@@ -81,7 +94,7 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium transition-colors hover:text-cyan-600 text-muted-foreground hover:text-foreground"
+                className="text-sm font-medium transition-colors hover:text-primary text-gray-200 hover:text-foreground"
               >
                 {link.label}
               </Link>
@@ -89,21 +102,23 @@ export function Header() {
           </nav>
 
           {/* Search Bar - Desktop */}
-          <form
-            onSubmit={handleSearch}
-            className="hidden lg:flex flex-1 max-w-md"
-          >
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Buscar productos..."
-                className="w-full pl-10"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-          </form>
+          {mounted && (
+            <form
+              onSubmit={handleSearch}
+              className="hidden lg:flex flex-1 max-w-md"
+            >
+              <div className="relative w-full">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-300" />
+                <Input
+                  type="search"
+                  placeholder="Buscar productos..."
+                  className="w-full pl-10"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+            </form>
+          )}
 
           {/* Right Side Actions */}
           <div className="flex items-center gap-2">
@@ -118,7 +133,7 @@ export function Header() {
               <SheetContent side="top" className="p-4">
                 <form onSubmit={handleSearch} className="mt-4">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-200" />
                     <Input
                       type="search"
                       placeholder="Buscar productos..."
@@ -209,7 +224,7 @@ export function Header() {
                 {totalItems > 0 && (
                   <Badge
                     variant="default"
-                    className="absolute -right-1 -top-1 h-5 min-w-5 items-center justify-center rounded-full bg-cyan-600 p-0 text-xs hover:bg-cyan-700"
+                    className="absolute -right-1 -top-1 h-5 min-w-5 items-center justify-center rounded-full bg-primary p-0 text-xs hover:bg-primary-hover"
                   >
                     {totalItems > 99 ? "99+" : totalItems}
                   </Badge>
@@ -241,7 +256,7 @@ export function Header() {
                   {/* Mobile Search */}
                   <form onSubmit={handleSearch}>
                     <div className="relative">
-                      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600" />
                       <Input
                         type="search"
                         placeholder="Buscar productos..."
@@ -259,7 +274,7 @@ export function Header() {
                         key={link.href}
                         href={link.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-cyan-50 hover:text-cyan-600"
+                        className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-primary-light hover:text-primary"
                       >
                         {link.label}
                       </Link>
@@ -276,7 +291,7 @@ export function Header() {
                         <Link
                           href="/cuenta"
                           onClick={() => setMobileMenuOpen(false)}
-                          className="flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-cyan-50 hover:text-cyan-600"
+                          className="flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-primary-light hover:text-primary"
                         >
                           <UserCircle className="mr-2 h-4 w-4" />
                           Mi Cuenta
@@ -284,7 +299,7 @@ export function Header() {
                         <Link
                           href="/pedidos"
                           onClick={() => setMobileMenuOpen(false)}
-                          className="flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-cyan-50 hover:text-cyan-600"
+                          className="flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-primary-light hover:text-primary"
                         >
                           Mis Pedidos
                         </Link>
@@ -293,7 +308,7 @@ export function Header() {
                             logout();
                             setMobileMenuOpen(false);
                           }}
-                          className="flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-cyan-50 hover:text-cyan-600"
+                          className="flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-primary-light hover:text-primary"
                         >
                           <LogOut className="mr-2 h-4 w-4" />
                           Cerrar Sesión
@@ -304,7 +319,7 @@ export function Header() {
                         <Link
                           href="/auth/login"
                           onClick={() => setMobileMenuOpen(false)}
-                          className="flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-cyan-50 hover:text-cyan-600"
+                          className="flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-primary-light hover:text-primary"
                         >
                           <LogIn className="mr-2 h-4 w-4" />
                           Iniciar Sesión
@@ -312,7 +327,7 @@ export function Header() {
                         <Link
                           href="/auth/register"
                           onClick={() => setMobileMenuOpen(false)}
-                          className="flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-cyan-50 hover:text-cyan-600"
+                          className="flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-primary-light hover:text-primary"
                         >
                           <UserCircle className="mr-2 h-4 w-4" />
                           Registrarse

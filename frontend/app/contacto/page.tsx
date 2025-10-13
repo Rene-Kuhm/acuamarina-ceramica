@@ -5,6 +5,7 @@ import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle } from "lucide-reac
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
@@ -51,11 +52,11 @@ export default function ContactoPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <section className="bg-gradient-to-r from-cyan-600 to-cyan-800 text-white py-12">
+      <section className="bg-gradient-hero text-white py-12">
         <div className="container mx-auto px-4">
-          <Breadcrumb items={breadcrumbItems} className="mb-6 text-cyan-100" />
+          <Breadcrumb items={breadcrumbItems} className="text-white" />
           <h1 className="text-4xl font-bold mb-2">Contacto</h1>
-          <p className="text-cyan-100">¿Tienes alguna pregunta? Estamos aquí para ayudarte</p>
+          <p className="text-white">¿Tienes alguna pregunta? Estamos aquí para ayudarte</p>
         </div>
       </section>
 
@@ -66,13 +67,13 @@ export default function ContactoPage() {
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-cyan-100 rounded-full">
-                    <Mail className="w-5 h-5 text-cyan-600" />
+                  <div className="p-3 bg-primary-light rounded-full">
+                    <Mail className="w-5 h-5 text-primary" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Email</h3>
-                    <p className="text-sm text-gray-600">info@aguamarina.com</p>
-                    <p className="text-sm text-gray-600">ventas@aguamarina.com</p>
+                    <p className="text-sm text-gray-100">info@aguamarina.com</p>
+                    <p className="text-sm text-gray-100">ventas@aguamarina.com</p>
                   </div>
                 </div>
               </CardContent>
@@ -81,13 +82,13 @@ export default function ContactoPage() {
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-cyan-100 rounded-full">
-                    <Phone className="w-5 h-5 text-cyan-600" />
+                  <div className="p-3 bg-primary-light rounded-full">
+                    <Phone className="w-5 h-5 text-primary" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Teléfono</h3>
-                    <p className="text-sm text-gray-600">+54 11 1234-5678</p>
-                    <p className="text-sm text-gray-600">Lun - Vie: 9:00 - 18:00</p>
+                    <p className="text-sm text-gray-100">+54 11 1234-5678</p>
+                    <p className="text-sm text-gray-100">Lun - Vie: 9:00 - 18:00</p>
                   </div>
                 </div>
               </CardContent>
@@ -96,12 +97,12 @@ export default function ContactoPage() {
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-cyan-100 rounded-full">
-                    <MapPin className="w-5 h-5 text-cyan-600" />
+                  <div className="p-3 bg-primary-light rounded-full">
+                    <MapPin className="w-5 h-5 text-primary" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Dirección</h3>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-100">
                       Av. Corrientes 1234<br />
                       Buenos Aires, Argentina
                     </p>
@@ -187,7 +188,7 @@ export default function ContactoPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="message">Mensaje *</Label>
-                  <textarea
+                  <Textarea
                     id="message"
                     name="message"
                     value={formData.message}
@@ -195,13 +196,12 @@ export default function ContactoPage() {
                     required
                     disabled={isSubmitting}
                     rows={6}
-                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full bg-cyan-600 hover:bg-cyan-700"
+                  className="w-full bg-primary hover:bg-primary-hover"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (

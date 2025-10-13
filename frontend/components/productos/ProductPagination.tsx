@@ -83,7 +83,7 @@ export function ProductPagination({
   return (
     <div className={cn("space-y-4", className)}>
       {/* Info Text */}
-      <div className="text-sm text-center text-muted-foreground">
+      <div className="text-sm text-center text-gray-600">
         Mostrando <span className="font-medium text-foreground">{startItem}</span> -{" "}
         <span className="font-medium text-foreground">{endItem}</span> de{" "}
         <span className="font-medium text-foreground">{total}</span> productos
@@ -113,7 +113,7 @@ export function ProductPagination({
               return (
                 <span
                   key={`ellipsis-${index}`}
-                  className="flex h-9 w-9 items-center justify-center text-muted-foreground"
+                  className="flex h-9 w-9 items-center justify-center text-gray-600"
                   aria-hidden="true"
                 >
                   ...
@@ -135,7 +135,7 @@ export function ProductPagination({
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
                   "h-9 w-9",
-                  isActive && "bg-cyan-600 hover:bg-cyan-700 text-white"
+                  isActive && "bg-primary hover:bg-primary-hover text-white"
                 )}
               >
                 {pageNumber}

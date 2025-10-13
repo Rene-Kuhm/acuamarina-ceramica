@@ -4,9 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { X, Scale, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useComparison } from "@/lib/hooks/useComparison";
-import { cn } from "@/lib/utils";
 
 export function ComparisonBar() {
   const { items, removeItem, totalItems } = useComparison();
@@ -19,7 +17,7 @@ export function ComparisonBar() {
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <Scale className="w-5 h-5 text-cyan-600" />
+              <Scale className="w-5 h-5 text-primary" />
               <span className="font-semibold text-gray-900">
                 Comparar ({totalItems}/4)
               </span>
@@ -56,7 +54,7 @@ export function ComparisonBar() {
           <Button
             asChild
             size="lg"
-            className="bg-cyan-600 hover:bg-cyan-700 text-white"
+            className="bg-primary hover:bg-primary-hover text-white"
           >
             <Link href="/comparar">
               Ver Comparación

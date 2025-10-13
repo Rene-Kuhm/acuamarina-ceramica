@@ -50,16 +50,16 @@ function BuscarContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <section className="bg-gradient-to-r from-cyan-600 to-cyan-800 text-white py-8">
+      <section className="bg-gradient-hero text-white py-8">
         <div className="container mx-auto px-4">
-          <Breadcrumb items={breadcrumbItems} className="mb-4 text-cyan-100" />
+          <Breadcrumb items={breadcrumbItems} className="text-white" />
           <div className="flex items-center gap-3">
             <Search className="w-8 h-8" />
             <div>
-              <h1 className="text-3xl font-bold">
+              <h1 className="text-3xl font-bold text-white">
                 {query ? `Resultados para "${query}"` : "Búsqueda"}
               </h1>
-              <p className="text-cyan-100 mt-1">
+              <p className="text-white mt-1">
                 {meta.total} {meta.total === 1 ? "producto encontrado" : "productos encontrados"}
               </p>
             </div>
@@ -113,7 +113,7 @@ function BuscarContent() {
 export default function BuscarPage() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="w-8 h-8 border-4 border-cyan-600 border-t-transparent rounded-full animate-spin" />
+      <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
     </div>}>
       <BuscarContent />
     </Suspense>

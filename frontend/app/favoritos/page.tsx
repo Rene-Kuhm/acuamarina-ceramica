@@ -62,7 +62,7 @@ export default function FavoritosPage() {
             <CardContent>
               <div className="flex justify-center mb-6">
                 <div className="p-4 bg-gray-100 rounded-full">
-                  <Heart className="w-16 h-16 text-gray-400" />
+                  <Heart className="w-16 h-16 text-gray-500" />
                 </div>
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -74,7 +74,7 @@ export default function FavoritosPage() {
               <Button
                 asChild
                 size="lg"
-                className="bg-cyan-600 hover:bg-cyan-700"
+                className="bg-primary hover:bg-primary-hover"
               >
                 <Link href="/productos">
                   <ShoppingBag className="w-5 h-5 mr-2" />
@@ -147,13 +147,13 @@ export default function FavoritosPage() {
                     href={`/productos/${item.slug}`}
                     className="block"
                   >
-                    <h3 className="font-semibold text-gray-900 line-clamp-2 hover:text-cyan-600 transition-colors">
+                    <h3 className="font-semibold text-gray-900 line-clamp-2 hover:text-primary transition-colors">
                       {item.name}
                     </h3>
                   </Link>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-cyan-600">
+                    <span className="text-lg font-bold text-primary">
                       {formatPrice(item.price)}
                     </span>
                   </div>
@@ -161,7 +161,7 @@ export default function FavoritosPage() {
                   <div className="flex gap-2">
                     <Button
                       onClick={() => handleAddToCart(item)}
-                      className="flex-1 bg-cyan-600 hover:bg-cyan-700"
+                      className="flex-1 bg-primary hover:bg-primary-hover"
                       size="sm"
                     >
                       <ShoppingCart className="w-4 h-4 mr-2" />

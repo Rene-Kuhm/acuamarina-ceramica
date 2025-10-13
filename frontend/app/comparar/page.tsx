@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, X, ShoppingCart, Heart, Trash2 } from "lucide-react";
@@ -82,7 +81,7 @@ export default function ComparacionPage() {
               <p className="text-gray-600 mb-8">
                 Agrega productos desde la página de productos para compararlos aquí
               </p>
-              <Button asChild size="lg" className="bg-cyan-600 hover:bg-cyan-700">
+              <Button asChild size="lg" className="bg-primary hover:bg-primary-hover">
                 <Link href="/productos">Explorar Productos</Link>
               </Button>
             </CardContent>
@@ -156,7 +155,7 @@ export default function ComparacionPage() {
                                 className="object-cover"
                               />
                             </div>
-                            <h3 className="font-semibold text-gray-900 line-clamp-2 hover:text-cyan-600">
+                            <h3 className="font-semibold text-gray-900 line-clamp-2 hover:text-primary">
                               {item.name}
                             </h3>
                           </Link>
@@ -181,7 +180,7 @@ export default function ComparacionPage() {
                     <td className="px-6 py-4 text-sm font-medium text-gray-900">Precio</td>
                     {items.map((item) => (
                       <td key={item.id} className="px-6 py-4 text-center">
-                        <span className="text-lg font-bold text-cyan-600">
+                        <span className="text-lg font-bold text-primary">
                           {formatPrice(item.price)}
                         </span>
                       </td>
@@ -227,7 +226,7 @@ export default function ComparacionPage() {
                           <Button
                             onClick={() => handleAddToCart(item)}
                             disabled={item.stock === 0}
-                            className="w-full bg-cyan-600 hover:bg-cyan-700"
+                            className="w-full bg-primary hover:bg-primary-hover"
                             size="sm"
                           >
                             <ShoppingCart className="w-4 h-4 mr-2" />

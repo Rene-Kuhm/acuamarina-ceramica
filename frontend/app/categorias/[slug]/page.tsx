@@ -62,13 +62,13 @@ function CategoryProductsContent() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-cyan-600 to-cyan-800 text-white py-8 sm:py-12">
+      <section className="bg-gradient-hero text-white py-8 sm:py-12">
         <div className="container mx-auto px-4">
-          <Breadcrumb items={breadcrumbItems} className="mb-4 text-cyan-100" />
+          <Breadcrumb items={breadcrumbItems} className="text-white" />
           {categoriesLoading ? (
             <div className="space-y-3">
-              <Skeleton className="h-12 w-96 bg-cyan-700" />
-              <Skeleton className="h-6 w-[500px] bg-cyan-700" />
+              <Skeleton className="h-12 w-96 bg-primary-hover" />
+              <Skeleton className="h-6 w-[500px] bg-primary-hover" />
             </div>
           ) : currentCategory ? (
             <>
@@ -76,18 +76,18 @@ function CategoryProductsContent() {
                 <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm">
                   <Grid3x3 className="w-6 h-6" />
                 </div>
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
                   {currentCategory.name}
                 </h1>
               </div>
               {currentCategory.description && (
-                <p className="mt-2 text-cyan-100 text-sm sm:text-base max-w-2xl">
+                <p className="text-white text-sm sm:text-base max-w-2xl">
                   {currentCategory.description}
                 </p>
               )}
             </>
           ) : (
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
               Categoría no encontrada
             </h1>
           )}
@@ -142,7 +142,7 @@ function CategoryProductsContent() {
             {/* Empty State */}
             {!productsLoading && products.length === 0 && (
               <div className="text-center py-16">
-                <Grid3x3 className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <Grid3x3 className="w-16 h-16 text-gray-500 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   No se encontraron productos
                 </h3>
@@ -182,10 +182,10 @@ export default function CategoryProductsPage() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-gray-50">
-          <section className="bg-gradient-to-r from-cyan-600 to-cyan-800 text-white py-8 sm:py-12">
+          <section className="bg-gradient-hero text-white py-8 sm:py-12">
             <div className="container mx-auto px-4">
-              <Skeleton className="h-8 w-64 mb-4 bg-cyan-700" />
-              <Skeleton className="h-10 w-96 bg-cyan-700" />
+              <Skeleton className="h-8 w-64 mb-4 bg-primary-hover" />
+              <Skeleton className="h-10 w-96 bg-primary-hover" />
             </div>
           </section>
           <div className="container mx-auto px-4 py-8">

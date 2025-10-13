@@ -103,7 +103,7 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
               <Button
                 onClick={() => setShowReviewForm(true)}
                 size="lg"
-                className="bg-cyan-600 hover:bg-cyan-700"
+                className="bg-primary hover:bg-primary-hover"
               >
                 Escribir una Reseña
               </Button>
@@ -113,7 +113,7 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
           {!isAuthenticated && (
             <div className="text-center p-4 bg-gray-50 rounded-lg">
               <p className="text-gray-600">
-                <a href="/auth/login" className="text-cyan-600 hover:underline">
+                <a href="/auth/login" className="text-primary hover:underline">
                   Inicia sesión
                 </a>{" "}
                 para escribir una reseña

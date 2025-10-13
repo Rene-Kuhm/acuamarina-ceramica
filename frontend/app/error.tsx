@@ -81,7 +81,7 @@ export default function Error({
           </p>
           <Link
             href="/contacto"
-            className="text-cyan-600 hover:text-cyan-700 hover:underline font-medium"
+            className="text-primary hover:text-primary-hover hover:underline font-medium"
           >
             Contáctanos para obtener ayuda
           </Link>
