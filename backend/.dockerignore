@@ -51,8 +51,8 @@ logs
 # Misc
 .eslintrc.json
 .prettierrc
-tsconfig.json
 jest.config.js
+# NOTE: tsconfig.json is NEEDED for Docker build, do not ignore it
 
 # Scripts
 scripts
