@@ -1,15 +1,63 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Environment files
 .env
 .env.local
 .env.test
-dist
-logs
+.env.supabase
+.env.*.local
+
+# Build output
+dist/
+build/
+
+# Logs
+logs/
 *.log
-.DS_Store
-coverage
-.vscode
-.idea
+npm-debug.log*
+yarn-debug.log*
+
+# Testing
+coverage/
+.nyc_output/
+__tests__/
+
+# IDE
+.vscode/
+.idea/
 *.swp
 *.swo
-.github
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Development scripts
+src/infrastructure/database/migrate.ts
+src/infrastructure/database/seed.ts
+src/infrastructure/database/reset.ts
+crear-db.js
+test-*.js
+delete-user.js
+
+# Documentation
+README.md
+docs/
+
+# Git & CI/CD
+.git/
+.gitignore
+.github/
+
+# Docker
 docker-compose.yml
+Dockerfile
+
+# Config files not needed in production
+tsconfig.json
+jest.config.js
+.eslintrc.js
+.prettierrc
+railway.json
