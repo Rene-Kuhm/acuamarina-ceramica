@@ -22,7 +22,7 @@ import uploadRoutes from './application/routes/upload.routes';
 import exportRoutes from './application/routes/export.routes';
 
 // Validar variables de entorno al inicio
-validateEnv();
+// validateEnv(); // Comentado temporalmente para serverless
 
 const app = express();
 
