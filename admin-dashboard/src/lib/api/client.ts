@@ -11,6 +11,7 @@ class ApiClient {
       headers: {
         'Content-Type': 'application/json',
       },
+      withCredentials: true, // Habilitar envío de cookies y credenciales
     });
 
     // Request interceptor para agregar token
