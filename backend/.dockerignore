@@ -11,12 +11,8 @@ logs
 .vercel
 .next
 coverage
-*.md
 README.md
 RAILWAY_DEPLOYMENT.md
 test-*.js
 *.test.ts
 *.spec.ts
-.eslintrc
-.prettierrc
-tsconfig.json
