@@ -34,7 +34,12 @@ app.use(requestIdMiddleware);
 
 // Seguridad
 app.use(helmet());
+
+// CORS - Debe estar ANTES de cualquier ruta
 app.use(cors(config.cors));
+
+// Manejar preflight requests explícitamente
+app.options('*', cors(config.cors));
 
 // Rate limiting
 const limiter = rateLimit({
