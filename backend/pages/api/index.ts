@@ -30,16 +30,53 @@ const getDbPool = () => {
   return pool;
 };
 
+// CORS configuration
+const corsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    // Allow all Vercel deployments and localhost
+    const allowedPatterns = [
+      /^https:\/\/.*\.vercel\.app$/,
+      /^http:\/\/localhost:\d+$/,
+    ];
+
+    // Always allow requests with no origin (like mobile apps or curl)
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    // Check if origin matches allowed patterns
+    const isAllowed = allowedPatterns.some(pattern => pattern.test(origin));
+    if (isAllowed) {
+      return callback(null, true);
+    }
+
+    // Check custom CORS_ORIGINS from env
+    const customOrigins = process.env.CORS_ORIGINS?.split(',') || [];
+    if (customOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    console.warn(`⚠️ CORS blocked origin: ${origin}`);
+    callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  exposedHeaders: ['Authorization'],
+  maxAge: 86400, // 24 hours
+};
+
 // Middleware básico
 app.use(helmet({
   contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false,
 }));
 
-app.use(cors({
-  origin: process.env.CORS_ORIGIN?.split(',') || '*',
-  credentials: process.env.CORS_CREDENTIALS === 'true',
-}));
+// Apply CORS before all routes
+app.use(cors(corsOptions));
+
+// Handle OPTIONS requests explicitly
+app.options('*', cors(corsOptions));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
