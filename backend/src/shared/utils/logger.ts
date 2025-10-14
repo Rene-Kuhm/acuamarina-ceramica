@@ -25,16 +25,23 @@ const format = winston.format.combine(
   winston.format.printf((info) => `${info.timestamp} [${info.level}]: ${info.message}`)
 );
 
-const transports = [
+// Transports - Only console for serverless (Vercel)
+const transports: winston.transport[] = [
   new winston.transports.Console(),
-  new winston.transports.File({
-    filename: path.join(process.cwd(), 'logs', 'error.log'),
-    level: 'error',
-  }),
-  new winston.transports.File({
-    filename: path.join(process.cwd(), 'logs', 'all.log'),
-  }),
 ];
+
+// Add file transports only in non-serverless environments
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  transports.push(
+    new winston.transports.File({
+      filename: path.join(process.cwd(), 'logs', 'error.log'),
+      level: 'error',
+    }),
+    new winston.transports.File({
+      filename: path.join(process.cwd(), 'logs', 'all.log'),
+    })
+  );
+}
 
 export const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
