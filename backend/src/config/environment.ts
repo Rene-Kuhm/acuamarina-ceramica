@@ -31,7 +31,32 @@ export const config = {
 
   // CORS
   cors: {
-    origin: process.env.CORS_ORIGINS?.split(',') || ['http://localhost:3000'],
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+      const allowedOrigins = process.env.CORS_ORIGINS?.split(',') || [];
+      const allowedPatterns = [
+        /^https:\/\/.*\.vercel\.app$/,  // Any Vercel deployment
+        /^http:\/\/localhost:\d+$/,      // Local development
+      ];
+
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      // Check if origin is in allowed list
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // Check if origin matches any pattern
+      const isAllowed = allowedPatterns.some(pattern => pattern.test(origin));
+      if (isAllowed) {
+        return callback(null, true);
+      }
+
+      // Reject other origins
+      callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
