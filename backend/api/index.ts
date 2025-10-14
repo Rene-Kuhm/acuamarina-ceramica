@@ -2,8 +2,18 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import app from '../src/app';
 
-// Export the Express app as a Vercel serverless function
-export default async (req: VercelRequest, res: VercelResponse) => {
-  // Importante: No wrappear en try-catch aquí, dejamos que Express maneje los errores
-  return app(req as any, res as any);
+// Wrapper para convertir Express app en Vercel handler
+export default (req: VercelRequest, res: VercelResponse) => {
+  return new Promise((resolve, reject) => {
+    // Crear un mock de res.end para capturar cuando Express termina
+    const originalEnd = res.end;
+    res.end = function(...args: any[]) {
+      res.end = originalEnd;
+      res.end.apply(res, args);
+      resolve(undefined);
+    };
+
+    // Pasar la request a Express
+    app(req as any, res as any);
+  });
 };
