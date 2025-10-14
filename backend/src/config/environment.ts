@@ -31,8 +31,10 @@ export const config = {
 
   // CORS
   cors: {
-    origin: process.env.CORS_ORIGIN?.split(',') || ['http://localhost:3000'],
-    credentials: process.env.CORS_CREDENTIALS === 'true',
+    origin: process.env.CORS_ORIGINS?.split(',') || ['http://localhost:3000'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   },
 
   // Rate limiting
