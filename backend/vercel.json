@@ -1,20 +1,5 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "pages/api/index.ts",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/pages/api/index.ts"
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  },
   "headers": [
     {
       "source": "/(.*)",
