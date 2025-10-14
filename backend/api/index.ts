@@ -21,9 +21,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   // API v1
-  if (path === '/v1' || path === '/v1/') {
+  if (path === '/' || path === '/v1' || path === '/v1/') {
     return res.json({
-      message: 'API Aguamarina Mosaicos',
+      message: 'API Aguamarina Mosaicos CORS Fixed',
       version: 'v1',
       status: 'online',
       timestamp: new Date().toISOString(),
