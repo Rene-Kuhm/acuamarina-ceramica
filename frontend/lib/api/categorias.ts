@@ -15,11 +15,13 @@ export interface Categoria {
 export const categoriasApi = {
   getAll: async (): Promise<Categoria[]> => {
     const response = await apiClient.get("/categories");
-    return response.data;
+    // El backend retorna { success, data }
+    return response.data.data;
   },
 
   getBySlug: async (slug: string): Promise<Categoria> => {
     const response = await apiClient.get(`/categories/${slug}`);
-    return response.data;
+    // El backend retorna { success, data }
+    return response.data.data;
   },
 };

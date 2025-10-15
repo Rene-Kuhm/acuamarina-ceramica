@@ -44,21 +44,34 @@ export interface ProductosResponse {
 export const productosApi = {
   getAll: async (params?: ProductosParams): Promise<ProductosResponse> => {
     const response = await apiClient.get("/products", { params });
-    return response.data;
+    // El backend retorna { success, data, pagination }
+    // Necesitamos transformarlo a { data, meta: { total, page, limit, totalPages } }
+    return {
+      data: response.data.data,
+      meta: {
+        total: response.data.pagination.total,
+        page: response.data.pagination.page,
+        limit: response.data.pagination.limit,
+        totalPages: response.data.pagination.totalPages,
+      },
+    };
   },
 
   getBySlug: async (slug: string): Promise<Producto> => {
     const response = await apiClient.get(`/products/${slug}`);
-    return response.data;
+    // El backend retorna { success, data }
+    return response.data.data;
   },
 
   getById: async (id: number): Promise<Producto> => {
     const response = await apiClient.get(`/products/${id}`);
-    return response.data;
+    // El backend retorna { success, data }
+    return response.data.data;
   },
 
   getDestacados: async (): Promise<Producto[]> => {
     const response = await apiClient.get("/products/destacados");
-    return response.data;
+    // El backend retorna { success, data }
+    return response.data.data;
   },
 };
