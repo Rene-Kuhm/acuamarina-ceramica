@@ -16,19 +16,36 @@ export const productsService = {
     if (params?.isActive !== undefined) queryParams.append('isActive', params.isActive.toString());
     if (params?.search) queryParams.append('search', params.search);
 
-    return apiClient.get<PaginatedResponse<Product>>(`/products?${queryParams.toString()}`);
+    // El backend retorna { success, data, pagination }
+    // Necesitamos transformarlo a { data, page, limit, total, totalPages }
+    const response = await apiClient.get<{
+      success: boolean;
+      data: Product[];
+      pagination: { page: number; limit: number; total: number; totalPages: number };
+    }>(`/products?${queryParams.toString()}`);
+
+    return {
+      data: response.data,
+      page: response.pagination.page,
+      limit: response.pagination.limit,
+      total: response.pagination.total,
+      totalPages: response.pagination.totalPages,
+    };
   },
 
   getById: async (id: string): Promise<Product> => {
-    return apiClient.get<Product>(`/products/${id}`);
+    const response = await apiClient.get<{ success: boolean; data: Product }>(`/products/${id}`);
+    return response.data;
   },
 
   create: async (data: CreateProductDTO): Promise<Product> => {
-    return apiClient.post<Product>('/products', data);
+    const response = await apiClient.post<{ success: boolean; data: Product }>('/products', data);
+    return response.data;
   },
 
   update: async (id: string, data: Partial<CreateProductDTO>): Promise<Product> => {
-    return apiClient.patch<Product>(`/products/${id}`, data);
+    const response = await apiClient.patch<{ success: boolean; data: Product }>(`/products/${id}`, data);
+    return response.data;
   },
 
   delete: async (id: string): Promise<void> => {
