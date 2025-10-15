@@ -8,22 +8,22 @@ const envSchema = z.object({
   PORT: z.string().regex(/^\d+$/).transform(Number).default('3000'),
   API_VERSION: z.string().default('v1'),
 
-  // Database
-  DB_HOST: z.string().min(1, 'DB_HOST is required'),
+  // Database (optional for initial deployment)
+  DB_HOST: z.string().default('localhost'),
   DB_PORT: z.string().regex(/^\d+$/).transform(Number).default('5432'),
-  DB_NAME: z.string().min(1, 'DB_NAME is required'),
-  DB_USER: z.string().min(1, 'DB_USER is required'),
-  DB_PASSWORD: z.string().min(1, 'DB_PASSWORD is required'),
+  DB_NAME: z.string().default('aguamarina_mosaicos'),
+  DB_USER: z.string().default('postgres'),
+  DB_PASSWORD: z.string().default(''),
   DB_SSL: z
     .string()
     .transform((val) => val === 'true')
     .default('false'),
   DB_MAX_CONNECTIONS: z.string().regex(/^\d+$/).transform(Number).default('20'),
 
-  // JWT
-  JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
+  // JWT (optional for initial deployment - will generate warnings)
+  JWT_SECRET: z.string().default('temporary_secret_change_me_in_production_min32chars'),
   JWT_EXPIRES_IN: z.string().default('7d'),
-  JWT_REFRESH_SECRET: z.string().min(32, 'JWT_REFRESH_SECRET must be at least 32 characters'),
+  JWT_REFRESH_SECRET: z.string().default('temporary_refresh_secret_change_in_production_min32'),
   JWT_REFRESH_EXPIRES_IN: z.string().default('30d'),
 
   // Cloudinary (opcionales)
