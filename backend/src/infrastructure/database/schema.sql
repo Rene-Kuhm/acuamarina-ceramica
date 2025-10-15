@@ -300,12 +300,14 @@ CREATE TABLE refresh_tokens (
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     token VARCHAR(500) NOT NULL,
     expires_at TIMESTAMP NOT NULL,
+    revoked_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE INDEX idx_refresh_tokens_user ON refresh_tokens(user_id);
 CREATE INDEX idx_refresh_tokens_token ON refresh_tokens(token);
 CREATE INDEX idx_refresh_tokens_expires ON refresh_tokens(expires_at);
+CREATE INDEX idx_refresh_tokens_revoked ON refresh_tokens(revoked_at);
 
 -- ========================================
 -- FUNCIONES Y TRIGGERS
