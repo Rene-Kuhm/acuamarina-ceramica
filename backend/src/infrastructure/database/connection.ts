@@ -6,19 +6,27 @@ import { logger } from '../../shared/utils/logger';
 // Cargar variables de entorno
 dotenv.config({ path: path.join(__dirname, '../../../.env') });
 
-const poolConfig: PoolConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '5432'),
-  database: process.env.DB_NAME || 'aguamarina_mosaicos',
-  user: process.env.DB_USER || 'postgres',
-  password: String(process.env.DB_PASSWORD || ''),
-  max: parseInt(process.env.DB_MAX_CONNECTIONS || '20'),
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 10000,
-  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
-  // Forzar IPv4 para evitar problemas de conectividad en Railway
-  options: '-c client_encoding=UTF8',
-};
+// Usar DATABASE_URL si está disponible (preferido en Railway/Vercel)
+// Si no, usar variables individuales
+const poolConfig: PoolConfig = process.env.DATABASE_URL
+  ? {
+      connectionString: process.env.DATABASE_URL,
+      max: parseInt(process.env.DB_MAX_CONNECTIONS || '10'),
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 10000,
+      ssl: { rejectUnauthorized: false },
+    }
+  : {
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT || '5432'),
+      database: process.env.DB_NAME || 'aguamarina_mosaicos',
+      user: process.env.DB_USER || 'postgres',
+      password: String(process.env.DB_PASSWORD || ''),
+      max: parseInt(process.env.DB_MAX_CONNECTIONS || '20'),
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 10000,
+      ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
+    };
 
 let poolInstance: Pool | null = null;
 
