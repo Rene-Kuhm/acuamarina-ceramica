@@ -37,7 +37,7 @@ const querySchema = z.object({
   categoryId: z.string().uuid().optional(),
   isActive: z.string().optional(),
   isFeatured: z.string().optional(),
-  sortBy: z.enum(['name', 'price', 'created_at', 'stock_quantity']).optional(),
+  sortBy: z.enum(['name', 'price', 'created_at', 'createdAt', 'stock_quantity', 'stockQuantity']).optional(),
   sortOrder: z.enum(['asc', 'desc']).optional(),
 });
 
@@ -53,7 +53,12 @@ export class ProductsController {
       const page = parseInt(query.page || '1');
       const limit = parseInt(query.limit || '20');
       const offset = (page - 1) * limit;
-      const sortBy = query.sortBy || 'created_at';
+
+      // Convert camelCase to snake_case for SQL
+      let sortBy = query.sortBy || 'created_at';
+      if (sortBy === 'createdAt') sortBy = 'created_at';
+      if (sortBy === 'stockQuantity') sortBy = 'stock_quantity';
+
       const sortOrder = query.sortOrder || 'desc';
 
       // Build WHERE clause
