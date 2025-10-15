@@ -173,12 +173,19 @@ let server: any;
 
 const startServer = async () => {
   try {
-    // Conectar a la base de datos
-    await connectDatabase();
+    // Conectar a la base de datos (opcional - no bloquea el inicio)
+    try {
+      await connectDatabase();
+      logger.info('✅ Database connected successfully');
+    } catch (error) {
+      logger.warn('⚠️ Database not available, continuing without database');
+      logger.warn('   The server will start but database-dependent features will fail');
+    }
 
     // Conectar a Redis (opcional - no bloquea el inicio)
     try {
       await connectRedis();
+      logger.info('✅ Redis connected successfully');
     } catch (error) {
       logger.warn('⚠️ Redis not available, continuing without cache');
     }
@@ -191,7 +198,7 @@ const startServer = async () => {
       logger.info(`   Puerto: ${config.port}`);
       logger.info(`   API: http://localhost:${config.port}/api/${config.apiVersion}`);
       logger.info(`   Swagger: http://localhost:${config.port}/api-docs`);
-      logger.info(`   Health: http://localhost:${config.port}/health/detailed`);
+      logger.info(`   Health: http://localhost:${config.port}/health`);
       logger.info('===========================================');
     });
 
