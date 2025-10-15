@@ -14,8 +14,10 @@ const poolConfig: PoolConfig = {
   password: String(process.env.DB_PASSWORD || ''),
   max: parseInt(process.env.DB_MAX_CONNECTIONS || '20'),
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  connectionTimeoutMillis: 10000,
   ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
+  // Forzar IPv4 para evitar problemas de conectividad en Railway
+  options: '-c client_encoding=UTF8',
 };
 
 let poolInstance: Pool | null = null;
