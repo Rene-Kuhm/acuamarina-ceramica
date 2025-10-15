@@ -2,7 +2,12 @@
 
 ## 🐛 Problema Identificado
 
-El login falla con error `500 (Internal Server Error)` porque falta el campo `revoked_at` en la tabla `refresh_tokens` de Supabase.
+El login falla con error `500 (Internal Server Error)` porque **faltan las tablas `refresh_tokens` y `audit_logs`** en la base de datos de Supabase.
+
+**Error original:**
+```
+ERROR: 42P01: la relación "refresh_tokens" no existe
+```
 
 **Error en el código (AuthController.ts:305)**:
 ```typescript
@@ -20,54 +25,37 @@ La columna `revoked_at` no existe en la tabla actual.
 
 ## ✅ Solución
 
-### Opción 1: Ejecutar Migración SQL en Supabase (Recomendado)
+### Paso 1: Ejecutar Script SQL en Supabase
 
 1. **Accede a Supabase Dashboard**: https://supabase.com/dashboard
 2. **Ve a tu proyecto**: `umyrvlzhvdsibpzvfnal`
 3. **SQL Editor → New Query**
-4. **Copia y pega este SQL**:
+4. **Copia el contenido completo del archivo**:
+   `backend/add-missing-tables.sql`
 
-```sql
--- Agregar campo revoked_at a refresh_tokens
-DO $$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1
-        FROM information_schema.columns
-        WHERE table_name = 'refresh_tokens'
-        AND column_name = 'revoked_at'
-    ) THEN
-        ALTER TABLE refresh_tokens ADD COLUMN revoked_at TIMESTAMP;
-        CREATE INDEX idx_refresh_tokens_revoked ON refresh_tokens(revoked_at);
-        RAISE NOTICE 'Columna revoked_at agregada exitosamente';
-    ELSE
-        RAISE NOTICE 'Columna revoked_at ya existe';
-    END IF;
-END $$;
-```
+5. **Pega y ejecuta** (botón RUN o Ctrl+Enter)
 
-5. **Ejecuta la query** (botón RUN o Ctrl+Enter)
-6. **Verifica**: Deberías ver el mensaje `"Columna revoked_at agregada exitosamente"`
+Este script:
+- ✅ Crea la tabla `refresh_tokens` con el campo `revoked_at`
+- ✅ Crea la tabla `audit_logs` para logs de auditoría
+- ✅ Agrega campos faltantes a `users`: `first_name`, `last_name`, `is_active`, `email_verified`, `last_login`
+- ✅ Renombra `password` a `password_hash` si es necesario
+- ✅ NO borra datos existentes
 
 ---
 
-### Opción 2: Usar psql desde Terminal
+### Paso 2: Verificar la Ejecución
 
-Si tienes acceso a psql:
+Deberías ver estos mensajes al finalizar:
 
-```bash
-psql "postgresql://postgres:Aguamarina@mosaicos@db.umyrvlzhvdsibpzvfnal.supabase.co:5432/postgres" -f backend/fix-refresh-tokens.sql
+```
+✅ Tablas para autenticación agregadas correctamente
 ```
 
----
-
-### Opción 3: Recrear la Base de Datos (Solo si es necesario)
-
-**⚠️ ADVERTENCIA: Esto borrará todos los datos existentes**
-
-```bash
-psql "postgresql://postgres:Aguamarina@mosaicos@db.umyrvlzhvdsibpzvfnal.supabase.co:5432/postgres" -f backend/src/infrastructure/database/schema.sql
-```
+Y una tabla mostrando:
+- `refresh_tokens`: 0 rows
+- `audit_logs`: 0 rows
+- Lista de columnas de `users` incluyendo `first_name`, `last_name`, etc.
 
 ---
 
