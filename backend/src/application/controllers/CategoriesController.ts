@@ -26,7 +26,7 @@ export class CategoriesController {
     try {
       const { includeInactive } = req.query;
 
-      const whereClause = includeInactive === 'true' ? '' : 'WHERE is_active = true';
+      const whereClause = includeInactive === 'true' ? '' : 'WHERE c.is_active = true';
 
       const result = await getPool().query(
         `SELECT
