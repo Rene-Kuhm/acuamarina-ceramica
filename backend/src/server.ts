@@ -157,6 +157,32 @@ apiRouter.get('/', (req, res) => {
 
 app.use(`/api/${config.apiVersion}`, apiRouter);
 
+// Ruta raíz - Información del servidor
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'API Aguamarina Mosaicos - Servidor activo',
+    version: config.apiVersion,
+    environment: config.nodeEnv,
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      api: `/api/${config.apiVersion}`,
+      documentation: '/api-docs',
+      health: {
+        basic: '/health',
+        ready: '/health/ready',
+        live: '/health/live',
+        detailed: '/health/detailed',
+      },
+    },
+    links: {
+      api: `https://diligent-upliftment-production-54de.up.railway.app/api/${config.apiVersion}`,
+      docs: 'https://diligent-upliftment-production-54de.up.railway.app/api-docs',
+      health: 'https://diligent-upliftment-production-54de.up.railway.app/health',
+    },
+  });
+});
+
 // Manejo de errores
 app.use(errorHandler);
 
@@ -165,6 +191,11 @@ app.use('*', (req, res) => {
   res.status(404).json({
     success: false,
     message: 'Ruta no encontrada',
+    availableEndpoints: {
+      api: `/api/${config.apiVersion}`,
+      documentation: '/api-docs',
+      health: '/health',
+    },
   });
 });
 
