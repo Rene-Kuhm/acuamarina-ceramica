@@ -12,6 +12,13 @@ const router = Router();
 router.get('/', ProductsController.getAll);
 
 /**
+ * @route   GET /api/v1/products/destacados
+ * @desc    Get featured products
+ * @access  Public
+ */
+router.get('/destacados', ProductsController.getFeatured);
+
+/**
  * @route   GET /api/v1/products/:id
  * @desc    Get product by ID
  * @access  Public

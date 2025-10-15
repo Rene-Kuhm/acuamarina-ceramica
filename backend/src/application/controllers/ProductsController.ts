@@ -132,6 +132,37 @@ export class ProductsController {
   }
 
   /**
+   * Get featured products
+   * GET /api/v1/products/destacados
+   */
+  static async getFeatured(req: Request, res: Response, next: NextFunction) {
+    try {
+      const limit = parseInt(req.query.limit as string) || 12;
+
+      const result = await getPool().query(
+        `SELECT
+          p.*,
+          c.name as category_name,
+          c.slug as category_slug,
+          (SELECT url FROM product_images WHERE product_id = p.id AND is_primary = true LIMIT 1) as primary_image
+         FROM products p
+         LEFT JOIN categories c ON p.category_id = c.id
+         WHERE p.is_active = true AND p.featured = true
+         ORDER BY p.created_at DESC
+         LIMIT $1`,
+        [limit]
+      );
+
+      res.json({
+        success: true,
+        data: result.rows,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
    * Get product by ID
    * GET /api/v1/products/:id
    */
