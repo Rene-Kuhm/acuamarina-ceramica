@@ -8,7 +8,12 @@ const redisConfig = {
   password: process.env.REDIS_PASSWORD,
   db: parseInt(process.env.REDIS_DB || '0'),
   retryStrategy: (times: number) => {
-    const delay = Math.min(times * 50, 2000);
+    // Dejar de intentar después de 3 intentos
+    if (times > 3) {
+      logger.warn('⚠️ Redis no disponible - continuando sin cache');
+      return null;
+    }
+    const delay = Math.min(times * 1000, 3000);
     return delay;
   },
   maxRetriesPerRequest: 3,
