@@ -26,6 +26,10 @@ import exportRoutes from './application/routes/export.routes';
 
 const app = express();
 
+// Trust proxy - DEBE estar antes de cualquier middleware
+// Railway, Vercel, y otros servicios cloud usan proxies reversos
+app.set('trust proxy', 1);
+
 // Swagger Documentation
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 

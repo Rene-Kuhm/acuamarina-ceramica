@@ -51,8 +51,15 @@ export const connectDatabase = async (): Promise<void> => {
   try {
     const client = await getPool().connect();
     logger.info('✓ Conexión exitosa a PostgreSQL');
-    logger.info(`  Base de datos: ${poolConfig.database}`);
-    logger.info(`  Host: ${poolConfig.host}:${poolConfig.port}`);
+
+    // Mostrar información de conexión según el tipo de configuración
+    if (process.env.DATABASE_URL) {
+      logger.info('  Conexión: Supabase Pooler (DATABASE_URL)');
+    } else {
+      logger.info(`  Base de datos: ${poolConfig.database}`);
+      logger.info(`  Host: ${poolConfig.host}:${poolConfig.port}`);
+    }
+
     client.release();
   } catch (error) {
     logger.error('✗ Error al conectar a PostgreSQL:', error);
