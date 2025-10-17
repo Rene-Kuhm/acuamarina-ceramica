@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,8 +21,10 @@ import {
 } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Loader2 } from 'lucide-react';
-import { ImageUpload } from '@/components/ui/image-upload';
+import { Loader2, RefreshCw } from 'lucide-react';
+import { CloudinaryImageUploader, ProductImage } from '@/components/ui/cloudinary-image-uploader';
+import { generateSKU, generateSlug } from '@/lib/generators';
+import { toast } from 'sonner';
 
 // Replace previous formSchema with this safe/coercing schema
 const formSchema = z.object({
@@ -75,7 +77,7 @@ const formSchema = z.object({
 
 	isActive: z.boolean().default(true),
 
-	images: z.array(z.union([z.string().url(), z.instanceof(File)])).optional().default([]),
+	images: z.array(z.custom<ProductImage>()).optional().default([]),
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -84,13 +86,15 @@ export default function NewProductPage() {
   const router = useRouter();
   const createProduct = useCreateProduct();
   const { data: categoriesData, isLoading: isLoadingCategories } = useCategories();
+  const [createdProductId, setCreatedProductId] = useState<number | undefined>(undefined);
 
   const form = useForm<ProductFormValues>({
 	// resolver causa conflictos de tipos con los genéricos de react-hook-form -> castear a any para evitar error TS
 	resolver: zodResolver(formSchema) as any,
 	defaultValues: {
-		sku: '',
+		sku: generateSKU(), // Auto-generate SKU on load
 		name: '',
+		slug: '',
 		price: 0,
 		stockQuantity: 0,
 		lowStockThreshold: 10,
@@ -99,16 +103,62 @@ export default function NewProductPage() {
 	},
   });
 
+  // Auto-generate slug from name
+  const name = form.watch('name');
+  useEffect(() => {
+    if (name && !form.formState.dirtyFields.slug) {
+      form.setValue('slug', generateSlug(name), { shouldValidate: false });
+    }
+  }, [name, form]);
+
+  const handleGenerateNewSKU = () => {
+    form.setValue('sku', generateSKU(), { shouldValidate: true });
+    toast.success('Nuevo SKU generado');
+  };
+
   const onSubmit = async (data: ProductFormValues) => {
-    const finalData = {
-      ...data,
-      slug: data.slug || data.name.toLowerCase().replace(/\s+/g, '-'),
-    };
-    // Aquí deberías manejar la subida de archivos `File` a tu servicio de almacenamiento
-    // y reemplazar los objetos `File` con las URLs resultantes antes de enviar a la API.
-    console.log('Form data to submit:', finalData);
-    // createProduct.mutate(finalData);
-    // Por ahora, solo mostramos los datos en consola.
+    try {
+      // 1. Preparar datos del producto (sin imágenes)
+      const { images, ...productData } = data;
+
+      const finalData = {
+        ...productData,
+        slug: data.slug || generateSlug(data.name),
+      };
+
+      // 2. Crear el producto primero
+      const createdProduct = await createProduct.mutateAsync(finalData as any);
+
+      // 3. Guardar el ID del producto recién creado
+      const productId = parseInt(createdProduct.id);
+      setCreatedProductId(productId);
+
+      toast.success('Producto creado exitosamente. Las imágenes se subirán a este producto.');
+
+      // 4. Las imágenes que se suban ahora se vincularán automáticamente al producto
+      // porque el CloudinaryImageUploader recibirá el productId
+
+      // Reset form después de 2 segundos
+      setTimeout(() => {
+        form.reset({
+          sku: generateSKU(),
+          name: '',
+          slug: '',
+          price: 0,
+          stockQuantity: 0,
+          lowStockThreshold: 10,
+          isActive: true,
+          images: [],
+        });
+        setCreatedProductId(undefined);
+      }, 2000);
+
+      // Optionally redirect to products list
+      // router.push('/dashboard/products');
+    } catch (error: any) {
+      console.error('Error creating product:', error);
+      toast.error(error?.response?.data?.message || 'Error al crear el producto');
+    }
   };
 
   return (
@@ -127,9 +177,23 @@ export default function NewProductPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>SKU</FormLabel>
-                    <FormControl>
-                      <Input placeholder="SKU-001" {...field} />
-                    </FormControl>
+                    <div className="flex gap-2">
+                      <FormControl>
+                        <Input placeholder="PROD-20240101-1234" {...field} />
+                      </FormControl>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={handleGenerateNewSKU}
+                        title="Generar nuevo SKU"
+                      >
+                        <RefreshCw className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <FormDescription>
+                      SKU generado automáticamente. Puedes cambiarlo o generar uno nuevo.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -157,7 +221,7 @@ export default function NewProductPage() {
                       <Input placeholder="mosaico-vidrio-azul" {...field} />
                     </FormControl>
                     <FormDescription>
-                      Si se deja en blanco, se generará a partir del nombre.
+                      Se genera automáticamente del nombre. Puedes editarlo manualmente.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -168,7 +232,7 @@ export default function NewProductPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Imágenes</CardTitle>
+              <CardTitle>Imágenes del Producto</CardTitle>
             </CardHeader>
             <CardContent>
               <FormField
@@ -177,8 +241,19 @@ export default function NewProductPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <ImageUpload value={field.value} onChange={field.onChange} />
+                      <CloudinaryImageUploader
+                        value={field.value}
+                        onChange={field.onChange}
+                        productId={createdProductId}
+                        maxImages={8}
+                        disabled={createProduct.isPending}
+                      />
                     </FormControl>
+                    {!createdProductId && (
+                      <p className="text-sm text-amber-600 dark:text-amber-500">
+                        💡 Las imágenes se vincularán al producto después de crearlo
+                      </p>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}

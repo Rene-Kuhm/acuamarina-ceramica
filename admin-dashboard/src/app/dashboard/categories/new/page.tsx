@@ -1,19 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCreateCategory, useCategories } from '@/hooks/useCategories';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Loader2, Upload } from 'lucide-react';
 import Link from 'next/link';
+import { generateSlug } from '@/lib/generators';
+import { toast } from 'sonner';
+import { uploadCategoryImage } from '@/lib/api/upload';
 
 export default function NewCategoryPage() {
   const router = useRouter();
   const createCategory = useCreateCategory();
   const { data: categories } = useCategories();
+  const [isUploading, setIsUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -24,26 +30,76 @@ export default function NewCategoryPage() {
     isActive: true,
   });
 
+  // Auto-generate slug from name
+  useEffect(() => {
+    if (formData.name) {
+      setFormData(prev => ({
+        ...prev,
+        slug: generateSlug(formData.name),
+      }));
+    }
+  }, [formData.name]);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('La imagen no debe superar los 5MB');
+        return;
+      }
+
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
+      setIsUploading(true);
+
+      // Upload image first if exists
+      let imageUrl = '';
+      if (imageFile) {
+        const uploadResponse = await uploadCategoryImage(imageFile);
+        imageUrl = uploadResponse.data.url;
+      }
+
       await createCategory.mutateAsync({
         name: formData.name,
+        slug: formData.slug,
+        description: formData.description,
         parentId: formData.parentId || undefined,
+        imageUrl: imageUrl || undefined,
       });
 
-      router.push('/dashboard/categories');
-    } catch (error) {
-      alert('Error al crear la categoría');
-    }
-  };
+      toast.success('Categoría creada exitosamente');
 
-  const generateSlug = (name: string) => {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
+      // Reset form
+      setFormData({
+        name: '',
+        slug: '',
+        description: '',
+        parentId: '',
+        displayOrder: '0',
+        isActive: true,
+      });
+      setImageFile(null);
+      setImagePreview(null);
+
+      // Optionally redirect
+      // router.push('/dashboard/categories');
+    } catch (error: any) {
+      console.error('Error creating category:', error);
+      toast.error(error?.response?.data?.message || 'Error al crear la categoría');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -74,29 +130,53 @@ export default function NewCategoryPage() {
                     id="name"
                     required
                     value={formData.name}
-                    onChange={(e) => {
-                      const name = e.target.value;
-                      setFormData({
-                        ...formData,
-                        name,
-                        slug: generateSlug(name),
-                      });
-                    }}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Mosaicos Decorativos"
+                    disabled={isUploading}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="slug">Slug</Label>
+                  <Label htmlFor="slug">Slug (URL)</Label>
                   <Input
                     id="slug"
                     value={formData.slug}
                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                     placeholder="mosaicos-decorativos"
+                    disabled={isUploading}
                   />
                   <p className="text-xs text-muted-foreground">
-                    URL amigable para la categoría
+                    Se genera automáticamente del nombre. Puedes editarlo manualmente.
                   </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="image">Imagen de la Categoría</Label>
+                  <div className="space-y-4">
+                    {imagePreview && (
+                      <div className="relative w-full h-48 rounded-lg overflow-hidden border">
+                        <img
+                          src={imagePreview}
+                          alt="Preview"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    <div className="flex items-center gap-2">
+                      <Input
+                        id="image"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        disabled={isUploading}
+                        className="cursor-pointer"
+                      />
+                      <Upload className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Sube una imagen (máx. 5MB). Se guardará en Cloudinary.
+                    </p>
+                  </div>
                 </div>
 
                 <div className="space-y-2">
@@ -170,11 +250,18 @@ export default function NewCategoryPage() {
         </div>
 
         <div className="flex gap-4 mt-6">
-          <Button type="submit" disabled={createCategory.isPending}>
-            {createCategory.isPending ? 'Guardando...' : 'Crear Categoría'}
+          <Button type="submit" disabled={createCategory.isPending || isUploading}>
+            {createCategory.isPending || isUploading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {isUploading ? 'Subiendo imagen...' : 'Guardando...'}
+              </>
+            ) : (
+              'Crear Categoría'
+            )}
           </Button>
           <Link href="/dashboard/categories">
-            <Button type="button" variant="outline">
+            <Button type="button" variant="outline" disabled={createCategory.isPending || isUploading}>
               Cancelar
             </Button>
           </Link>
