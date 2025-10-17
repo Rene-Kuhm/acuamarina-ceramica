@@ -41,13 +41,23 @@ const fetchCategories = async (): Promise<Category[]> => {
   return JSON.parse(JSON.stringify(mockCategories));
 };
 
-const createCategory = async (category: { name: string; parentId?: string }): Promise<Category> => {
+interface CreateCategoryParams {
+  name: string;
+  slug?: string;
+  description?: string;
+  parentId?: string;
+  imageUrl?: string;
+}
+
+const createCategory = async (category: CreateCategoryParams): Promise<Category> => {
   console.log('Creating category:', category);
   await new Promise(resolve => setTimeout(resolve, 500));
   const newCategory: Category = {
     id: Date.now().toString(),
     name: category.name,
-    slug: category.name.toLowerCase().replace(/\s+/g, '-'),
+    slug: category.slug || category.name.toLowerCase().replace(/\s+/g, '-'),
+    description: category.description,
+    imageUrl: category.imageUrl,
     displayOrder: 0,
     isActive: true,
     createdAt: new Date().toISOString(),
@@ -95,7 +105,7 @@ export const useCategories = () => {
 
 export const useCreateCategory = () => {
   const queryClient = useQueryClient();
-  return useMutation<Category, Error, { name: string; parentId?: string }>({
+  return useMutation<Category, Error, CreateCategoryParams>({
     mutationFn: createCategory,
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
