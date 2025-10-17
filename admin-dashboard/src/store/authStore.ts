@@ -16,7 +16,7 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       accessToken: null,
       refreshToken: null,
@@ -69,8 +69,21 @@ export const useAuthStore = create<AuthState>()(
       name: 'auth-storage',
       partialize: (state) => ({
         user: state.user,
+        accessToken: state.accessToken,
+        refreshToken: state.refreshToken,
         isAuthenticated: state.isAuthenticated,
       }),
+      onRehydrateStorage: () => (state) => {
+        // Sincronizar tokens con localStorage cuando se restaura el estado
+        if (state && typeof window !== 'undefined') {
+          if (state.accessToken) {
+            localStorage.setItem('accessToken', state.accessToken);
+          }
+          if (state.refreshToken) {
+            localStorage.setItem('refreshToken', state.refreshToken);
+          }
+        }
+      },
     }
   )
 );
