@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { User } from '@/types';
 
 interface AuthState {
@@ -12,6 +12,7 @@ interface AuthState {
   logout: () => void;
   updateUser: (user: Partial<User>) => void;
   setLoading: (isLoading: boolean) => void;
+  initializeFromStorage: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -64,26 +65,36 @@ export const useAuthStore = create<AuthState>()(
       setLoading: (isLoading) => {
         set({ isLoading });
       },
+
+      initializeFromStorage: () => {
+        if (typeof window === 'undefined') return;
+
+        const storedAccessToken = localStorage.getItem('accessToken');
+        const storedRefreshToken = localStorage.getItem('refreshToken');
+
+        // Si hay tokens en localStorage pero no en el store, restaurar
+        if (storedAccessToken && storedRefreshToken) {
+          const currentState = get();
+          if (!currentState.accessToken || !currentState.refreshToken) {
+            set({
+              accessToken: storedAccessToken,
+              refreshToken: storedRefreshToken,
+              isAuthenticated: true,
+            });
+          }
+        }
+      },
     }),
     {
       name: 'auth-storage',
+      storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         user: state.user,
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
         isAuthenticated: state.isAuthenticated,
       }),
-      onRehydrateStorage: () => (state) => {
-        // Sincronizar tokens con localStorage cuando se restaura el estado
-        if (state && typeof window !== 'undefined') {
-          if (state.accessToken) {
-            localStorage.setItem('accessToken', state.accessToken);
-          }
-          if (state.refreshToken) {
-            localStorage.setItem('refreshToken', state.refreshToken);
-          }
-        }
-      },
+      skipHydration: false,
     }
   )
 );

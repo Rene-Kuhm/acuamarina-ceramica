@@ -9,16 +9,24 @@ import { Header } from '@/components/layout/Header';
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const initializeFromStorage = useAuthStore((state) => state.initializeFromStorage);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    // Inicializar desde localStorage al montar
+    initializeFromStorage();
+  }, [initializeFromStorage]);
 
   useEffect(() => {
-    if (mounted && !isAuthenticated) {
-      router.push('/login');
-    }
+    // Dar tiempo a que Zustand se hidrate antes de verificar auth
+    const timer = setTimeout(() => {
+      if (mounted && !isAuthenticated) {
+        router.push('/login');
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, [mounted, isAuthenticated, router]);
 
   // Evitar hydration mismatch: no renderizar hasta que el cliente se haya montado
