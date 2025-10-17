@@ -10,16 +10,32 @@ export class UploadController {
    */
   static async uploadProductImage(req: Request, res: Response, next: NextFunction) {
     try {
+      logger.info('📸 Iniciando upload de imagen de producto');
+
       if (!req.file) {
+        logger.error('❌ No se proporcionó archivo');
         return res.status(400).json({
           success: false,
           message: 'No se ha proporcionado ningún archivo',
         });
       }
 
+      // Verificar configuración de Cloudinary
+      const cloudinaryConfig = cloudinary.config();
+      if (!cloudinaryConfig.cloud_name || !cloudinaryConfig.api_key || !cloudinaryConfig.api_secret) {
+        logger.error('❌ Cloudinary no está configurado correctamente');
+        return res.status(500).json({
+          success: false,
+          message: 'Error de configuración del servidor (Cloudinary)',
+        });
+      }
+
+      logger.info(`📦 Archivo recibido: ${req.file.originalname}, tamaño: ${req.file.size} bytes`);
+
       const { productId } = req.body;
 
       // Upload to Cloudinary
+      logger.info('☁️ Subiendo a Cloudinary...');
       const result = await new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           {
@@ -40,9 +56,11 @@ export class UploadController {
       });
 
       const uploadResult = result as any;
+      logger.info(`✅ Imagen subida a Cloudinary: ${uploadResult.secure_url}`);
 
       // If productId is provided, save to database
       if (productId) {
+        logger.info(`💾 Guardando imagen en base de datos para producto ${productId}`);
         // Check if product exists
         const productCheck = await getPool().query(
           'SELECT id FROM products WHERE id = $1',
@@ -107,8 +125,14 @@ export class UploadController {
         },
       });
     } catch (error) {
-      logger.error('Error al subir imagen:', error);
-      next(error);
+      logger.error('❌ Error al subir imagen:', error);
+      logger.error('Stack trace:', error instanceof Error ? error.stack : 'No stack trace');
+
+      return res.status(500).json({
+        success: false,
+        message: 'Error al subir la imagen',
+        error: error instanceof Error ? error.message : 'Error desconocido',
+      });
     }
   }
 
