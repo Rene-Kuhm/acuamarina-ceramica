@@ -219,8 +219,14 @@ export class ProductsController {
    */
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
+      logger.info('📦 Creando producto...');
+      logger.info('📝 Datos recibidos:', JSON.stringify(req.body, null, 2));
+
       const data = createProductSchema.parse(req.body);
+      logger.info('✅ Validación exitosa');
+
       const userId = (req as any).user?.userId;
+      logger.info(`👤 Usuario: ${userId}`);
 
       // Generate slug if not provided
       const slug = data.slug || data.name
@@ -268,14 +274,17 @@ export class ProductsController {
         [userId, result.rows[0].id, JSON.stringify(data)]
       );
 
-      logger.info(`Producto creado: ${data.name} por usuario ${userId}`);
+      logger.info(`✅ Producto creado: ${data.name} (ID: ${result.rows[0].id}) por usuario ${userId}`);
 
       res.status(201).json({
         success: true,
         data: result.rows[0],
       });
     } catch (error) {
+      logger.error('❌ Error al crear producto:', error);
+
       if (error instanceof z.ZodError) {
+        logger.error('Errores de validación:', JSON.stringify(error.errors, null, 2));
         return res.status(400).json({
           success: false,
           message: 'Datos inválidos',
@@ -285,13 +294,21 @@ export class ProductsController {
 
       // Check for unique constraint violation
       if ((error as any).code === '23505') {
+        logger.error('Error: SKU o slug duplicado');
         return res.status(409).json({
           success: false,
           message: 'El SKU o slug ya existe',
         });
       }
 
-      next(error);
+      logger.error('Error desconocido:', error instanceof Error ? error.message : 'Unknown error');
+      logger.error('Stack trace:', error instanceof Error ? error.stack : 'No stack trace');
+
+      return res.status(500).json({
+        success: false,
+        message: 'Error al crear el producto',
+        error: error instanceof Error ? error.message : 'Error desconocido',
+      });
     }
   }
 
