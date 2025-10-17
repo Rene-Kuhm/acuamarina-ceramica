@@ -10,9 +10,18 @@ const createProductSchema = z.object({
   slug: z.string().optional(),
   description: z.string().optional().nullable(),
   shortDescription: z.string().optional().nullable(),
-  categoryId: z.string().optional().nullable()
-    .transform(val => !val || val === '' ? null : val)
-    .refine(val => val === null || z.string().uuid().safeParse(val).success, 'Category ID debe ser un UUID válido'),
+  categoryId: z.any()
+    .transform(val => {
+      // Si está vacío, undefined, null o no es un string, retornar null
+      if (!val || val === '' || val === 'undefined' || val === 'null') return null;
+      // Si es un string y parece un UUID válido, retornar el valor
+      if (typeof val === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val)) {
+        return val;
+      }
+      // Para cualquier otro caso, retornar null (permisivo)
+      return null;
+    })
+    .nullable(),
   price: z.union([z.number(), z.string()]).transform(val => typeof val === 'string' ? parseFloat(val) : val).refine(val => val > 0, 'Precio debe ser positivo'),
   comparePrice: z.union([z.number(), z.string()])
     .transform(val => {
