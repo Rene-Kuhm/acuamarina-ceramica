@@ -178,10 +178,10 @@ export class ProductsController {
           p.*,
           c.name as category_name,
           c.slug as category_slug,
-          (SELECT url FROM product_images WHERE product_id = p.id AND is_primary = true LIMIT 1) as primary_image
+          (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = true LIMIT 1) as primary_image
          FROM products p
          LEFT JOIN categories c ON p.category_id = c.id
-         WHERE p.is_active = true AND p.featured = true
+         WHERE p.is_active = true AND p.is_featured = true
          ORDER BY p.created_at DESC
          LIMIT $1`,
         [limit]
@@ -197,12 +197,16 @@ export class ProductsController {
   }
 
   /**
-   * Get product by ID
+   * Get product by ID or Slug
    * GET /api/v1/products/:id
    */
   static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
+
+      // Check if it's a UUID or slug
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+      const whereClause = isUUID ? 'p.id = $1' : 'p.slug = $1';
 
       const result = await getPool().query(
         `SELECT
@@ -211,7 +215,7 @@ export class ProductsController {
           c.slug as category_slug
          FROM products p
          LEFT JOIN categories c ON p.category_id = c.id
-         WHERE p.id = $1`,
+         WHERE ${whereClause}`,
         [id]
       );
 
@@ -225,7 +229,7 @@ export class ProductsController {
       // Get product images
       const imagesResult = await getPool().query(
         `SELECT * FROM product_images WHERE product_id = $1 ORDER BY display_order, created_at`,
-        [id]
+        [result.rows[0].id]
       );
 
       const product = {
