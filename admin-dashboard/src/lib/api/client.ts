@@ -43,10 +43,17 @@ class ApiClient {
 
             if (refreshToken) {
               try {
-                // Aquí implementarías el refresh del token
-                // const { data } = await axios.post(`${API_URL}/auth/refresh`, { refreshToken });
-                // localStorage.setItem('accessToken', data.accessToken);
-                // return this.client(originalRequest);
+                // Refrescar el token
+                const { data } = await axios.post(`${API_URL}/auth/refresh`, { refreshToken });
+                localStorage.setItem('accessToken', data.accessToken);
+
+                // Actualizar el header de la petición original
+                if (originalRequest.headers) {
+                  originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+                }
+
+                // Reintentar la petición original
+                return this.client(originalRequest);
               } catch (refreshError) {
                 // Si falla el refresh, limpiar tokens y redirigir a login
                 localStorage.removeItem('accessToken');
@@ -54,6 +61,12 @@ class ApiClient {
                 if (typeof window !== 'undefined') {
                   window.location.href = '/login';
                 }
+              }
+            } else {
+              // No hay refresh token, redirigir a login
+              localStorage.removeItem('accessToken');
+              if (typeof window !== 'undefined') {
+                window.location.href = '/login';
               }
             }
           }

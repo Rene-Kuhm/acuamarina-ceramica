@@ -17,7 +17,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
-    email: 'admin@acuamarina.com',
+    email: 'admin@aguamarina.com',
     password: 'Admin123!',
   });
 
@@ -95,7 +95,7 @@ export default function LoginPage() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="admin@acuamarina.com"
+                    placeholder="admin@aguamarina.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     required
