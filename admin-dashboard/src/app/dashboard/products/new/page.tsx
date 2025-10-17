@@ -133,28 +133,37 @@ export default function NewProductPage() {
       const productId = parseInt(createdProduct.id);
       setCreatedProductId(productId);
 
-      toast.success('Producto creado exitosamente. Las imágenes se subirán a este producto.');
+      toast.success('Producto creado exitosamente.');
 
-      // 4. Las imágenes que se suban ahora se vincularán automáticamente al producto
-      // porque el CloudinaryImageUploader recibirá el productId
+      // 4. Si había imágenes pre-cargadas, vincularlas al producto
+      if (images && images.length > 0) {
+        toast.info(`Vinculando ${images.length} imagen(es) al producto...`);
 
-      // Reset form después de 2 segundos
-      setTimeout(() => {
-        form.reset({
-          sku: generateSKU(),
-          name: '',
-          slug: '',
-          price: 0,
-          stockQuantity: 0,
-          lowStockThreshold: 10,
-          isActive: true,
-          images: [],
+        // Re-upload images with productId to link them to the product
+        const uploadPromises = images.map(async (img, index) => {
+          try {
+            // Fetch the image from Cloudinary URL
+            const response = await fetch(img.url);
+            const blob = await response.blob();
+            const file = new File([blob], `product-image-${index}.jpg`, { type: blob.type });
+
+            // Upload with productId
+            const { uploadProductImage } = await import('@/lib/api/upload');
+            await uploadProductImage(file, productId, {
+              altText: img.altText,
+              isPrimary: img.isPrimary,
+            });
+          } catch (error) {
+            console.error(`Error linking image ${index}:`, error);
+          }
         });
-        setCreatedProductId(undefined);
-      }, 2000);
 
-      // Optionally redirect to products list
-      // router.push('/dashboard/products');
+        await Promise.all(uploadPromises);
+        toast.success('Todas las imágenes han sido vinculadas al producto.');
+      }
+
+      // Redirect to products list after success
+      router.push('/dashboard/products');
     } catch (error: any) {
       console.error('Error creating product:', error);
       toast.error(error?.response?.data?.message || 'Error al crear el producto');
