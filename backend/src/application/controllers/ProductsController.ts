@@ -10,12 +10,32 @@ const createProductSchema = z.object({
   slug: z.string().optional(),
   description: z.string().optional().nullable(),
   shortDescription: z.string().optional().nullable(),
-  categoryId: z.string().uuid().optional().nullable(),
+  categoryId: z.string().optional().nullable()
+    .transform(val => !val || val === '' ? null : val)
+    .refine(val => val === null || z.string().uuid().safeParse(val).success, 'Category ID debe ser un UUID válido'),
   price: z.union([z.number(), z.string()]).transform(val => typeof val === 'string' ? parseFloat(val) : val).refine(val => val > 0, 'Precio debe ser positivo'),
-  comparePrice: z.union([z.number(), z.string()]).transform(val => typeof val === 'string' ? parseFloat(val) : val).refine(val => val > 0, 'Precio de comparación debe ser positivo').optional().nullable(),
-  costPrice: z.union([z.number(), z.string()]).transform(val => typeof val === 'string' ? parseFloat(val) : val).refine(val => val > 0, 'Precio de costo debe ser positivo').optional().nullable(),
+  comparePrice: z.union([z.number(), z.string()])
+    .transform(val => {
+      if (!val || val === '') return null;
+      return typeof val === 'string' ? parseFloat(val) : val;
+    })
+    .refine(val => val === null || val > 0, 'Precio de comparación debe ser positivo')
+    .optional().nullable(),
+  costPrice: z.union([z.number(), z.string()])
+    .transform(val => {
+      if (!val || val === '') return null;
+      return typeof val === 'string' ? parseFloat(val) : val;
+    })
+    .refine(val => val === null || val > 0, 'Precio de costo debe ser positivo')
+    .optional().nullable(),
   dimensions: z.string().optional().nullable(),
-  weight: z.union([z.number(), z.string()]).transform(val => typeof val === 'string' ? parseFloat(val) : val).refine(val => val > 0, 'Peso debe ser positivo').optional().nullable(),
+  weight: z.union([z.number(), z.string()])
+    .transform(val => {
+      if (!val || val === '') return null;
+      return typeof val === 'string' ? parseFloat(val) : val;
+    })
+    .refine(val => val === null || val > 0, 'Peso debe ser positivo')
+    .optional().nullable(),
   material: z.string().optional().nullable(),
   finish: z.string().optional().nullable(),
   color: z.string().optional().nullable(),
