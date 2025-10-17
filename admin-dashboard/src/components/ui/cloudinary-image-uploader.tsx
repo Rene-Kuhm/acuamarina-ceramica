@@ -66,20 +66,19 @@ export const CloudinaryImageUploader: React.FC<CloudinaryImageUploaderProps> = (
           });
 
           // Update the image with the server response
-          onChange((prev) =>
-            prev.map((img, idx) =>
-              idx === imageIndex
-                ? {
-                    ...img,
-                    id: response.data.id,
-                    url: response.data.url,
-                    cloudinaryId: response.data.cloudinaryId,
-                    uploading: false,
-                    file: undefined,
-                  }
-                : img
-            )
+          const updatedImages = [...value, ...newImages].map((img, idx) =>
+            idx === imageIndex
+              ? {
+                  ...img,
+                  id: response.data.id,
+                  url: response.data.url,
+                  cloudinaryId: response.data.cloudinaryId,
+                  uploading: false,
+                  file: undefined,
+                }
+              : img
           );
+          onChange(updatedImages);
 
           toast.success('Imagen subida correctamente');
         } catch (error: any) {
@@ -87,7 +86,8 @@ export const CloudinaryImageUploader: React.FC<CloudinaryImageUploaderProps> = (
           toast.error(error?.response?.data?.message || 'Error al subir la imagen');
 
           // Remove the failed upload
-          onChange((prev) => prev.filter((_, idx) => idx !== imageIndex));
+          const filteredImages = [...value, ...newImages].filter((_, idx) => idx !== imageIndex);
+          onChange(filteredImages);
         } finally {
           setUploadingCount((prev) => prev - 1);
         }
