@@ -265,18 +265,17 @@ export class ProductsController {
 
       const result = await getPool().query(
         `INSERT INTO products (
-          sku, name, slug, description, short_description, category_id,
+          sku, name, slug, description, category_id,
           price, compare_price, cost_price, dimensions, weight, material,
           finish, color, stock_quantity, low_stock_threshold, is_active, is_featured,
           meta_title, meta_description, keywords
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)
         RETURNING *`,
         [
           data.sku,
           data.name,
           slug,
           data.description || null,
-          data.shortDescription || null,
           data.categoryId || null,
           data.price,
           data.comparePrice || null,
