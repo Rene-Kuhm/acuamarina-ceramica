@@ -8,32 +8,35 @@ import { Header } from '@/components/layout/Header';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const initializeFromStorage = useAuthStore((state) => state.initializeFromStorage);
+  const { isAuthenticated, isInitialized, initialize } = useAuthStore();
   const [mounted, setMounted] = useState(false);
 
+  // Inicializar el auth store cuando se monta el componente
   useEffect(() => {
     setMounted(true);
-    // Inicializar desde localStorage al montar
-    initializeFromStorage();
-  }, [initializeFromStorage]);
+    initialize();
+  }, [initialize]);
 
+  // Redirigir a login solo después de que se haya inicializado
   useEffect(() => {
-    // Dar tiempo a que Zustand se hidrate antes de verificar auth
-    const timer = setTimeout(() => {
-      if (mounted && !isAuthenticated) {
-        router.push('/login');
-      }
-    }, 100);
+    if (mounted && isInitialized && !isAuthenticated) {
+      router.push('/login');
+    }
+  }, [mounted, isInitialized, isAuthenticated, router]);
 
-    return () => clearTimeout(timer);
-  }, [mounted, isAuthenticated, router]);
-
-  // Evitar hydration mismatch: no renderizar hasta que el cliente se haya montado
-  if (!mounted) {
-    return null;
+  // No renderizar nada hasta que esté montado e inicializado
+  if (!mounted || !isInitialized) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-slate-950">
+        <div className="text-center">
+          <div className="h-8 w-8 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-400 text-sm">Cargando...</p>
+        </div>
+      </div>
+    );
   }
 
+  // Si no está autenticado, no renderizar nada (se redirigirá)
   if (!isAuthenticated) {
     return null;
   }
