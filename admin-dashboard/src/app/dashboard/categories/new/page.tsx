@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useCreateCategory, useCategories } from '@/hooks/useCategories';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,6 @@ import { toast } from 'sonner';
 import { uploadCategoryImage } from '@/lib/api/upload';
 
 export default function NewCategoryPage() {
-  const router = useRouter();
   const createCategory = useCreateCategory();
   const { data: categories } = useCategories();
   const [isUploading, setIsUploading] = useState(false);
@@ -94,9 +93,12 @@ export default function NewCategoryPage() {
 
       // Optionally redirect
       // router.push('/dashboard/categories');
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error creating category:', error);
-      toast.error(error?.response?.data?.message || 'Error al crear la categoría');
+      const errorMessage = error instanceof Error
+        ? error.message
+        : (error as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Error al crear la categoría';
+      toast.error(errorMessage);
     } finally {
       setIsUploading(false);
     }
@@ -155,10 +157,12 @@ export default function NewCategoryPage() {
                   <div className="space-y-4">
                     {imagePreview && (
                       <div className="relative w-full h-48 rounded-lg overflow-hidden border">
-                        <img
+                        <Image
                           src={imagePreview}
                           alt="Preview"
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, 50vw"
                         />
                       </div>
                     )}
