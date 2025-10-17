@@ -45,21 +45,34 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isInitialized: false,
 
   initialize: () => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') {
+      console.log('⚠️ Initialize llamado en servidor, ignorando...');
+      return;
+    }
+
+    console.log('🔄 Inicializando authStore...');
 
     // Leer datos del localStorage
     const storedUser = getStoredUser();
     const accessToken = getStoredToken('accessToken');
     const refreshToken = getStoredToken('refreshToken');
 
+    console.log('📦 Datos en localStorage:', {
+      hasUser: !!storedUser,
+      hasAccessToken: !!accessToken,
+      hasRefreshToken: !!refreshToken,
+    });
+
     // Si hay tokens válidos, restaurar la sesión
     if (accessToken && refreshToken && storedUser) {
+      console.log('✅ Restaurando sesión desde localStorage');
       set({
         user: storedUser,
         isAuthenticated: true,
         isInitialized: true,
       });
     } else {
+      console.log('❌ No hay sesión válida, limpiando...');
       // Si no hay tokens, limpiar todo
       if (typeof window !== 'undefined') {
         localStorage.removeItem('auth-user');
@@ -75,12 +88,19 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   login: (user, accessToken, refreshToken) => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') {
+      console.log('⚠️ Login llamado en servidor, ignorando...');
+      return;
+    }
+
+    console.log('🔐 Ejecutando login en authStore...', { email: user.email });
 
     // Guardar en localStorage
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
     setStoredUser(user);
+
+    console.log('💾 Tokens guardados en localStorage');
 
     // Actualizar estado
     set({
@@ -89,6 +109,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       isLoading: false,
       isInitialized: true,
     });
+
+    console.log('✅ Estado actualizado - isAuthenticated: true');
   },
 
   logout: () => {

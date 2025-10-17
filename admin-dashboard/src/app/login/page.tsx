@@ -27,10 +27,21 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
+      console.log('🔐 Intentando login...', formData.email);
       const response = await authService.login(formData);
+      console.log('✅ Login exitoso:', response);
+
+      // Llamar a login del store
       login(response.user, response.accessToken, response.refreshToken);
+      console.log('✅ Tokens guardados en store');
+
+      // Esperar un poco para asegurar que el estado se actualice
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Redirigir al dashboard
       router.push('/dashboard');
     } catch (err: any) {
+      console.error('❌ Error en login:', err);
       setError(err.response?.data?.message || 'Error al iniciar sesión');
     } finally {
       setIsLoading(false);

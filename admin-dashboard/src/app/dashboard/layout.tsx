@@ -13,14 +13,24 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   // Inicializar el auth store cuando se monta el componente
   useEffect(() => {
+    console.log('📱 Dashboard layout montado');
     setMounted(true);
     initialize();
   }, [initialize]);
 
   // Redirigir a login solo después de que se haya inicializado
   useEffect(() => {
+    console.log('🔍 Verificando autenticación:', {
+      mounted,
+      isInitialized,
+      isAuthenticated,
+    });
+
     if (mounted && isInitialized && !isAuthenticated) {
+      console.log('⚠️ No autenticado, redirigiendo a login...');
       router.push('/login');
+    } else if (mounted && isInitialized && isAuthenticated) {
+      console.log('✅ Usuario autenticado, mostrando dashboard');
     }
   }, [mounted, isInitialized, isAuthenticated, router]);
 
