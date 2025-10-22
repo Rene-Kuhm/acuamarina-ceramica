@@ -88,18 +88,20 @@ export default function ProductsPage() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
-            Productos
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Gestiona el catálogo de productos y mosaicos
-          </p>
-        </div>
-        <div className="flex gap-2">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white to-indigo-50/20">
+      <div className="space-y-6 animate-fade-in p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-transparent rounded-lg blur-3xl"></div>
+          <div className="relative">
+            <h1 className="text-2xl font-bold text-slate-900">
+              Productos
+            </h1>
+            <p className="text-sm text-slate-600 mt-1">
+              Gestiona el catálogo de productos y mosaicos
+            </p>
+          </div>
+          <div className="flex gap-2 relative">
           <Button
             variant="outline"
             onClick={handleExport}
@@ -366,6 +368,7 @@ export default function ProductsPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      </div>
     </div>
   );
 }

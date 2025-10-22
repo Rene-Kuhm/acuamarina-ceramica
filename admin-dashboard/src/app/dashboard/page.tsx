@@ -69,12 +69,16 @@ export default function DashboardPage() {
   ], [dashboardData]);
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
-        <p className="text-sm text-slate-600 mt-1">Resumen general de tu tienda</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#f0fdfa]">
+      <div className="space-y-6 p-6">
+        {/* Header */}
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#14b8a6]/5 to-transparent rounded-lg blur-3xl"></div>
+          <div className="relative">
+            <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
+            <p className="text-sm text-slate-600 mt-1">Resumen general de tu tienda</p>
+          </div>
+        </div>
 
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -116,8 +120,8 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Activity Grid */}
-      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Activity Grid */}
+        <div className="grid gap-6 lg:grid-cols-2">
         {/* Productos con Stock Bajo */}
         <Card className="col-span-1">
           <CardHeader className="border-b border-slate-200">
@@ -248,6 +252,7 @@ export default function DashboardPage() {
             )}
           </CardContent>
         </Card>
+        </div>
       </div>
     </div>
   );

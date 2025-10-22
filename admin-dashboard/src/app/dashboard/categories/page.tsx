@@ -62,17 +62,19 @@ export default function CategoriesPage() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
-            Categorías
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Gestiona las categorías y subcategorías de tus productos.
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50/30 via-white to-orange-50/20">
+      <div className="space-y-6 animate-fade-in p-6">
+        <div className="flex items-center justify-between relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 to-transparent rounded-lg blur-3xl"></div>
+          <div className="relative">
+            <h1 className="text-2xl font-bold text-slate-900">
+              Categorías
+            </h1>
+            <p className="text-sm text-slate-600 mt-1">
+              Gestiona las categorías y subcategorías de tus productos.
+            </p>
+          </div>
         </div>
-      </div>
 
       <Card>
         <CardHeader>
@@ -166,6 +168,7 @@ export default function CategoriesPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      </div>
     </div>
   );
 }
