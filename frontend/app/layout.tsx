@@ -1,21 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-import { Header } from "@/components/layout/Header";
+import { HeaderPremium as Header } from "@/components/layout/HeaderPremium";
 import { Footer } from "@/components/layout/Footer";
 import { ComparisonBar } from "@/components/productos/ComparisonBar";
 import { SkipToContent } from "@/components/layout/SkipToContent";
 import { StructuredData } from "@/components/seo/StructuredData";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Inter - Premium typography like Apple
+const inter = Inter({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -105,7 +103,7 @@ export default function RootLayout({
         <StructuredData />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} font-sans antialiased`}
       >
         <Providers>
           <SkipToContent />
