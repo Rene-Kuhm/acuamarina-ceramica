@@ -34,22 +34,36 @@ export const config = {
     origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
       const allowedOrigins = process.env.CORS_ORIGINS?.split(',') || [];
       const allowedPatterns = [
-        /^https:\/\/.*\.vercel\.app$/,  // Any Vercel deployment
-        /^http:\/\/localhost:\d+$/,      // Local development
+        /^https:\/\/.*\.vercel\.app$/,              // Any Vercel deployment
+        /^https:\/\/acuamarina.*\.vercel\.app$/,    // Specific Aguamarina deployments
+        /^http:\/\/localhost:\d+$/,                  // Local development
+        /^https:\/\/localhost:\d+$/,                 // Local development HTTPS
       ];
 
       // Allow requests with no origin (like mobile apps or curl)
       if (!origin) {
+        console.log('✅ CORS: Allowing request with no origin');
         return callback(null, true);
       }
 
+      // Log all origin requests for debugging
+      console.log(`🔍 CORS: Checking origin: ${origin}`);
+
       // Check if origin is in allowed list
       if (allowedOrigins.includes(origin)) {
+        console.log(`✅ CORS: Origin allowed from env list: ${origin}`);
         return callback(null, true);
       }
 
       // Check if origin matches any pattern
-      const isAllowed = allowedPatterns.some(pattern => pattern.test(origin));
+      const isAllowed = allowedPatterns.some(pattern => {
+        const matches = pattern.test(origin);
+        if (matches) {
+          console.log(`✅ CORS: Origin matches pattern: ${origin} -> ${pattern}`);
+        }
+        return matches;
+      });
+
       if (isAllowed) {
         return callback(null, true);
       }
@@ -60,8 +74,9 @@ export const config = {
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    exposedHeaders: ['Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-Request-Id'],
+    exposedHeaders: ['Authorization', 'X-Request-Id'],
+    maxAge: 86400, // 24 hours
   },
 
   // Rate limiting
