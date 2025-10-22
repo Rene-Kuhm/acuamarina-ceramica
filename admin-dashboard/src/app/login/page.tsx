@@ -49,60 +49,110 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-950 via-slate-900 to-[#134e4a] relative overflow-hidden">
-      {/* Animated background effects - Aguamarina */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#14b8a6]/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#2dd4bf]/10 rounded-full blur-3xl animate-pulse delay-700"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-[#14b8a6]/5 to-[#0d9488]/5 rounded-full blur-3xl"></div>
-      </div>
+    <div className="min-h-screen flex">
+      {/* Left side - Branding */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#14b8a6] via-[#0d9488] to-[#115e59] p-12 flex-col justify-between relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
 
-      {/* Login Card */}
-      <div className="relative z-10 w-full max-w-md">
-        {/* Logo Badge */}
-        <div className="flex justify-center mb-8 animate-fade-in">
-          <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#14b8a6] to-[#0d9488] rounded-full blur-2xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
-            <div className="relative h-24 w-24 rounded-full bg-white flex items-center justify-center shadow-2xl ring-4 ring-[#14b8a6]/10 group-hover:scale-110 transition-transform duration-300 overflow-hidden">
+        {/* Logo and Title */}
+        <div className="relative z-10">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="h-16 w-16 rounded-2xl bg-white flex items-center justify-center shadow-lg">
               <Image
                 src="/logo/logo.png"
-                alt="Aguamarina Mosaicos Logo"
-                width={96}
-                height={96}
+                alt="Aguamarina Logo"
+                width={48}
+                height={48}
+                className="object-contain"
+                priority
+              />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white">Aguamarina Mosaicos</h1>
+              <p className="text-white/80 text-sm">Panel de Administración</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Center content */}
+        <div className="relative z-10 space-y-6">
+          <h2 className="text-4xl font-bold text-white leading-tight">
+            Gestiona tu negocio<br />con elegancia
+          </h2>
+          <p className="text-white/90 text-lg max-w-md">
+            Sistema integral para administrar productos, categorías, pedidos y clientes de forma profesional.
+          </p>
+
+          {/* Features */}
+          <div className="space-y-4 pt-6">
+            <div className="flex items-start gap-3">
+              <div className="h-8 w-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                <ShieldCheck className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <h3 className="text-white font-semibold">Seguro y Confiable</h3>
+                <p className="text-white/70 text-sm">Autenticación JWT con tokens de refresco</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="h-8 w-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                <Sparkles className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <h3 className="text-white font-semibold">Interfaz Moderna</h3>
+                <p className="text-white/70 text-sm">Diseño responsivo y fácil de usar</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="relative z-10 text-white/60 text-sm">
+          © 2025 Aguamarina Mosaicos. Todos los derechos reservados.
+        </div>
+      </div>
+
+      {/* Right side - Login Form */}
+      <div className="flex-1 flex items-center justify-center p-8 bg-gradient-to-br from-slate-50 to-slate-100">
+        <div className="w-full max-w-md">
+          {/* Mobile Logo */}
+          <div className="lg:hidden flex justify-center mb-8">
+            <div className="h-16 w-16 rounded-2xl bg-[#14b8a6] flex items-center justify-center shadow-lg">
+              <Image
+                src="/logo/logo.png"
+                alt="Aguamarina Logo"
+                width={48}
+                height={48}
                 className="object-contain"
                 priority
               />
             </div>
           </div>
-        </div>
 
-        <Card className="border-slate-700/50 bg-slate-900/90 backdrop-blur-xl shadow-2xl animate-slide-in">
-          <CardHeader className="space-y-3 text-center pb-8">
-            <div className="flex justify-center">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#14b8a6]/10 to-[#0d9488]/10 border border-[#14b8a6]/20 text-[#14b8a6] text-xs font-medium">
+          <Card className="border-slate-200 bg-white shadow-xl">
+            <CardHeader className="space-y-2 pb-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f0fdfa] border border-[#ccfbf1] text-[#14b8a6] text-xs font-semibold w-fit">
                 <Sparkles className="h-3.5 w-3.5" />
                 Sistema Premium
-              </span>
-            </div>
-            <CardTitle className="text-3xl font-bold">
-              <span className="bg-gradient-to-r from-[#14b8a6] via-[#2dd4bf] to-[#5eead4] bg-clip-text text-transparent">
-                Aguamarina Mosaicos
-              </span>
-            </CardTitle>
-            <CardDescription className="text-slate-400 text-base">
-              Panel de Administración Empresarial
-            </CardDescription>
-          </CardHeader>
+              </div>
+              <CardTitle className="text-2xl font-bold text-slate-900">
+                Iniciar Sesión
+              </CardTitle>
+              <CardDescription className="text-slate-600">
+                Ingresa tus credenciales para acceder al panel
+              </CardDescription>
+            </CardHeader>
 
-          <CardContent className="space-y-6">
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Email Field */}
-              <div className="space-y-2" suppressHydrationWarning>
-                <Label htmlFor="email" className="text-slate-300 font-medium flex items-center gap-2">
-                  <Mail className="h-4 w-4 text-[#14b8a6]" />
-                  Email
-                </Label>
-                <div className="relative group">
+            <CardContent className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Email Field */}
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-slate-700 font-medium flex items-center gap-2">
+                    <Mail className="h-4 w-4 text-[#14b8a6]" />
+                    Correo electrónico
+                  </Label>
                   <Input
                     id="email"
                     type="email"
@@ -111,19 +161,16 @@ export default function LoginPage() {
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     required
                     disabled={isLoading}
-                    className="bg-slate-800/50 border-slate-700/50 text-white placeholder:text-slate-500 focus:border-[#14b8a6]/50 focus:ring-[#14b8a6]/20 h-12 px-4 group-hover:border-[#14b8a6]/30 transition-colors"
-                    suppressHydrationWarning
+                    className="h-11"
                   />
                 </div>
-              </div>
 
-              {/* Password Field */}
-              <div className="space-y-2" suppressHydrationWarning>
-                <Label htmlFor="password" className="text-slate-300 font-medium flex items-center gap-2">
-                  <Lock className="h-4 w-4 text-[#14b8a6]" />
-                  Contraseña
-                </Label>
-                <div className="relative group">
+                {/* Password Field */}
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-slate-700 font-medium flex items-center gap-2">
+                    <Lock className="h-4 w-4 text-[#14b8a6]" />
+                    Contraseña
+                  </Label>
                   <Input
                     id="password"
                     type="password"
@@ -132,60 +179,69 @@ export default function LoginPage() {
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     required
                     disabled={isLoading}
-                    className="bg-slate-800/50 border-slate-700/50 text-white placeholder:text-slate-500 focus:border-[#14b8a6]/50 focus:ring-[#14b8a6]/20 h-12 px-4 group-hover:border-[#14b8a6]/30 transition-colors"
-                    suppressHydrationWarning
+                    className="h-11"
                   />
                 </div>
-              </div>
 
-              {/* Error Message */}
-              {error && (
-                <div className="p-4 text-sm text-red-300 bg-red-500/10 rounded-xl border border-red-500/20 flex items-start gap-3 animate-fade-in">
-                  <ShieldCheck className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
-                  <span>{error}</span>
-                </div>
-              )}
-
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                className="w-full h-12 bg-gradient-to-r from-[#14b8a6] to-[#0d9488] hover:from-[#0d9488] hover:to-[#115e59] text-white font-semibold shadow-lg hover:shadow-[#14b8a6]/50 transition-all duration-300 group relative overflow-hidden"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <span className="flex items-center gap-2">
-                    <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    Iniciando sesión...
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-2">
-                    Iniciar Sesión
-                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </span>
+                {/* Error Message */}
+                {error && (
+                  <div className="p-3 text-sm text-red-700 bg-red-50 rounded-lg border border-red-200 flex items-start gap-2">
+                    <ShieldCheck className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
+                    <span>{error}</span>
+                  </div>
                 )}
-              </Button>
-            </form>
 
-            {/* Demo Credentials */}
-            <div className="pt-4 border-t border-slate-700/50">
-              <div className="text-center space-y-2">
-                <p className="text-xs text-slate-400 font-medium">Credenciales de prueba</p>
-                <div className="inline-flex flex-col gap-1 px-4 py-3 bg-slate-800/30 rounded-lg border border-slate-700/30">
-                  <p className="text-xs text-[#14b8a6] font-mono">admin@aguamarina.com</p>
-                  <p className="text-xs text-slate-400">•••••••</p>
-                  <p className="text-xs text-[#14b8a6] font-mono">Admin123!</p>
+                {/* Submit Button */}
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  fullWidth
+                  disabled={isLoading}
+                  className="mt-6"
+                >
+                  {isLoading ? (
+                    <span className="flex items-center gap-2">
+                      <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      Iniciando sesión...
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-2">
+                      Iniciar Sesión
+                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  )}
+                </Button>
+              </form>
+
+              {/* Demo Credentials */}
+              <div className="pt-4 border-t border-slate-200">
+                <div className="space-y-3">
+                  <p className="text-xs text-slate-600 font-medium text-center">Credenciales de prueba</p>
+                  <div className="flex flex-col gap-2 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-slate-600">Email:</span>
+                      <span className="text-[#14b8a6] font-mono font-semibold">admin@aguamarina.com</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-slate-600">Password:</span>
+                      <span className="text-[#14b8a6] font-mono font-semibold">Admin123!</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        {/* Footer Badge */}
-        <div className="mt-8 text-center animate-fade-in">
-          <p className="text-sm text-slate-400">
-            Protegido con{' '}
-            <span className="text-[#14b8a6] font-semibold">autenticación JWT</span>
-          </p>
+          {/* Footer Link */}
+          <div className="mt-6 text-center">
+            <p className="text-sm text-slate-600">
+              ¿Problemas para acceder?{' '}
+              <button className="text-[#14b8a6] font-semibold hover:underline">
+                Contacta soporte
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </div>

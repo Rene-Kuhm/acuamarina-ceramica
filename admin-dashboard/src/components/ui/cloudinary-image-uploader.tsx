@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
 import { useState, useCallback } from 'react';
-import { UploadCloud, X, Loader2, GripVertical, Star } from 'lucide-react';
 import { useDropzone } from 'react-dropzone';
-import { Button } from './button';
-import { uploadProductImage, deleteImage } from '@/lib/api/upload';
+import { Star, X, ChevronLeft, ChevronRight, Upload, Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { uploadProductImage } from '@/lib/api/upload';
 import { toast } from 'sonner';
 
 export interface ProductImage {
@@ -25,71 +25,74 @@ interface CloudinaryImageUploaderProps {
   disabled?: boolean;
 }
 
-export const CloudinaryImageUploader: React.FC<CloudinaryImageUploaderProps> = ({
-  value,
+export function CloudinaryImageUploader({
+  value = [],
   onChange,
   productId,
   maxImages = 10,
   disabled = false,
-}) => {
-  const [uploadingCount, setUploadingCount] = useState(0);
+}: CloudinaryImageUploaderProps) {
+  const [uploading, setUploading] = useState(false);
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       if (disabled) return;
 
-      // Check if adding these files would exceed the limit
-      if (value.length + acceptedFiles.length > maxImages) {
+      const remainingSlots = maxImages - value.length;
+      if (remainingSlots <= 0) {
         toast.error(`Máximo ${maxImages} imágenes permitidas`);
         return;
       }
 
-      // Add files as pending uploads with preview
-      const newImages: ProductImage[] = acceptedFiles.map((file) => ({
-        url: URL.createObjectURL(file),
-        file,
-        uploading: true,
-        isPrimary: value.length === 0, // First image is primary by default
-      }));
+      const filesToUpload = acceptedFiles.slice(0, remainingSlots);
 
-      onChange([...value, ...newImages]);
-      setUploadingCount((prev) => prev + acceptedFiles.length);
+      for (const file of filesToUpload) {
+        // Validate file size (5MB max)
+        if (file.size > 5 * 1024 * 1024) {
+          toast.error(`${file.name} excede el tamaño máximo de 5MB`);
+          continue;
+        }
 
-      // Upload each file
-      for (let i = 0; i < acceptedFiles.length; i++) {
-        const file = acceptedFiles[i];
-        const imageIndex = value.length + i;
+        // Create preview
+        const previewUrl = URL.createObjectURL(file);
+        const tempImage: ProductImage = {
+          url: previewUrl,
+          file,
+          uploading: true,
+          isPrimary: value.length === 0, // First image is primary
+        };
+
+        // Add to UI immediately
+        onChange([...value, tempImage]);
 
         try {
+          // Upload to Cloudinary
           const response = await uploadProductImage(file, productId, {
-            isPrimary: value.length === 0 && i === 0,
+            isPrimary: value.length === 0,
           });
 
-          // Update the image with the server response
-          const updatedImages = [...value, ...newImages].map((img, idx) =>
-            idx === imageIndex
+          // Replace preview with real URL
+          const updatedImages = value.map((img) =>
+            img.url === previewUrl
               ? {
-                  ...img,
                   id: response.data.id,
                   url: response.data.url,
                   cloudinaryId: response.data.cloudinaryId,
+                  isPrimary: value.length === 0,
                   uploading: false,
-                  file: undefined,
                 }
               : img
           );
           onChange(updatedImages);
 
           toast.success('Imagen subida correctamente');
-        } catch (error: any) {
+        } catch (error) {
           console.error('Error uploading image:', error);
-          toast.error(error?.response?.data?.message || 'Error al subir la imagen');
+          toast.error('Error al subir la imagen');
 
-          // Remove the failed upload
-          const filteredImages = [...value, ...newImages].filter((_, idx) => idx !== imageIndex);
+          // Remove failed image
+          const filteredImages = value.filter((img) => img.url !== previewUrl);
           onChange(filteredImages);
-        } finally {
-          setUploadingCount((prev) => prev - 1);
         }
       }
     },
@@ -98,71 +101,102 @@ export const CloudinaryImageUploader: React.FC<CloudinaryImageUploaderProps> = (
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { 'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp'] },
-    disabled: disabled || value.length >= maxImages,
-    maxSize: 5 * 1024 * 1024, // 5MB
+    accept: {
+      'image/*': ['.jpg', '.jpeg', '.png', '.gif', '.webp'],
+    },
+    multiple: true,
+    disabled,
   });
 
-  const handleRemove = async (index: number) => {
-    if (disabled) return;
-
+  const removeImage = async (index: number) => {
     const image = value[index];
 
-    // If image has an ID, delete from server
+    // If image has an ID, delete from backend
     if (image.id) {
       try {
+        const { deleteImage } = await import('@/lib/api/upload');
         await deleteImage(image.id);
-        toast.success('Imagen eliminada correctamente');
-      } catch (error: any) {
+        toast.success('Imagen eliminada');
+      } catch (error) {
         console.error('Error deleting image:', error);
-        toast.error(error?.response?.data?.message || 'Error al eliminar la imagen');
+        toast.error('Error al eliminar la imagen');
         return;
       }
     }
 
-    // Remove from local state
-    const newValue = [...value];
-    newValue.splice(index, 1);
-    onChange(newValue);
+    // Remove from UI
+    const newImages = value.filter((_, i) => i !== index);
+
+    // If removed image was primary, make first image primary
+    if (image.isPrimary && newImages.length > 0) {
+      newImages[0].isPrimary = true;
+    }
+
+    onChange(newImages);
   };
 
-  const handleSetPrimary = (index: number) => {
-    if (disabled) return;
-
-    const newValue = value.map((img, idx) => ({
+  const setPrimaryImage = (index: number) => {
+    const newImages = value.map((img, i) => ({
       ...img,
-      isPrimary: idx === index,
+      isPrimary: i === index,
     }));
-    onChange(newValue);
+    onChange(newImages);
   };
 
-  const moveImage = (fromIndex: number, toIndex: number) => {
-    if (disabled) return;
+  const moveImage = (index: number, direction: 'left' | 'right') => {
+    const newImages = [...value];
+    const targetIndex = direction === 'left' ? index - 1 : index + 1;
 
-    const newValue = [...value];
-    const [movedItem] = newValue.splice(fromIndex, 1);
-    newValue.splice(toIndex, 0, movedItem);
-    onChange(newValue);
+    if (targetIndex < 0 || targetIndex >= newImages.length) return;
+
+    [newImages[index], newImages[targetIndex]] = [newImages[targetIndex], newImages[index]];
+    onChange(newImages);
   };
 
   return (
     <div className="space-y-4">
+      {/* Dropzone */}
+      {value.length < maxImages && (
+        <div
+          {...getRootProps()}
+          className={cn(
+            "border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors",
+            isDragActive && "border-[#14b8a6] bg-[#f0fdfa]",
+            !isDragActive && "border-slate-300 hover:border-slate-400",
+            disabled && "opacity-50 cursor-not-allowed"
+          )}
+        >
+          <input {...getInputProps()} />
+          <div className="flex flex-col items-center gap-2">
+            <Upload className="h-10 w-10 text-slate-400" />
+            <p className="text-sm text-slate-600">
+              {isDragActive
+                ? "Suelta las imágenes aquí"
+                : "Arrastra imágenes o haz click para seleccionar"}
+            </p>
+            <p className="text-xs text-slate-500">
+              Máximo {maxImages} imágenes • JPG, PNG, GIF, WEBP • Máx 5MB
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Image Grid */}
       {value.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {value.map((image, index) => (
             <div
-              key={image.id || index}
-              className="relative aspect-square rounded-lg overflow-hidden group border border-slate-200 dark:border-slate-700"
+              key={image.url}
+              className="relative aspect-square rounded-lg overflow-hidden border border-slate-200 group"
             >
               {/* Image */}
               <img
                 src={image.url}
-                alt={image.altText || `Product image ${index + 1}`}
+                alt={image.altText || `Imagen ${index + 1}`}
                 className="w-full h-full object-cover"
               />
 
-              {/* Loading Overlay */}
+              {/* Uploading Overlay */}
               {image.uploading && (
                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                   <Loader2 className="h-8 w-8 text-white animate-spin" />
@@ -171,65 +205,61 @@ export const CloudinaryImageUploader: React.FC<CloudinaryImageUploaderProps> = (
 
               {/* Controls Overlay */}
               {!image.uploading && (
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-200">
-                  <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button
-                      type="button"
-                      size="icon"
-                      variant="destructive"
-                      className="h-8 w-8"
-                      onClick={() => handleRemove(index)}
-                      disabled={disabled}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-
-                  <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button
-                      type="button"
-                      size="icon"
-                      variant={image.isPrimary ? 'default' : 'secondary'}
-                      className="h-8 w-8"
-                      onClick={() => handleSetPrimary(index)}
-                      disabled={disabled}
-                      title="Marcar como principal"
-                    >
-                      <Star className={`h-4 w-4 ${image.isPrimary ? 'fill-current' : ''}`} />
-                    </Button>
-
-                    {value.length > 1 && (
-                      <div className="flex gap-1">
-                        <Button
-                          type="button"
-                          size="icon"
-                          variant="secondary"
-                          className="h-8 w-8"
-                          onClick={() => moveImage(index, Math.max(0, index - 1))}
-                          disabled={disabled || index === 0}
-                        >
-                          ←
-                        </Button>
-                        <Button
-                          type="button"
-                          size="icon"
-                          variant="secondary"
-                          className="h-8 w-8"
-                          onClick={() => moveImage(index, Math.min(value.length - 1, index + 1))}
-                          disabled={disabled || index === value.length - 1}
-                        >
-                          →
-                        </Button>
-                      </div>
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                  {/* Set Primary */}
+                  <button
+                    type="button"
+                    onClick={() => setPrimaryImage(index)}
+                    className={cn(
+                      "p-2 rounded-full transition-colors",
+                      image.isPrimary
+                        ? "bg-[#14b8a6] text-white"
+                        : "bg-white/90 text-slate-700 hover:bg-white"
                     )}
-                  </div>
+                    title="Marcar como principal"
+                  >
+                    <Star className="h-4 w-4" fill={image.isPrimary ? "currentColor" : "none"} />
+                  </button>
+
+                  {/* Move Left */}
+                  {index > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => moveImage(index, 'left')}
+                      className="p-2 rounded-full bg-white/90 text-slate-700 hover:bg-white transition-colors"
+                      title="Mover a la izquierda"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </button>
+                  )}
+
+                  {/* Move Right */}
+                  {index < value.length - 1 && (
+                    <button
+                      type="button"
+                      onClick={() => moveImage(index, 'right')}
+                      className="p-2 rounded-full bg-white/90 text-slate-700 hover:bg-white transition-colors"
+                      title="Mover a la derecha"
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </button>
+                  )}
+
+                  {/* Remove */}
+                  <button
+                    type="button"
+                    onClick={() => removeImage(index)}
+                    className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors"
+                    title="Eliminar imagen"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
                 </div>
               )}
 
               {/* Primary Badge */}
-              {image.isPrimary && (
-                <div className="absolute top-2 left-2 bg-cyan-600 text-white text-xs px-2 py-1 rounded-md flex items-center gap-1">
-                  <Star className="h-3 w-3 fill-current" />
+              {image.isPrimary && !image.uploading && (
+                <div className="absolute top-2 left-2 bg-[#14b8a6] text-white text-xs font-semibold px-2 py-1 rounded-full">
                   Principal
                 </div>
               )}
@@ -238,57 +268,13 @@ export const CloudinaryImageUploader: React.FC<CloudinaryImageUploaderProps> = (
         </div>
       )}
 
-      {/* Dropzone */}
-      {value.length < maxImages && (
-        <div
-          {...getRootProps()}
-          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200 ${
-            isDragActive
-              ? 'border-cyan-600 dark:border-cyan-500 bg-cyan-50 dark:bg-cyan-950/30 scale-[1.02]'
-              : disabled
-              ? 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 cursor-not-allowed opacity-50'
-              : 'border-slate-300 dark:border-slate-700 hover:border-cyan-500 dark:hover:border-cyan-400 hover:bg-slate-50 dark:hover:bg-slate-900/50'
-          }`}
-        >
-          <input {...getInputProps()} />
-          <div className="flex flex-col items-center gap-3 text-slate-600 dark:text-slate-400">
-            {uploadingCount > 0 ? (
-              <>
-                <Loader2 className="h-10 w-10 animate-spin text-cyan-600" />
-                <p className="font-medium">Subiendo {uploadingCount} imagen(es)...</p>
-              </>
-            ) : (
-              <>
-                <UploadCloud className="h-10 w-10" />
-                {isDragActive ? (
-                  <p className="font-medium">Suelta las imágenes aquí...</p>
-                ) : (
-                  <>
-                    <p className="font-medium">
-                      Arrastra y suelta imágenes, o haz clic para seleccionar
-                    </p>
-                    <p className="text-sm text-slate-500 dark:text-slate-500">
-                      Máximo {maxImages} imágenes, hasta 5MB cada una
-                    </p>
-                    <p className="text-xs text-slate-400 dark:text-slate-600">
-                      {value.length}/{maxImages} imágenes
-                    </p>
-                  </>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Instructions */}
+      {/* Info Text */}
       {value.length > 0 && (
-        <div className="text-xs text-slate-500 dark:text-slate-500 space-y-1">
-          <p>• Haz clic en la estrella para marcar una imagen como principal</p>
-          <p>• Usa las flechas para cambiar el orden de las imágenes</p>
-          <p>• Haz clic en la X para eliminar una imagen</p>
-        </div>
+        <p className="text-xs text-slate-500">
+          {value.length} de {maxImages} imágenes
+          {value.length > 0 && " • Haz hover sobre las imágenes para ver controles"}
+        </p>
       )}
     </div>
   );
-};
+}
