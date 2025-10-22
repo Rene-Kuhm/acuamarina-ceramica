@@ -61,6 +61,46 @@
   --color-warning: #f59e0b;
   --color-warning-foreground: #ffffff;
 
+  /* ============================================
+     BRAND COLORS - Aguamarina Cerámicos
+     ============================================ */
+
+  /* === AQUAMARINA (Primary Brand) === */
+  --aqua-50: #f0fdfa;
+  --aqua-100: #ccfbf1;
+  --aqua-200: #99f6e4;
+  --aqua-300: #5eead4;
+  --aqua-400: #2dd4bf;
+  --aqua-500: #14b8a6;  /* Main brand color */
+  --aqua-600: #0d9488;
+  --aqua-700: #0f766e;
+  --aqua-800: #115e59;
+  --aqua-900: #134e4a;
+
+  /* === TERRACOTA (Ceramic Accent) === */
+  --terra-50: #fdf4f3;
+  --terra-100: #fce8e5;
+  --terra-200: #f9d0ca;
+  --terra-300: #f5aea3;
+  --terra-400: #ee7f6e;
+  --terra-500: #e15540;  /* Terracota */
+  --terra-600: #ce3a22;
+  --terra-700: #ad2f1a;
+  --terra-800: #8f2a1a;
+  --terra-900: #76281d;
+
+  /* === DORADO (Gold Accent) === */
+  --gold-50: #fefce8;
+  --gold-100: #fef9c3;
+  --gold-200: #fef08a;
+  --gold-300: #fde047;
+  --gold-400: #facc15;
+  --gold-500: #eab308;  /* Gold */
+  --gold-600: #ca8a04;
+  --gold-700: #a16207;
+  --gold-800: #854d0e;
+  --gold-900: #713f12;
+
   /* === TYPOGRAPHY === */
   --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-heading: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -485,4 +525,106 @@ button {
 
 .dark .bg-gradient-primary {
   background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+}
+
+/* ============================================
+   BRAND GRADIENTS - Aguamarina Cerámicos
+   ============================================ */
+
+/* Ocean Wave Gradient - Hero */
+.bg-gradient-ocean {
+  background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 25%, #99f6e4 50%, #5eead4 75%, #2dd4bf 100%);
+}
+
+.bg-gradient-ocean-dark {
+  background: linear-gradient(135deg, #0f766e 0%, #115e59 50%, #134e4a 100%);
+}
+
+/* Animated Wave Gradient */
+@keyframes wave-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.bg-gradient-wave {
+  background: linear-gradient(-45deg, #f0fdfa, #ccfbf1, #5eead4, #2dd4bf, #14b8a6);
+  background-size: 400% 400%;
+  animation: wave-gradient 15s ease infinite;
+}
+
+/* Mesh Gradient - Aqua + Terra */
+.bg-gradient-mesh {
+  background:
+    radial-gradient(at 40% 20%, #f0fdfa 0px, transparent 50%),
+    radial-gradient(at 80% 0%, #99f6e4 0px, transparent 50%),
+    radial-gradient(at 0% 50%, #fce8e5 0px, transparent 50%),
+    radial-gradient(at 80% 100%, #f5aea3 0px, transparent 50%),
+    radial-gradient(at 0% 100%, #ccfbf1 0px, transparent 50%),
+    #ffffff;
+}
+
+/* Terracota Gradient */
+.bg-gradient-terra {
+  background: linear-gradient(135deg, #fdf4f3 0%, #fce8e5 25%, #f9d0ca 75%, #f5aea3 100%);
+}
+
+/* Gold Shine Gradient */
+.bg-gradient-gold {
+  background: linear-gradient(135deg, #fefce8 0%, #fef9c3 25%, #fde047 75%, #facc15 100%);
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-dark {
+  background: rgba(17, 17, 17, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Glow Effects */
+.glow-aqua {
+  box-shadow: 0 0 20px rgba(45, 212, 191, 0.4), 0 0 40px rgba(45, 212, 191, 0.2);
+}
+
+.glow-terra {
+  box-shadow: 0 0 20px rgba(225, 85, 64, 0.4), 0 0 40px rgba(225, 85, 64, 0.2);
+}
+
+.glow-gold {
+  box-shadow: 0 0 20px rgba(234, 179, 8, 0.4), 0 0 40px rgba(234, 179, 8, 0.2);
+}
+
+/* Shimmer Effect Premium */
+@keyframes shimmer-premium {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer-premium {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer-premium 2s infinite;
 }
