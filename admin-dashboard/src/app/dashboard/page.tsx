@@ -69,11 +69,11 @@ export default function DashboardPage() {
   ], [dashboardData]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Dashboard</h1>
-        <p className="text-slate-600 mt-1">Resumen general de tu tienda</p>
+        <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
+        <p className="text-sm text-slate-600 mt-1">Resumen general de tu tienda</p>
       </div>
 
       {/* Stats Grid */}
@@ -91,16 +91,16 @@ export default function DashboardPage() {
             return (
               <Link key={stat.title} href={stat.href}>
                 <Card className="hover:shadow-lg hover:border-[#14b8a6]/50 transition-all duration-200 cursor-pointer group">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <CardHeader className="flex flex-row items-center justify-between pb-3">
                     <CardTitle className="text-sm font-medium text-slate-600">
                       {stat.title}
                     </CardTitle>
                     <div className="p-2 rounded-lg bg-[#14b8a6]/10 group-hover:bg-[#14b8a6]/20 transition-colors">
-                      <Icon className="h-4 w-4 text-[#14b8a6]" />
+                      <Icon className="h-5 w-5 text-[#14b8a6]" />
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-slate-900 mb-1">
+                    <div className="text-xl font-bold text-slate-900 mb-2">
                       {stat.value}
                     </div>
                     <div className="flex items-center gap-1 text-xs">
