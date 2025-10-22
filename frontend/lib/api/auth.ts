@@ -53,7 +53,8 @@ export const authApi = {
 
     if (data.name && !data.firstName && !data.lastName) {
       const nameParts = data.name.trim().split(/\s+/);
-      const { name, ...rest } = data; // Remove name from data
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { name: _name, ...rest } = data; // Remove name from data
       requestData = {
         ...rest,
         firstName: nameParts[0],

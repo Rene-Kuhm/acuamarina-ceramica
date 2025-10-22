@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -15,16 +15,25 @@ if (typeof window !== "undefined") {
  */
 export function useGSAP(
   callback: (context: gsap.Context) => void | (() => void),
-  dependencies: any[] = []
+  dependencies: React.DependencyList = []
 ) {
-  const contextRef = useRef<gsap.Context>();
+  const contextRef = useRef<gsap.Context | null>(null);
+  const callbackRef = useRef(callback);
+
+  // Update callback ref
+  callbackRef.current = callback;
 
   useLayoutEffect(() => {
-    contextRef.current = gsap.context(callback);
+    contextRef.current = gsap.context(() => {
+      if (callbackRef.current && contextRef.current) {
+        callbackRef.current(contextRef.current);
+      }
+    });
 
     return () => {
       contextRef.current?.revert();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies);
 
   return contextRef;
@@ -49,5 +58,5 @@ export function useScrollTrigger(
         ...scrollTriggerConfig,
       },
     });
-  }, [trigger]);
+  }, [trigger, animation, scrollTriggerConfig]);
 }
