@@ -43,15 +43,21 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t bg-muted/50">
-      {/* Newsletter Section */}
-      <div className="bg-gradient-hero text-white">
-        <div className="container mx-auto px-4 py-12">
+    <footer className="border-t bg-white">
+      {/* Newsletter Section - Aquamarina Style */}
+      <div className="relative bg-gradient-to-br from-[#0d9488] via-[#14b8a6] to-[#2dd4bf] text-white overflow-hidden">
+        {/* Mesh gradient background */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#f0fdfa] rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="container mx-auto px-4 py-12 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold mb-2">
               Suscríbete a nuestro Newsletter
             </h2>
-            <p className="text-white mb-6">
+            <p className="text-white/90 mb-6">
               Recibe ofertas exclusivas, novedades y consejos para tus proyectos
             </p>
             <div className="max-w-md mx-auto">
@@ -76,7 +82,7 @@ export function Footer() {
                   className="object-contain"
                 />
               </div>
-              <span className="font-bold text-lg bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">
+              <span className="font-bold text-lg bg-gradient-to-r from-[#14b8a6] via-[#0d9488] to-[#115e59] bg-clip-text text-transparent">
                 Aguamarina Mosaicos
               </span>
             </Link>
@@ -84,14 +90,14 @@ export function Footer() {
               Tu tienda de confianza para cerámicos de alta calidad.
               Transformamos espacios con diseño y elegancia.
             </p>
-            <p className="text-sm font-medium text-foreground">
+            <p className="text-sm font-medium text-gray-900">
               Calidad y estilo en cada pieza
             </p>
           </div>
 
           {/* Column 2: Quick Links */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
               Enlaces Rápidos
             </h3>
             <ul className="space-y-2">
@@ -99,7 +105,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-gray-600 transition-colors hover:text-primary"
+                    className="text-sm text-gray-600 transition-colors hover:text-[#14b8a6]"
                   >
                     {link.label}
                   </Link>
@@ -110,7 +116,7 @@ export function Footer() {
 
           {/* Column 3: Information */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
               Información
             </h3>
             <ul className="space-y-2">
@@ -118,7 +124,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-gray-600 transition-colors hover:text-primary"
+                    className="text-sm text-gray-600 transition-colors hover:text-[#14b8a6]"
                   >
                     {link.label}
                   </Link>
@@ -129,30 +135,30 @@ export function Footer() {
 
           {/* Column 4: Contact */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
               Contacto
             </h3>
             <ul className="space-y-3">
               <li className="flex items-start space-x-3">
-                <Mail className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
+                <Mail className="h-4 w-4 mt-0.5 text-[#14b8a6] flex-shrink-0" />
                 <a
                   href="mailto:info@acuamarina.com"
-                  className="text-sm text-gray-600 transition-colors hover:text-primary"
+                  className="text-sm text-gray-600 transition-colors hover:text-[#14b8a6]"
                 >
                   info@acuamarina.com
                 </a>
               </li>
               <li className="flex items-start space-x-3">
-                <Phone className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
+                <Phone className="h-4 w-4 mt-0.5 text-[#14b8a6] flex-shrink-0" />
                 <a
                   href="tel:+541123456789"
-                  className="text-sm text-gray-600 transition-colors hover:text-primary"
+                  className="text-sm text-gray-600 transition-colors hover:text-[#14b8a6]"
                 >
                   +54 telefono
                 </a>
               </li>
               <li className="flex items-start space-x-3">
-                <MapPin className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
+                <MapPin className="h-4 w-4 mt-0.5 text-[#14b8a6] flex-shrink-0" />
                 <span className="text-sm text-gray-600">
                   Av. Ejemplo 1234
                   <br />
@@ -163,7 +169,7 @@ export function Footer() {
 
             {/* Social Media Links */}
             <div className="pt-2">
-              <p className="text-sm font-medium text-foreground mb-3">
+              <p className="text-sm font-medium text-gray-900 mb-3">
                 Síguenos
               </p>
               <div className="flex space-x-3">
@@ -175,7 +181,7 @@ export function Footer() {
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors hover:bg-primary hover:text-white"
+                      className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#f0fdfa] text-[#14b8a6] transition-colors hover:bg-[#14b8a6] hover:text-white"
                       aria-label={social.label}
                     >
                       <Icon className="h-4 w-4" />
@@ -198,21 +204,21 @@ export function Footer() {
           <div className="flex items-center space-x-4">
             <Link
               href="/terminos"
-              className="text-sm text-gray-600 transition-colors hover:text-primary"
+              className="text-sm text-gray-600 transition-colors hover:text-[#14b8a6]"
             >
               Términos
             </Link>
             <Separator orientation="vertical" className="h-4" />
             <Link
               href="/privacidad"
-              className="text-sm text-gray-600 transition-colors hover:text-primary"
+              className="text-sm text-gray-600 transition-colors hover:text-[#14b8a6]"
             >
               Privacidad
             </Link>
             <Separator orientation="vertical" className="h-4" />
             <Link
               href="/cookies"
-              className="text-sm text-gray-600 transition-colors hover:text-primary"
+              className="text-sm text-gray-600 transition-colors hover:text-[#14b8a6]"
             >
               Cookies
             </Link>

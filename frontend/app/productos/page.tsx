@@ -54,35 +54,56 @@ function ProductosContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-hero text-white py-8 sm:py-12">
-        <div className="container mx-auto px-4">
-          <div className="mb-4">
+    <div className="min-h-screen bg-white">
+      {/* Hero Section - Ocean Wave Style */}
+      <section className="relative bg-gradient-wave py-16 sm:py-24 overflow-hidden">
+        {/* Floating Bubbles Effect */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(12)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-2 h-2 bg-white/20 rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${100 + Math.random() * 20}%`,
+                animation: `float-up ${10 + Math.random() * 10}s linear infinite`,
+                animationDelay: `${Math.random() * 5}s`,
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="mb-6">
             <Breadcrumb
               items={breadcrumbItems.map(item => ({
                 ...item,
                 label: item.label,
               }))}
-              className="[&_a]:text-white/80 [&_a]:hover:text-white [&_span]:text-white [&_svg]:text-white/60"
+              className="[&_a]:text-white/80 [&_a]:hover:text-white [&_span]:text-white/90 [&_svg]:text-white/60"
             />
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 text-white">
-            Nuestros Productos
-          </h1>
-          <p className="text-white/90 text-sm sm:text-base max-w-2xl">
-            Explora nuestra amplia selección de cerámicos de alta calidad
-          </p>
+
+          <div className="max-w-3xl">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-white via-[#f0fdfa] to-white bg-clip-text text-transparent">
+                Nuestros Productos
+              </span>
+            </h1>
+            <p className="text-white/90 text-base sm:text-lg leading-relaxed">
+              Explora nuestra amplia selección de cerámicos de alta calidad, diseñados para transformar tus espacios
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Main Content */}
-      <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
+      <div className="container mx-auto px-3 sm:px-4 py-8 sm:py-12">
         {/* Error State */}
         {error && (
-          <Alert variant="destructive" className="mb-6 border-red-600 bg-red-50">
-            <AlertCircle className="h-5 w-5 text-red-600" />
-            <AlertDescription className="text-red-900 font-medium text-sm sm:text-base">
+          <Alert variant="destructive" className="mb-6 border-[#e15540] bg-[#fef2f2]">
+            <AlertCircle className="h-5 w-5 text-[#e15540]" />
+            <AlertDescription className="text-gray-900 font-medium text-sm sm:text-base">
               Error al cargar los productos. Por favor, intenta nuevamente.
             </AlertDescription>
           </Alert>
@@ -149,14 +170,15 @@ function ProductosContent() {
 export default function ProductosPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gray-50">
-        <section className="bg-gradient-hero text-white py-8 sm:py-12">
+      <div className="min-h-screen bg-white">
+        <section className="relative bg-gradient-wave py-16 sm:py-24 overflow-hidden">
           <div className="container mx-auto px-4">
-            <Skeleton className="h-8 w-64 mb-4 bg-primary/30" />
-            <Skeleton className="h-10 w-96 bg-primary/30" />
+            <Skeleton className="h-8 w-64 mb-6 bg-white/30" />
+            <Skeleton className="h-12 w-96 mb-4 bg-white/30" />
+            <Skeleton className="h-6 w-[500px] bg-white/20" />
           </div>
         </section>
-        <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
+        <div className="container mx-auto px-3 sm:px-4 py-8 sm:py-12">
           <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] xl:grid-cols-[320px_1fr] gap-4 sm:gap-6 lg:gap-8">
             <aside className="hidden lg:block">
               <div className="space-y-4">

@@ -17,19 +17,42 @@ export default function CategoriasPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-hero text-white py-12 sm:py-16">
-        <div className="container mx-auto px-4">
-          <Breadcrumb items={breadcrumbItems} className="text-white" />
+    <div className="min-h-screen bg-white">
+      {/* Hero Section - Ocean Wave Style */}
+      <section className="relative bg-gradient-wave py-16 sm:py-24 overflow-hidden">
+        {/* Floating Bubbles Effect */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(12)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-2 h-2 bg-white/20 rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${100 + Math.random() * 20}%`,
+                animation: `float-up ${10 + Math.random() * 10}s linear infinite`,
+                animationDelay: `${Math.random() * 5}s`,
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="mb-6">
+            <Breadcrumb items={breadcrumbItems} className="[&_a]:text-white/80 [&_a]:hover:text-white [&_span]:text-white/90 [&_svg]:text-white/60" />
+          </div>
+
           <div className="max-w-3xl">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-white/10 rounded-lg backdrop-blur-sm">
-                <Grid3x3 className="w-8 h-8" />
+            <div className="flex items-center gap-4 mb-6">
+              <div className="glass p-4 rounded-xl">
+                <Grid3x3 className="w-8 h-8 text-white" />
               </div>
-              <h1 className="text-4xl sm:text-5xl font-bold">Categorías</h1>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold">
+                <span className="bg-gradient-to-r from-white via-[#f0fdfa] to-white bg-clip-text text-transparent">
+                  Categorías
+                </span>
+              </h1>
             </div>
-            <p className="text-white">
+            <p className="text-white/90 text-base sm:text-lg leading-relaxed">
               Explora nuestra colección completa de productos organizados por categoría.
               Encuentra exactamente lo que necesitas para tu proyecto.
             </p>
@@ -38,10 +61,10 @@ export default function CategoriasPage() {
       </section>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-16">
         {error && (
-          <Alert variant="destructive" className="mb-8">
-            <AlertDescription>
+          <Alert variant="destructive" className="mb-8 border-[#e15540] bg-[#fef2f2]">
+            <AlertDescription className="text-gray-900">
               Error al cargar las categorías. Por favor, intenta nuevamente.
             </AlertDescription>
           </Alert>
@@ -61,11 +84,11 @@ export default function CategoriasPage() {
           </div>
         ) : categories && categories.length > 0 ? (
           <>
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <div className="mb-12 text-center">
+              <h2 className="text-3xl font-bold text-gray-900 mb-3">
                 Todas las Categorías
               </h2>
-              <p className="text-gray-600">
+              <p className="text-gray-600 text-lg">
                 {categories.length} categorías disponibles
               </p>
             </div>
@@ -77,29 +100,29 @@ export default function CategoriasPage() {
                   href={`/categorias/${category.slug}`}
                   className="group"
                 >
-                  <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-primary/50 cursor-pointer">
-                    {/* Category Image - Placeholder for now */}
-                    <div className="relative h-48 bg-gradient-to-br from-cyan-100 via-cyan-50 to-blue-50 overflow-hidden">
+                  <Card className="h-full overflow-hidden transition-all duration-500 hover:shadow-2xl hover:scale-[1.03] hover:border-[#14b8a6] cursor-pointer bg-white">
+                    {/* Category Image with Aquamarina gradient */}
+                    <div className="relative h-48 bg-gradient-to-br from-[#f0fdfa] via-[#ccfbf1] to-[#99f6e4] overflow-hidden">
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <Shapes className="w-16 h-16 text-primary/30" />
+                        <Shapes className="w-16 h-16 text-[#14b8a6]/40" />
                       </div>
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#14b8a6]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </div>
 
                     <CardHeader>
-                      <CardTitle className="text-xl group-hover:text-primary transition-colors flex items-center justify-between">
+                      <CardTitle className="text-xl group-hover:text-[#14b8a6] transition-colors duration-300 flex items-center justify-between">
                         {category.name}
-                        <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" />
                       </CardTitle>
-                      <CardDescription className="line-clamp-2">
+                      <CardDescription className="line-clamp-2 text-gray-600">
                         {category.description || `Explora nuestra selección de ${category.name.toLowerCase()}`}
                       </CardDescription>
                     </CardHeader>
 
                     <CardContent>
-                      <div className="flex items-center text-sm text-primary font-medium">
+                      <div className="flex items-center text-sm text-[#14b8a6] font-medium">
                         Ver productos
-                        <ArrowRight className="w-4 h-4 ml-1" />
+                        <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" />
                       </div>
                     </CardContent>
                   </Card>
@@ -109,29 +132,37 @@ export default function CategoriasPage() {
           </>
         ) : (
           <div className="text-center py-16">
-            <Shapes className="w-16 h-16 text-gray-500 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <div className="inline-flex p-6 rounded-full bg-[#f0fdfa] mb-6">
+              <Shapes className="w-16 h-16 text-[#14b8a6]" />
+            </div>
+            <h3 className="text-2xl font-semibold text-gray-900 mb-3">
               No hay categorías disponibles
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 text-lg mb-6">
               Actualmente no tenemos categorías para mostrar.
             </p>
           </div>
         )}
       </div>
 
-      {/* CTA Section */}
-      <section className="bg-white border-t py-12">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+      {/* CTA Section - Aquamarina Style */}
+      <section className="relative bg-gradient-to-br from-[#0d9488] via-[#14b8a6] to-[#2dd4bf] text-white py-16 overflow-hidden">
+        {/* Mesh gradient background */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#f0fdfa] rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
             ¿No encuentras lo que buscas?
           </h2>
-          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
             Nuestro equipo está aquí para ayudarte a encontrar el producto perfecto para tu proyecto
           </p>
           <Link
             href="/contacto"
-            className="inline-flex items-center px-6 py-3 bg-primary hover:bg-primary-hover text-white font-medium rounded-lg transition-colors"
+            className="inline-flex items-center px-8 py-4 bg-white text-[#14b8a6] font-semibold rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
           >
             Contáctanos
             <ArrowRight className="w-5 h-5 ml-2" />
