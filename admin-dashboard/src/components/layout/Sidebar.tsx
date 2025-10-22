@@ -63,8 +63,8 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               />
             </div>
             <div className="flex-1 min-w-0">
-              <h2 className="text-base font-bold text-slate-900 leading-tight truncate">Aguamarina</h2>
-              <p className="text-xs text-slate-500 leading-tight">Admin Panel</p>
+              <h2 className="text-base font-bold text-slate-900 leading-tight truncate"></h2>
+              <p className="text-xs text-slate-500 leading-tight"></p>
             </div>
           </div>
         )}
