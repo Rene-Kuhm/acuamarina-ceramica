@@ -31,7 +31,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
 						type="search"
 						aria-label="Buscar productos, pedidos, clientes"
 						placeholder="Buscar productos, pedidos, clientes..."
-						className="flex h-10 w-full rounded-md border px-3 py-2 text-sm placeholder:text-muted-foreground pl-10 bg-slate-50 border-slate-200 focus:bg-white focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]/20 transition-all dark:bg-slate-800 dark:border-slate-700 dark:focus:bg-slate-900 dark:focus:border-[#2dd4bf]"
+						className="flex h-10 w-full rounded-md border px-3 py-2 text-sm placeholder:text-muted-foreground pl-10 bg-slate-50 border-slate-200 focus:bg-white focus:border-aqua-500 focus:ring-2 focus:ring-aqua-500/20 transition-all dark:bg-slate-800 dark:border-slate-700 dark:focus:bg-slate-900 dark:focus:border-aqua-400"
 					/>
 				</div>
 			</div>
@@ -61,9 +61,9 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
 				{/* profile */}
 				<button
 					type="button"
-					className="inline-flex items-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#14b8a6] h-10 px-3 py-2 gap-2 hover:bg-slate-100 dark:hover:bg-slate-700"
+					className="inline-flex items-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-aqua-500 h-10 px-3 py-2 gap-2 hover:bg-slate-100 dark:hover:bg-slate-700"
 				>
-					<div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#14b8a6] to-[#0d9488] flex items-center justify-center text-white text-sm font-semibold shadow-md">U</div>
+					<div className="h-8 w-8 rounded-full bg-gradient-to-br from-aqua-500 to-aqua-600 flex items-center justify-center text-white text-sm font-semibold shadow-md">U</div>
 					<div className="hidden md:block text-left">
 						<p className="text-sm font-medium text-slate-900 dark:text-slate-100">Usuario</p>
 						<p className="text-xs text-slate-500 dark:text-slate-400">admin@ejemplo.com</p>
