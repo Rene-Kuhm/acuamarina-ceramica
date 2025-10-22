@@ -7,8 +7,9 @@ import { Footer } from "@/components/layout/Footer";
 import { ComparisonBar } from "@/components/productos/ComparisonBar";
 import { SkipToContent } from "@/components/layout/SkipToContent";
 import { StructuredData } from "@/components/seo/StructuredData";
+import { SmoothScroll } from "@/components/animations/SmoothScroll";
+import { CustomCursor } from "@/components/animations/CustomCursor";
 
-// Inter - Premium typography like Apple
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -26,70 +27,6 @@ export const metadata: Metadata = {
     "Descubre la mejor selección de cerámicos para tu hogar. Calidad, diseño y precios accesibles en Aguamarina Mosaicos.",
   keywords:
     "cerámicos, azulejos, pisos, revestimientos, construcción, decoración, mosaicos, porcelanato",
-  authors: [{ name: "Aguamarina Mosaicos" }],
-  creator: "Aguamarina Mosaicos",
-  publisher: "Aguamarina Mosaicos",
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  openGraph: {
-    type: "website",
-    locale: "es_AR",
-    url: "/",
-    siteName: "Aguamarina Mosaicos",
-    title: "Aguamarina Mosaicos - Tu tienda de cerámicos de calidad",
-    description:
-      "Descubre la mejor selección de cerámicos para tu hogar. Calidad, diseño y precios accesibles en Aguamarina Mosaicos.",
-    images: [
-      {
-        url: "/logo-aguamarina.png",
-        width: 1200,
-        height: 630,
-        alt: "Aguamarina Mosaicos",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Aguamarina Mosaicos - Tu tienda de cerámicos de calidad",
-    description:
-      "Descubre la mejor selección de cerámicos para tu hogar. Calidad, diseño y precios accesibles.",
-    images: ["/logo-aguamarina.png"],
-    creator: "@aguamarinamosaicos",
-  },
-  icons: {
-    icon: [
-      { url: '/logo-aguamarina.png' },
-      { url: '/logo-aguamarina.png', sizes: '32x32', type: 'image/png' },
-      { url: '/logo-aguamarina.png', sizes: '16x16', type: 'image/png' },
-    ],
-    apple: [
-      { url: '/logo-aguamarina.png', sizes: '180x180', type: 'image/png' },
-    ],
-    shortcut: '/logo-aguamarina.png',
-  },
-  verification: {
-    google: "google-site-verification-code-here",
-  },
-  manifest: "/manifest.webmanifest",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "Aguamarina Mosaicos",
-  },
-  formatDetection: {
-    telephone: true,
-    email: true,
-    address: true,
-  },
 };
 
 export default function RootLayout({
@@ -102,17 +39,18 @@ export default function RootLayout({
       <head>
         <StructuredData />
       </head>
-      <body
-        className={`${inter.variable} font-sans antialiased`}
-      >
+      <body className={`${inter.variable} font-sans antialiased`}>
         <Providers>
-          <SkipToContent />
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main id="main-content" className="flex-1">{children}</main>
-            <Footer />
-            <ComparisonBar />
-          </div>
+          <SmoothScroll>
+            <CustomCursor />
+            <SkipToContent />
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <main id="main-content" className="flex-1">{children}</main>
+              <Footer />
+              <ComparisonBar />
+            </div>
+          </SmoothScroll>
         </Providers>
       </body>
     </html>
