@@ -49,13 +49,18 @@ export const authApi = {
 
   register: async (data: RegisterData): Promise<AuthResponse> => {
     // Si se proporciona 'name', dividirlo en firstName y lastName
-    let requestData = { ...data };
+    let requestData: RegisterData;
 
     if (data.name && !data.firstName && !data.lastName) {
       const nameParts = data.name.trim().split(/\s+/);
-      requestData.firstName = nameParts[0];
-      requestData.lastName = nameParts.slice(1).join(' ') || nameParts[0];
-      delete requestData.name;
+      const { name, ...rest } = data; // Remove name from data
+      requestData = {
+        ...rest,
+        firstName: nameParts[0],
+        lastName: nameParts.slice(1).join(' ') || nameParts[0],
+      };
+    } else {
+      requestData = data;
     }
 
     const response = await apiClient.post("/auth/register", requestData);
