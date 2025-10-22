@@ -4,21 +4,16 @@ import { useQuery } from '@tanstack/react-query';
 import { statsService } from '@/services/stats.service';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Package, DollarSign, ShoppingCart, Users, AlertTriangle, TrendingUp, ArrowUpRight } from 'lucide-react';
+import { Package, DollarSign, ShoppingCart, Users, TrendingUp, TrendingDown } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import Link from 'next/link';
 import { useMemo } from 'react';
 
-// Skeleton para las tarjetas
 function StatCardSkeleton() {
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <Skeleton className="h-4 w-24" />
-      </CardHeader>
-      <CardContent className="space-y-2">
-        <Skeleton className="h-8 w-32" />
-        <Skeleton className="h-3 w-20" />
+    <Card className="overflow-hidden">
+      <CardContent className="p-6">
+        <Skeleton className="h-16 w-full" />
       </CardContent>
     </Card>
   );
@@ -35,224 +30,242 @@ export default function DashboardPage() {
 
   const stats = useMemo(() => [
     {
-      title: 'Total Productos',
-      value: dashboardData?.stats.total_products || 0,
-      icon: Package,
-      change: '+12.5%',
-      changeType: 'positive' as const,
-      href: '/dashboard/products',
-    },
-    {
-      title: 'Ventas del Mes',
+      title: 'TOTAL VENTAS',
+      subtitle: 'Lorem Ipsum',
       value: formatCurrency(dashboardData?.stats.monthly_revenue || 0),
       icon: DollarSign,
-      change: '+18.2%',
-      changeType: 'positive' as const,
+      change: '+12.5%',
+      gradient: 'from-purple-500 to-purple-600',
+      iconBg: 'bg-purple-500/20',
       href: '/dashboard/orders',
     },
     {
-      title: 'Pedidos del Mes',
-      value: dashboardData?.stats.monthly_orders || 0,
+      title: 'VENTAS DIARIAS',
+      subtitle: 'Lorem Ipsum',
+      value: '$750',
       icon: ShoppingCart,
-      change: '+10%',
-      changeType: 'positive' as const,
+      change: '+8.3%',
+      gradient: 'from-cyan-400 to-cyan-500',
+      iconBg: 'bg-cyan-400/20',
       href: '/dashboard/orders',
     },
     {
-      title: 'Total Clientes',
-      value: dashboardData?.stats.total_customers || 0,
-      icon: Users,
-      change: '+8.3%',
-      changeType: 'positive' as const,
-      href: '/dashboard/customers',
+      title: 'PEDIDOS TOTALES',
+      subtitle: 'Lorem Ipsum',
+      value: '$5,450',
+      icon: Package,
+      change: '+18.2%',
+      gradient: 'from-blue-500 to-blue-600',
+      iconBg: 'bg-blue-500/20',
+      href: '/dashboard/products',
     },
   ], [dashboardData]);
 
+  // Calcular porcentaje para el gráfico circular
+  const completionPercentage = 50;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#f0fdfa]">
-      <div className="space-y-6 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100/50">
+      <div className="p-4 sm:p-6 lg:p-8 space-y-6">
         {/* Header */}
-        <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#14b8a6]/5 to-transparent rounded-lg blur-3xl"></div>
-          <div className="relative">
-            <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
-            <p className="text-sm text-slate-600 mt-1">Resumen general de tu tienda</p>
+        <div>
+          <h1 className="text-xl font-bold text-slate-800">Analytics</h1>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {isLoading ? (
+            <>
+              <StatCardSkeleton />
+              <StatCardSkeleton />
+              <StatCardSkeleton />
+            </>
+          ) : (
+            stats.map((stat) => {
+              const Icon = stat.icon;
+              return (
+                <Link key={stat.title} href={stat.href}>
+                  <Card className={`overflow-hidden border-0 shadow-lg bg-gradient-to-br ${stat.gradient} text-white hover:shadow-xl transition-all duration-300 group cursor-pointer`}>
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between">
+                        <div className="space-y-3">
+                          <div className={`w-12 h-12 rounded-xl ${stat.iconBg} backdrop-blur-sm flex items-center justify-center`}>
+                            <Icon className="w-6 h-6 text-white" />
+                          </div>
+                          <div>
+                            <p className="text-xs font-semibold opacity-90 tracking-wide">{stat.title}</p>
+                            <p className="text-[10px] opacity-70">{stat.subtitle}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <h3 className="text-2xl font-bold mb-1">{stat.value}</h3>
+                          <div className="flex items-center gap-1 text-xs font-medium">
+                            <TrendingUp className="w-3 h-3" />
+                            <span>{stat.change}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              );
+            })
+          )}
+        </div>
+
+        {/* Reports Section */}
+        <div>
+          <h2 className="text-lg font-bold text-slate-800 mb-4">Reports</h2>
+
+          <div className="grid gap-6 lg:grid-cols-2">
+            {/* Circular Progress Chart */}
+            <Card className="border-slate-200 shadow-md">
+              <CardContent className="p-6">
+                <div className="flex flex-col items-center justify-center space-y-4">
+                  {/* SVG Circular Progress */}
+                  <div className="relative w-48 h-48">
+                    <svg className="w-48 h-48 transform -rotate-90">
+                      <circle
+                        cx="96"
+                        cy="96"
+                        r="88"
+                        stroke="#e2e8f0"
+                        strokeWidth="16"
+                        fill="none"
+                      />
+                      <circle
+                        cx="96"
+                        cy="96"
+                        r="88"
+                        stroke="url(#gradient)"
+                        strokeWidth="16"
+                        fill="none"
+                        strokeDasharray={`${2 * Math.PI * 88}`}
+                        strokeDashoffset={`${2 * Math.PI * 88 * (1 - completionPercentage / 100)}`}
+                        strokeLinecap="round"
+                        className="transition-all duration-1000"
+                      />
+                      <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#14b8a6" />
+                          <stop offset="100%" stopColor="#0d9488" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center">
+                        <p className="text-4xl font-bold text-slate-800">{completionPercentage}%</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-center">
+                    <h3 className="text-sm font-bold text-[#14b8a6] mb-1">LOREM IPSUM</h3>
+                    <p className="text-xs text-slate-500">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Area Chart Placeholder */}
+            <Card className="border-slate-200 shadow-md">
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-slate-700">Ventas Mensuales</h3>
+                  </div>
+
+                  {/* Simple area chart mockup */}
+                  <div className="relative h-64 bg-gradient-to-b from-[#14b8a6]/10 to-transparent rounded-lg">
+                    <div className="absolute inset-0 flex items-end justify-around p-4">
+                      {[40, 65, 45, 80, 60, 90, 55, 75, 50, 85, 70, 95].map((height, i) => (
+                        <div key={i} className="flex flex-col items-center gap-1">
+                          <div
+                            className="w-8 bg-gradient-to-t from-[#14b8a6] to-[#5eead4] rounded-t-md transition-all duration-500 hover:opacity-80"
+                            style={{ height: `${height}%` }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Legend */}
+                    <div className="absolute bottom-2 right-4 flex gap-4 text-xs">
+                      <div className="flex items-center gap-1">
+                        <div className="w-3 h-3 rounded-full bg-[#14b8a6]"></div>
+                        <span className="text-slate-600">Lorem Ipsum dolor</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                        <span className="text-slate-600">Lorem Ipsum dolor</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
-      {/* Stats Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {isLoading ? (
-          <>
-            <StatCardSkeleton />
-            <StatCardSkeleton />
-            <StatCardSkeleton />
-            <StatCardSkeleton />
-          </>
-        ) : (
-          stats.map((stat) => {
-            const Icon = stat.icon;
-            return (
-              <Link key={stat.title} href={stat.href}>
-                <Card className="hover:shadow-lg hover:border-[#14b8a6]/50 transition-all duration-200 cursor-pointer group">
-                  <CardHeader className="flex flex-row items-center justify-between pb-3">
-                    <CardTitle className="text-sm font-medium text-slate-600">
-                      {stat.title}
-                    </CardTitle>
-                    <div className="p-2 rounded-lg bg-[#14b8a6]/10 group-hover:bg-[#14b8a6]/20 transition-colors">
-                      <Icon className="h-5 w-5 text-[#14b8a6]" />
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-xl font-bold text-slate-900 mb-2">
-                      {stat.value}
-                    </div>
-                    <div className="flex items-center gap-1 text-xs">
-                      <TrendingUp className="h-3 w-3 text-emerald-600" />
-                      <span className="font-medium text-emerald-600">{stat.change}</span>
-                      <span className="text-slate-500">vs mes anterior</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            );
-          })
+        {/* Quick Stats */}
+        {!isLoading && dashboardData && (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs text-slate-500 font-medium">Productos</p>
+                    <p className="text-2xl font-bold text-slate-800">{dashboardData.stats.total_products}</p>
+                  </div>
+                  <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
+                    <Package className="w-6 h-6 text-purple-600" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs text-slate-500 font-medium">Clientes</p>
+                    <p className="text-2xl font-bold text-slate-800">{dashboardData.stats.total_customers}</p>
+                  </div>
+                  <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+                    <Users className="w-6 h-6 text-blue-600" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs text-slate-500 font-medium">Pedidos</p>
+                    <p className="text-2xl font-bold text-slate-800">{dashboardData.stats.monthly_orders}</p>
+                  </div>
+                  <div className="w-12 h-12 rounded-xl bg-cyan-100 flex items-center justify-center">
+                    <ShoppingCart className="w-6 h-6 text-cyan-600" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs text-slate-500 font-medium">Stock Bajo</p>
+                    <p className="text-2xl font-bold text-slate-800">{dashboardData.lowStockProducts?.length || 0}</p>
+                  </div>
+                  <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
+                    <TrendingDown className="w-6 h-6 text-amber-600" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         )}
-      </div>
-
-        {/* Activity Grid */}
-        <div className="grid gap-6 lg:grid-cols-2">
-        {/* Productos con Stock Bajo */}
-        <Card className="col-span-1">
-          <CardHeader className="border-b border-slate-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="p-2 rounded-lg bg-amber-50">
-                  <AlertTriangle className="h-4 w-4 text-amber-600" />
-                </div>
-                <CardTitle className="text-base font-semibold">Productos con Stock Bajo</CardTitle>
-              </div>
-              {!isLoading && dashboardData?.lowStockProducts && dashboardData.lowStockProducts.length > 0 && (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                  {dashboardData.lowStockProducts.length}
-                </span>
-              )}
-            </div>
-          </CardHeader>
-          <CardContent className="pt-6">
-            {isLoading ? (
-              <div className="space-y-3">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex items-center justify-between py-3 border-b last:border-0">
-                    <Skeleton className="h-4 w-32" />
-                    <Skeleton className="h-4 w-16" />
-                  </div>
-                ))}
-              </div>
-            ) : !dashboardData?.lowStockProducts || dashboardData.lowStockProducts.length === 0 ? (
-              <div className="text-center py-8">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-100 mb-3">
-                  <Package className="h-6 w-6 text-emerald-600" />
-                </div>
-                <p className="text-sm font-medium text-slate-900">¡Todo en orden!</p>
-                <p className="text-sm text-slate-500 mt-1">No hay productos con stock bajo</p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {dashboardData.lowStockProducts.map((product) => (
-                  <Link
-                    key={product.id}
-                    href={`/dashboard/products/${product.id}/edit`}
-                    className="flex items-center justify-between py-3 px-3 -mx-3 rounded-lg hover:bg-slate-50 transition-colors group"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-slate-900 truncate group-hover:text-[#14b8a6]">
-                        {product.name}
-                      </p>
-                      <p className="text-xs text-slate-500 mt-0.5">SKU: {product.sku}</p>
-                    </div>
-                    <div className="text-right ml-3 flex-shrink-0">
-                      <p className="text-sm font-semibold text-amber-600">
-                        {product.stock_quantity} unidades
-                      </p>
-                      <p className="text-xs text-slate-500">Mín: {product.low_stock_threshold}</p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Últimos Pedidos */}
-        <Card className="col-span-1">
-          <CardHeader className="border-b border-slate-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="p-2 rounded-lg bg-[#14b8a6]/10">
-                  <ShoppingCart className="h-4 w-4 text-[#14b8a6]" />
-                </div>
-                <CardTitle className="text-base font-semibold">Últimos Pedidos</CardTitle>
-              </div>
-              <Link href="/dashboard/orders" className="text-sm font-medium text-[#14b8a6] hover:text-[#0d9488] flex items-center gap-1">
-                Ver todos
-                <ArrowUpRight className="h-3 w-3" />
-              </Link>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-6">
-            {isLoading ? (
-              <div className="space-y-3">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex items-center justify-between py-3 border-b last:border-0">
-                    <Skeleton className="h-4 w-32" />
-                    <Skeleton className="h-4 w-16" />
-                  </div>
-                ))}
-              </div>
-            ) : !dashboardData?.recentOrders || dashboardData.recentOrders.length === 0 ? (
-              <div className="text-center py-8">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#14b8a6]/10 mb-3">
-                  <ShoppingCart className="h-6 w-6 text-[#14b8a6]" />
-                </div>
-                <p className="text-sm font-medium text-slate-900">No hay pedidos aún</p>
-                <p className="text-sm text-slate-500 mt-1">Los nuevos pedidos aparecerán aquí</p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {dashboardData.recentOrders.map((order) => (
-                  <Link
-                    key={order.id}
-                    href={`/dashboard/orders/${order.id}`}
-                    className="flex items-center justify-between py-3 px-3 -mx-3 rounded-lg hover:bg-slate-50 transition-colors group"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-mono font-medium text-slate-900 group-hover:text-[#14b8a6]">
-                        #{order.order_number}
-                      </p>
-                      <p className="text-xs text-slate-500 mt-0.5">
-                        {order.customer_name || 'Cliente'}
-                      </p>
-                    </div>
-                    <div className="text-right ml-3 flex-shrink-0">
-                      <p className="text-sm font-semibold text-slate-900 mb-1">
-                        {formatCurrency(order.total_amount)}
-                      </p>
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                        order.status === 'delivered' ? 'bg-emerald-100 text-emerald-800' :
-                        order.status === 'pending' ? 'bg-amber-100 text-amber-800' :
-                        'bg-blue-100 text-blue-800'
-                      }`}>
-                        {order.status}
-                      </span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-        </div>
       </div>
     </div>
   );
