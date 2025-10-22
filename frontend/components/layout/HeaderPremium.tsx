@@ -21,6 +21,7 @@ import { useWishlist } from "@/lib/hooks/useWishlist";
 import { useRouter } from "next/navigation";
 
 const navLinks = [
+  { href: "/", label: "Inicio" },
   { href: "/productos", label: "Productos" },
   { href: "/categorias", label: "Categorías" },
   { href: "/nosotros", label: "Nosotros" },
