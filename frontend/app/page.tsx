@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProductGrid } from "@/components/productos/ProductGrid";
 import { useProductsDestacados } from "@/lib/hooks/useProducts";
+import { QRCatalogo } from "@/components/QRCatalogo";
 
 export default function HomePage() {
   const { data: productosDestacados, isLoading } = useProductsDestacados();
@@ -124,6 +125,21 @@ export default function HomePage() {
               href="/categorias/pisos-ceramicos"
             />
           </div>
+        </div>
+      </section>
+
+      {/* QR Catálogo Section */}
+      <section className="py-16 md:py-20 bg-gradient-to-b from-white to-cyan-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+              Catálogo Móvil
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Lleva nuestro catálogo completo en tu bolsillo. Escanea el código QR y accede a todos nuestros productos desde tu dispositivo móvil.
+            </p>
+          </div>
+          <QRCatalogo />
         </div>
       </section>
 
