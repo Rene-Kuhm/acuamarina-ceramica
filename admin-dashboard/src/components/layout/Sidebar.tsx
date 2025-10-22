@@ -51,50 +51,55 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       {/* Logo & Toggle */}
       <div className="flex items-center justify-between h-16 px-4 border-b border-slate-200">
         {!collapsed && (
-          <div className="flex items-center gap-3">
-            <div className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-[#14b8a6] to-[#0d9488] flex items-center justify-center overflow-hidden">
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            <div className="relative w-10 h-10 rounded-lg bg-gradient-to-br from-[#14b8a6] to-[#0d9488] flex items-center justify-center overflow-hidden flex-shrink-0">
               <Image
                 src="/logo/logo.png"
                 alt="Aguamarina"
-                width={32}
-                height={32}
+                width={36}
+                height={36}
                 className="object-contain"
                 priority
               />
             </div>
-            <div>
-              <h1 className="text-sm font-bold text-slate-900">Aguamarina</h1>
-              <p className="text-xs text-slate-500">Admin Panel</p>
+            <div className="flex-1 min-w-0">
+              <h1 className="text-base font-bold text-slate-900 leading-tight truncate">Aguamarina</h1>
+              <p className="text-xs text-slate-500 leading-tight">Admin Panel</p>
             </div>
           </div>
         )}
         {collapsed && (
-          <div className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-[#14b8a6] to-[#0d9488] flex items-center justify-center overflow-hidden mx-auto">
+          <div className="relative w-10 h-10 rounded-lg bg-gradient-to-br from-[#14b8a6] to-[#0d9488] flex items-center justify-center overflow-hidden mx-auto">
             <Image
               src="/logo/logo.png"
               alt="Aguamarina"
-              width={32}
-              height={32}
+              width={36}
+              height={36}
               className="object-contain"
               priority
             />
           </div>
         )}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onToggle}
-          className={cn(
-            "h-8 w-8 rounded-lg hover:bg-slate-100",
-            collapsed && "mx-auto mt-2"
-          )}
-        >
-          {collapsed ? (
-            <ChevronRight className="h-4 w-4 text-slate-600" />
-          ) : (
+        {!collapsed && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onToggle}
+            className="h-8 w-8 rounded-lg hover:bg-slate-100 flex-shrink-0"
+          >
             <ChevronLeft className="h-4 w-4 text-slate-600" />
-          )}
-        </Button>
+          </Button>
+        )}
+        {collapsed && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onToggle}
+            className="h-8 w-8 rounded-lg hover:bg-slate-100 mx-auto mt-2"
+          >
+            <ChevronRight className="h-4 w-4 text-slate-600" />
+          </Button>
+        )}
       </div>
 
       {/* Navigation */}
