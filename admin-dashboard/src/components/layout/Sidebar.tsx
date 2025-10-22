@@ -51,21 +51,15 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       {/* Logo & Toggle */}
       <div className="flex items-center justify-between h-16 px-4 border-b border-slate-200">
         {!collapsed && (
-          <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="relative w-10 h-10 rounded-lg bg-gradient-to-br from-[#14b8a6] to-[#0d9488] flex items-center justify-center overflow-hidden flex-shrink-0">
-              <Image
-                src="/logo/logo.png"
-                alt="Aguamarina"
-                width={36}
-                height={36}
-                className="object-contain"
-                priority
-              />
-            </div>
-            <div className="flex-1 min-w-0">
-              <h2 className="text-base font-bold text-slate-900 leading-tight truncate"></h2>
-              <p className="text-xs text-slate-500 leading-tight"></p>
-            </div>
+          <div className="relative w-10 h-10 rounded-lg bg-gradient-to-br from-[#14b8a6] to-[#0d9488] flex items-center justify-center overflow-hidden flex-shrink-0">
+            <Image
+              src="/logo/logo.png"
+              alt="Aguamarina"
+              width={36}
+              height={36}
+              className="object-contain"
+              priority
+            />
           </div>
         )}
         {collapsed && (

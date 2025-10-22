@@ -2,290 +2,193 @@
 
 @theme {
   /* ============================================
-     PREMIUM MINIMALIST DESIGN SYSTEM
-     Inspired by: Apple, Nike, Samsung, Uniqlo
+     AGUAMARINA CERÁMICAS - NATURAL PREMIUM UI
      ============================================ */
 
-  /* === NEUTRAL PALETTE (WCAG AA Compliant) === */
-  --color-white: #ffffff;
-  --color-black: #111111;
-  --color-gray-50: #fafafa;
-  --color-gray-100: #f5f5f5;
-  --color-gray-200: #eeeeee;
-  --color-gray-300: #e0e0e0;
-  --color-gray-400: #bdbdbd;
-  --color-gray-500: #9e9e9e;
-  --color-gray-600: #666666;
-  --color-gray-700: #4a4a4a;
-  --color-gray-800: #333333;
-  --color-gray-900: #1a1a1a;
+  /* === BASE NEUTRALS (Soft Warm Whites & Grays) === */
+  --color-white: #fcfcfa;
+  --color-black: #1a1a1a;
+  --color-gray-50: #fafaf9;
+  --color-gray-100: #f5f4f2;
+  --color-gray-200: #ecebe8;
+  --color-gray-300: #dddcd7;
+  --color-gray-400: #bfbeb9;
+  --color-gray-500: #9c9b95;
+  --color-gray-600: #6f6e68;
+  --color-gray-700: #504f49;
+  --color-gray-800: #33322e;
+  --color-gray-900: #1b1b17;
 
-  /* === BASE COLORS === */
-  --color-background: #ffffff;
-  --color-foreground: #111111;
+  /* === BRAND COLORS === */
+  --color-primary: #14b8a6; /* Aguamarina */
+  --color-primary-hover: #0d9488;
+  --color-primary-light: #ccfbf1;
+
+  --color-accent: #e15540; /* Terracota */
+  --color-accent-hover: #ce3a22;
+
+  --color-highlight: #eab308; /* Dorado */
+  --color-highlight-soft: #fef9c3;
+
+  /* === BACKGROUND & FOREGROUND === */
+  --color-background: #fcfcfa;
+  --color-foreground: #1a1a1a;
   --color-card: #ffffff;
-  --color-card-foreground: #111111;
+  --color-card-foreground: #1a1a1a;
+
+  /* === TYPOGRAPHY === */
+  --font-sans: "Poppins", "Inter", "Nunito Sans", sans-serif;
+  --font-heading: "Poppins", "Inter", "Nunito Sans", sans-serif;
+
+  /* === SHADOWS (Soft Ambient) === */
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.04);
+  --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.08);
+  --shadow-glow-aqua: 0 0 20px rgba(20, 184, 166, 0.25);
+  --shadow-glow-terra: 0 0 20px rgba(225, 85, 64, 0.25);
+
+  /* === RADIUS === */
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 2rem;
+
+  /* === ADDITIONAL THEME VARIABLES === */
   --color-popover: #ffffff;
-  --color-popover-foreground: #111111;
-
-  /* === PRIMARY (Minimal Accent) === */
-  --color-primary: #111111;
+  --color-popover-foreground: #1a1a1a;
   --color-primary-foreground: #ffffff;
-  --color-primary-hover: #424242;
-  --color-primary-light: #e8f4f8;
-
-  /* === SECONDARY === */
-  --color-secondary: #f5f5f5;
-  --color-secondary-foreground: #111111;
-  --color-secondary-hover: #eeeeee;
-
-  /* === ACCENT (Subtle) === */
-  --color-accent: #111111;
+  --color-secondary: #f5f4f2;
+  --color-secondary-foreground: #1a1a1a;
+  --color-secondary-hover: #ecebe8;
   --color-accent-foreground: #ffffff;
-  --color-accent-hover: #424242;
-
-  /* === MUTED === */
-  --color-muted: #f5f5f5;
-  --color-muted-foreground: #757575;
-
-  /* === BORDERS & INPUTS === */
-  --color-border: #eeeeee;
-  --color-input: #eeeeee;
-  --color-ring: #111111;
-
-  /* === STATES === */
+  --color-muted: #f5f4f2;
+  --color-muted-foreground: #6f6e68;
+  --color-border: #ecebe8;
+  --color-input: #ecebe8;
+  --color-ring: #14b8a6;
   --color-destructive: #dc2626;
   --color-destructive-foreground: #ffffff;
   --color-success: #16a34a;
   --color-success-foreground: #ffffff;
   --color-warning: #f59e0b;
   --color-warning-foreground: #ffffff;
-
-  /* ============================================
-     BRAND COLORS - Aguamarina Cerámicos
-     ============================================ */
-
-  /* === AQUAMARINA (Primary Brand) === */
-  --aqua-50: #f0fdfa;
-  --aqua-100: #ccfbf1;
-  --aqua-200: #99f6e4;
-  --aqua-300: #5eead4;
-  --aqua-400: #2dd4bf;
-  --aqua-500: #14b8a6;
-  --aqua-600: #0d9488;
-  --aqua-700: #0f766e;
-  --aqua-800: #115e59;
-  --aqua-900: #134e4a;
-
-  /* === TERRACOTA (Ceramic Accent) === */
-  --terra-50: #fdf4f3;
-  --terra-100: #fce8e5;
-  --terra-200: #f9d0ca;
-  --terra-300: #f5aea3;
-  --terra-400: #ee7f6e;
-  --terra-500: #e15540;
-  --terra-600: #ce3a22;
-  --terra-700: #ad2f1a;
-  --terra-800: #8f2a1a;
-  --terra-900: #76281d;
-
-  /* === DORADO (Gold Accent) === */
-  --gold-50: #fefce8;
-  --gold-100: #fef9c3;
-  --gold-200: #fef08a;
-  --gold-300: #fde047;
-  --gold-400: #facc15;
-  --gold-500: #eab308;
-  --gold-600: #ca8a04;
-  --gold-700: #a16207;
-  --gold-800: #854d0e;
-  --gold-900: #713f12;
-
-  /* === TYPOGRAPHY === */
-  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-heading: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-
-  /* === SPACING (Generous) === */
-  --spacing-section: 7rem;
-  --spacing-section-sm: 5rem;
-  --spacing-container: 2rem;
-
-  /* === BORDER RADIUS === */
-  --radius-sm: 0.125rem;
-  --radius: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
-  --radius-2xl: 2rem;
-  --radius-full: 9999px;
-
-  /* === SHADOWS (Subtle) === */
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
 }
 
 /* ============================================
-   DARK MODE (Optional - Subtle)
+   BASE STYLES & TYPOGRAPHY
    ============================================ */
-.dark {
-  --color-background: #000000;
-  --color-foreground: #fafafa;
-  --color-card: #111111;
-  --color-card-foreground: #fafafa;
-  --color-popover: #111111;
-  --color-popover-foreground: #fafafa;
-
-  --color-primary: #ffffff;
-  --color-primary-foreground: #000000;
-  --color-primary-hover: #eeeeee;
-
-  --color-secondary: #1a1a1a;
-  --color-secondary-foreground: #fafafa;
-  --color-secondary-hover: #212121;
-
-  --color-muted: #1a1a1a;
-  --color-muted-foreground: #9e9e9e;
-
-  --color-border: #212121;
-  --color-input: #212121;
-  --color-ring: #ffffff;
-}
-
-/* ============================================
-   BASE STYLES
-   ============================================ */
-* {
-  @apply border-border;
-}
-
-html {
-  @apply scroll-smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
 
 body {
-  @apply bg-background text-foreground;
-  font-family: var(--font-sans);
-  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
-  letter-spacing: -0.011em;
+  @apply bg-[var(--color-background)] text-[var(--color-foreground)] font-sans antialiased;
+  letter-spacing: -0.015em;
+  transition: background 0.4s ease, color 0.4s ease;
 }
+
+/* Headings refinados */
+h1, h2, h3, h4 {
+  @apply font-heading font-semibold;
+  letter-spacing: -0.02em;
+}
+h1 { @apply text-5xl md:text-6xl tracking-tight; }
+h2 { @apply text-4xl md:text-5xl tracking-tight; }
+h3 { @apply text-2xl md:text-3xl; }
+
+/* Párrafos y textos */
+p { @apply text-gray-700 leading-relaxed; }
 
 /* ============================================
-   TYPOGRAPHY SCALE (Apple-inspired)
+   COMPONENTES PREMIUM
    ============================================ */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  letter-spacing: -0.022em;
-  line-height: 1.1;
+
+/* ======= Tarjetas ======= */
+.card {
+  @apply bg-card rounded-lg border border-gray-200 p-6 shadow-sm transition-all duration-300;
+  box-shadow: var(--shadow-soft);
+}
+.card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
 }
 
-h1 {
-  @apply text-5xl md:text-6xl lg:text-7xl;
-  font-weight: 700;
+/* ======= Botones ======= */
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-full font-medium px-6 py-3 text-white transition-all duration-300;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+  box-shadow: var(--shadow-glow-aqua);
+}
+.btn-primary:hover {
+  filter: brightness(1.05);
+  box-shadow: var(--shadow-glow-aqua), 0 8px 20px rgba(0,0,0,0.1);
 }
 
-h2 {
-  @apply text-4xl md:text-5xl lg:text-6xl;
+.btn-accent {
+  @apply inline-flex items-center justify-center rounded-full font-medium px-6 py-3 text-white transition-all duration-300;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover));
+  box-shadow: var(--shadow-glow-terra);
+}
+.btn-accent:hover {
+  filter: brightness(1.05);
 }
 
-h3 {
-  @apply text-3xl md:text-4xl;
+/* ======= Navbar / Sidebar ======= */
+.navbar {
+  @apply flex items-center justify-between px-8 py-4 bg-white shadow-sm border-b border-gray-200;
+  background: linear-gradient(180deg, #ffffff, #f9f9f8);
+}
+.sidebar {
+  @apply flex flex-col bg-gray-50 border-r border-gray-200 w-64 min-h-screen p-6;
+  background: linear-gradient(180deg, #fefefe, #f5f5f3);
 }
 
-h4 {
-  @apply text-2xl md:text-3xl;
+/* ======= Glassmorphism refinado ======= */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(14px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-p {
-  @apply text-base md:text-lg;
-  line-height: 1.6;
-  letter-spacing: -0.003em;
+/* ======= Animaciones suaves ======= */
+.animate-fade {
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.text-large {
-  @apply text-xl md:text-2xl;
-  line-height: 1.5;
+/* ======= Indicadores y etiquetas ======= */
+.badge {
+  @apply inline-flex items-center rounded-full px-3 py-1 text-sm font-medium;
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-hover);
 }
 
-.text-small {
-  @apply text-sm;
-  letter-spacing: 0;
-}
-
-/* ============================================
-   SELECTION & FOCUS
-   ============================================ */
-::selection {
-  @apply bg-black text-white;
-}
-
-.dark ::selection {
-  @apply bg-white text-black;
-}
-
-:focus-visible {
-  @apply outline-none ring-4 ring-black ring-offset-4 ring-offset-white;
-  animation: focus-pulse 1.5s ease-in-out infinite;
-}
-
-.dark :focus-visible {
-  @apply ring-white ring-offset-black;
-}
-
-@keyframes focus-pulse {
-  0%, 100% {
-    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.1);
-  }
-}
-
-/* ============================================
-   SCROLLBAR (Minimal)
-   ============================================ */
+/* ======= Scrollbar refinado ======= */
 ::-webkit-scrollbar {
   width: 8px;
-  height: 8px;
 }
-
-::-webkit-scrollbar-track {
-  @apply bg-transparent;
-}
-
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 rounded-full;
+  background: linear-gradient(var(--color-primary), var(--color-primary-hover));
+  border-radius: 4px;
 }
-
-.dark ::-webkit-scrollbar-thumb {
-  @apply bg-gray-700;
-}
-
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400;
+  background: var(--color-primary-hover);
 }
 
-.dark ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-600;
+/* ======= Gradiente Hero ======= */
+.bg-ocean {
+  background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 25%, #5eead4 75%, #14b8a6 100%);
+}
+
+/* ======= Microinteracciones ======= */
+.hover-lift {
+  @apply transition-transform duration-300 ease-out;
+}
+.hover-lift:hover {
+  transform: translateY(-3px) scale(1.02);
 }
 
 /* ============================================
-   ANIMATIONS (Subtle & Smooth)
+   ADDITIONAL ANIMATIONS
    ============================================ */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 
 @keyframes slide-up {
   from {
@@ -348,7 +251,7 @@ p {
 }
 
 .animate-fade-in {
-  animation: fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .animate-slide-up {
@@ -376,7 +279,18 @@ p {
 }
 
 /* ============================================
-   UTILITY CLASSES (Premium)
+   SELECTION & FOCUS
+   ============================================ */
+::selection {
+  @apply bg-[var(--color-primary)] text-white;
+}
+
+:focus-visible {
+  @apply outline-none ring-2 ring-[var(--color-primary)] ring-offset-2 ring-offset-white;
+}
+
+/* ============================================
+   UTILITY CLASSES
    ============================================ */
 
 /* Container with generous padding */
@@ -394,15 +308,6 @@ p {
   @apply py-12 md:py-16 lg:py-20;
 }
 
-/* Hover lift effect (subtle) */
-.hover-lift {
-  @apply transition-all duration-300 ease-out;
-}
-
-.hover-lift:hover {
-  @apply -translate-y-1;
-}
-
 /* Image hover scale */
 .image-hover {
   @apply overflow-hidden;
@@ -414,22 +319,6 @@ p {
 
 .image-hover:hover img {
   @apply scale-105;
-}
-
-/* Glass effect (minimal) */
-.glass-minimal {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px) saturate(100%);
-  -webkit-backdrop-filter: blur(10px) saturate(100%);
-}
-
-.dark .glass-minimal {
-  background: rgba(17, 17, 17, 0.8);
-}
-
-/* Button reset */
-button {
-  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
 }
 
 /* Link underline animation */
@@ -446,87 +335,6 @@ button {
   @apply w-full;
 }
 
-/* Divider line */
-.divider {
-  @apply h-px bg-border;
-}
-
-/* ============================================
-   PREMIUM COMPONENTS
-   ============================================ */
-
-/* Hero text gradient (subtle) */
-.text-gradient-premium {
-  @apply bg-clip-text text-transparent;
-  background-image: linear-gradient(135deg, #111111 0%, #424242 100%);
-}
-
-.dark .text-gradient-premium {
-  background-image: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
-}
-
-/* Card minimal */
-.card-minimal {
-  @apply bg-card rounded-lg border border-border p-6 md:p-8;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02);
-}
-
-.card-minimal:hover {
-  @apply shadow-lg;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-}
-
-/* Button primary (minimal black) */
-.btn-primary {
-  @apply inline-flex items-center justify-center rounded-full bg-black px-8 py-4 text-base font-medium text-white transition-all duration-200;
-  @apply hover:bg-gray-800 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2;
-}
-
-.dark .btn-primary {
-  @apply bg-white text-black hover:bg-gray-100;
-}
-
-/* Button secondary (outline) */
-.btn-secondary {
-  @apply inline-flex items-center justify-center rounded-full border-2 border-black bg-transparent px-8 py-4 text-base font-medium text-black transition-all duration-200;
-  @apply hover:bg-black hover:text-white focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2;
-}
-
-.dark .btn-secondary {
-  @apply border-white text-white hover:bg-white hover:text-black;
-}
-
-/* ============================================
-   GRADIENTS
-   ============================================ */
-
-/* Hero gradient - Premium dark to light */
-.bg-gradient-hero {
-  background: linear-gradient(135deg, #111111 0%, #424242 100%);
-}
-
-.dark .bg-gradient-hero {
-  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
-}
-
-/* Subtle background gradients */
-.bg-gradient-subtle {
-  background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
-}
-
-.dark .bg-gradient-subtle {
-  background: linear-gradient(180deg, #000000 0%, #111111 100%);
-}
-
-/* Primary gradient for CTAs */
-.bg-gradient-primary {
-  background: linear-gradient(135deg, #111111 0%, #212121 100%);
-}
-
-.dark .bg-gradient-primary {
-  background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
-}
-
 /* ============================================
    BRAND GRADIENTS - Aguamarina Cerámicos
    ============================================ */
@@ -534,10 +342,6 @@ button {
 /* Ocean Wave Gradient - Hero */
 .bg-gradient-ocean {
   background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 25%, #99f6e4 50%, #5eead4 75%, #2dd4bf 100%);
-}
-
-.bg-gradient-ocean-dark {
-  background: linear-gradient(135deg, #0f766e 0%, #115e59 50%, #134e4a 100%);
 }
 
 /* Animated Wave Gradient */
@@ -578,21 +382,6 @@ button {
 /* Gold Shine Gradient */
 .bg-gradient-gold {
   background: linear-gradient(135deg, #fefce8 0%, #fef9c3 25%, #fde047 75%, #facc15 100%);
-}
-
-/* Glassmorphism */
-.glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.glass-dark {
-  background: rgba(17, 17, 17, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Glow Effects */
