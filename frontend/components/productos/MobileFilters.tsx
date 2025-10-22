@@ -54,19 +54,19 @@ export function MobileFilters({
         </div>
 
         {/* Footer Actions */}
-        <SheetFooter className="flex-row gap-2 sm:flex-row">
+        <SheetFooter className="flex-row gap-3 sm:flex-row border-t pt-4">
           {hasActiveFilters && (
             <Button
               variant="outline"
               onClick={handleClearAll}
-              className="flex-1 sm:flex-1"
+              className="flex-1 sm:flex-1 border-black text-black hover:bg-gray-100"
             >
               Limpiar todo
             </Button>
           )}
           <Button
             onClick={handleApply}
-            className="flex-1 sm:flex-1 bg-primary hover:bg-primary-hover"
+            className="flex-1 sm:flex-1 bg-black hover:bg-gray-800 text-white"
           >
             Aplicar filtros
           </Button>

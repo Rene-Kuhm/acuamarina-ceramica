@@ -9,6 +9,7 @@ import { SkipToContent } from "@/components/layout/SkipToContent";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { SmoothScroll } from "@/components/animations/SmoothScroll";
 import { CustomCursor } from "@/components/animations/CustomCursor";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -50,6 +51,7 @@ export default function RootLayout({
               <Footer />
               <ComparisonBar />
             </div>
+            <Toaster position="bottom-right" richColors />
           </SmoothScroll>
         </Providers>
       </body>

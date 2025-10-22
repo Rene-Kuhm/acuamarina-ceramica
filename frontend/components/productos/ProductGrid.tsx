@@ -99,25 +99,39 @@ export function ProductGrid({
 
 /**
  * ProductCardSkeleton Component
- * Loading skeleton for ProductCard
+ * Loading skeleton for ProductCard with realistic shimmer effect
  */
 function ProductCardSkeleton() {
   return (
-    <Card className="overflow-hidden">
-      {/* Image Skeleton */}
-      <Skeleton className="aspect-square w-full" />
+    <Card className="overflow-hidden border-gray-200">
+      {/* Image Skeleton with Badges Placeholders */}
+      <div className="relative aspect-square w-full">
+        <Skeleton className="w-full h-full rounded-none" />
+        {/* Badge placeholders */}
+        <div className="absolute top-3 left-3 space-y-2">
+          <Skeleton className="h-6 w-20 rounded-md" />
+        </div>
+        <div className="absolute top-3 right-3">
+          <Skeleton className="h-9 w-9 rounded-full" />
+        </div>
+      </div>
 
       {/* Content Skeleton */}
       <CardContent className="p-4 space-y-3">
-        <Skeleton className="h-3 w-20" />
-        <Skeleton className="h-5 w-full" />
-        <Skeleton className="h-5 w-3/4" />
-        <Skeleton className="h-8 w-32" />
+        {/* Category */}
+        <Skeleton className="h-3 w-24 rounded-sm" />
+        {/* Title - 2 lines */}
+        <div className="space-y-2">
+          <Skeleton className="h-5 w-full rounded-sm" />
+          <Skeleton className="h-5 w-4/5 rounded-sm" />
+        </div>
+        {/* Price */}
+        <Skeleton className="h-7 w-28 rounded-sm" />
       </CardContent>
 
       {/* Footer Skeleton */}
       <CardFooter className="p-4 pt-0">
-        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-11 w-full rounded-lg" />
       </CardFooter>
     </Card>
   );

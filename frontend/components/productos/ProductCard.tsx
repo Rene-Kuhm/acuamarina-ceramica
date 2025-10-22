@@ -10,6 +10,8 @@ import { useCart } from "@/lib/hooks/useCart";
 import { useWishlist } from "@/lib/hooks/useWishlist";
 import { Producto } from "@/lib/api/productos";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import confetti from "canvas-confetti";
 
 export interface ProductCardProps {
   product: Producto;
@@ -37,11 +39,33 @@ export function ProductCard({ product, featured = false, className }: ProductCar
       image: product.images[0] || "/placeholder-product.jpg",
       stock: product.stock,
     });
+
+    // Confetti sutil y premium
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (rect.left + rect.width / 2) / window.innerWidth;
+    const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+    confetti({
+      particleCount: 30,
+      spread: 60,
+      origin: { x, y },
+      colors: ['#111111', '#666666', '#999999'],
+      scalar: 0.8,
+      gravity: 1.2,
+      ticks: 200,
+    });
+
+    toast.success("Producto agregado", {
+      description: `${product.name} se agregó al carrito`,
+      duration: 3000,
+    });
   };
 
   const handleToggleWishlist = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
+
+    const wasInWishlist = isInWishlist(product.id);
 
     toggleWishlist({
       id: product.id,
@@ -50,6 +74,18 @@ export function ProductCard({ product, featured = false, className }: ProductCar
       price: product.price,
       image: product.images[0] || "/placeholder-product.jpg",
     });
+
+    if (wasInWishlist) {
+      toast.info("Eliminado de favoritos", {
+        description: `${product.name} se eliminó de favoritos`,
+        duration: 2000,
+      });
+    } else {
+      toast.success("Agregado a favoritos", {
+        description: `${product.name} se agregó a favoritos`,
+        duration: 2000,
+      });
+    }
   };
 
   const formatPrice = (price: number) => {
@@ -66,7 +102,7 @@ export function ProductCard({ product, featured = false, className }: ProductCar
     <Link href={`/productos/${product.slug}`} className="block">
       <Card
         className={cn(
-          "group h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:border-primary/50",
+          "group h-full overflow-hidden transition-all duration-500 ease-out hover:shadow-2xl hover:scale-[1.04] hover:-translate-y-2 hover:border-gray-900",
           isOutOfStock && "opacity-60",
           className
         )}
@@ -77,8 +113,12 @@ export function ProductCard({ product, featured = false, className }: ProductCar
             src={product.images[0] || "/placeholder-product.jpg"}
             alt={product.name}
             fill
-            className="object-cover transition-transform duration-300 group-hover:scale-110"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.15] group-hover:rotate-1"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2VlZWVlZSIvPjwvc3ZnPg=="
+            loading="lazy"
+            quality={85}
           />
 
           {/* Badges */}
@@ -101,15 +141,15 @@ export function ProductCard({ product, featured = false, className }: ProductCar
           {/* Wishlist Button */}
           <button
             onClick={handleToggleWishlist}
-            className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-white transition-colors"
+            className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-white hover:scale-110 transition-all duration-300 hover:shadow-lg"
             aria-label={isInWishlist(product.id) ? "Quitar de favoritos" : "Agregar a favoritos"}
           >
             <Heart
               className={cn(
-                "w-5 h-5 transition-colors",
+                "w-5 h-5 transition-all duration-300",
                 isInWishlist(product.id)
-                  ? "fill-pink-600 text-pink-600"
-                  : "text-gray-600 hover:text-pink-600"
+                  ? "fill-pink-600 text-pink-600 scale-110"
+                  : "text-gray-600 hover:text-pink-600 hover:scale-110"
               )}
             />
           </button>
@@ -119,19 +159,19 @@ export function ProductCard({ product, featured = false, className }: ProductCar
         <CardContent className="p-4 space-y-2">
           {/* Category */}
           {product.category && (
-            <p className="text-xs text-gray-600 uppercase tracking-wide">
+            <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
               {product.category.name}
             </p>
           )}
 
           {/* Product Name */}
-          <h3 className="font-semibold text-base line-clamp-2 min-h-[3rem] group-hover:text-primary transition-colors">
+          <h3 className="font-semibold text-lg line-clamp-2 min-h-[3.5rem] text-gray-900 group-hover:text-black transition-colors leading-snug">
             {product.name}
           </h3>
 
           {/* Price */}
           <div className="flex items-baseline gap-2">
-            <p className="text-2xl font-bold text-primary">
+            <p className="text-xl font-bold text-black">
               {formatPrice(product.price)}
             </p>
           </div>
@@ -142,10 +182,10 @@ export function ProductCard({ product, featured = false, className }: ProductCar
           <Button
             onClick={handleAddToCart}
             disabled={isOutOfStock}
-            className="w-full bg-primary hover:bg-primary-hover text-white transition-colors"
+            className="w-full bg-black hover:bg-gray-800 text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group/btn"
             size="lg"
           >
-            <ShoppingCart className="w-4 h-4" />
+            <ShoppingCart className="w-4 h-4 transition-transform duration-300 group-hover/btn:scale-110" />
             {isOutOfStock ? "Sin Stock" : "Agregar al Carrito"}
           </Button>
         </CardFooter>

@@ -49,13 +49,13 @@ export function ProductListHeader({
         <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
           {total > 0 ? (
             <>
-              <span className="text-primary">{total}</span>{" "}
-              <span className="text-gray-900">
+              <span className="text-black font-bold">{total}</span>{" "}
+              <span className="text-gray-700 font-medium">
                 {total === 1 ? "producto encontrado" : "productos encontrados"}
               </span>
             </>
           ) : (
-            <span className="text-gray-900">No se encontraron productos</span>
+            <span className="text-gray-600">No se encontraron productos</span>
           )}
         </h2>
       </div>
@@ -67,12 +67,12 @@ export function ProductListHeader({
           <Button
             variant="outline"
             onClick={onOpenMobileFilters}
-            className="lg:hidden relative"
+            className="lg:hidden relative border-black text-black hover:bg-gray-100 transition-all duration-300"
           >
             <SlidersHorizontal className="w-4 h-4 mr-2" />
             Filtros
             {activeFilterCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-primary rounded-full">
+              <span className="absolute -top-2 -right-2 flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-white bg-black rounded-full shadow-lg animate-pulse">
                 {activeFilterCount}
               </span>
             )}

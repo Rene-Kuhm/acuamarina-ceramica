@@ -58,7 +58,15 @@ function ProductosContent() {
       {/* Hero Section */}
       <section className="bg-gradient-hero text-white py-8 sm:py-12">
         <div className="container mx-auto px-4">
-          <Breadcrumb items={breadcrumbItems} className="text-white mb-4" />
+          <div className="mb-4">
+            <Breadcrumb
+              items={breadcrumbItems.map(item => ({
+                ...item,
+                label: item.label,
+              }))}
+              className="[&_a]:text-white/80 [&_a]:hover:text-white [&_span]:text-white [&_svg]:text-white/60"
+            />
+          </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 text-white">
             Nuestros Productos
           </h1>

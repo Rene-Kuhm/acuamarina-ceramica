@@ -247,39 +247,44 @@ export default function CarritoPage() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-4">
-              <CardHeader>
-                <CardTitle>Resumen del Pedido</CardTitle>
+            <Card className="sticky top-4 border-2 border-gray-900 shadow-xl">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl font-bold text-black">Resumen del Pedido</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Subtotal ({totalItems} productos)</span>
-                    <span className="font-medium">{formatPrice(subtotal)}</span>
+              <CardContent className="space-y-6">
+                {/* Total destacado arriba */}
+                <div className="bg-gray-50 rounded-lg p-6 border-2 border-gray-200">
+                  <div className="text-center space-y-2">
+                    <p className="text-sm text-gray-600 font-medium uppercase tracking-wide">Total a Pagar</p>
+                    <p className="text-4xl font-bold text-black">{formatPrice(total)}</p>
+                    <p className="text-xs text-gray-500">{totalItems} {totalItems === 1 ? "producto" : "productos"}</p>
                   </div>
-                  <div className="flex justify-between text-sm">
+                </div>
+
+                {/* Desglose */}
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Subtotal</span>
+                    <span className="font-semibold text-gray-900">{formatPrice(subtotal)}</span>
+                  </div>
+                  <div className="flex justify-between">
                     <span className="text-gray-600">Envío</span>
-                    <span className={shipping === 0 ? "text-green-600 font-medium" : "font-medium"}>
-                      {shipping === 0 ? "¡Gratis!" : formatPrice(shipping)}
+                    <span className={shipping === 0 ? "text-green-600 font-bold" : "font-semibold text-gray-900"}>
+                      {shipping === 0 ? "¡GRATIS!" : formatPrice(shipping)}
                     </span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">IVA (21%)</span>
-                    <span className="font-medium">{formatPrice(tax)}</span>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-500">IVA incluido (21%)</span>
+                    <span className="text-gray-500">{formatPrice(tax)}</span>
                   </div>
                 </div>
 
                 <Separator />
 
-                <div className="flex justify-between text-lg font-bold">
-                  <span>Total</span>
-                  <span className="text-primary">{formatPrice(total)}</span>
-                </div>
-
                 <Button
                   onClick={handleCheckout}
                   size="lg"
-                  className="w-full bg-primary hover:bg-primary-hover text-white"
+                  className="w-full bg-black hover:bg-gray-800 text-white text-base font-bold py-6 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
                 >
                   Proceder al Pago
                   <ArrowRight className="w-5 h-5 ml-2" />
@@ -289,24 +294,24 @@ export default function CarritoPage() {
                   asChild
                   variant="outline"
                   size="lg"
-                  className="w-full"
+                  className="w-full border-black text-black hover:bg-gray-100"
                 >
                   <Link href="/productos">Seguir Comprando</Link>
                 </Button>
 
                 {/* Security Info */}
-                <div className="pt-4 space-y-2 text-xs text-gray-600">
+                <div className="pt-4 border-t space-y-2 text-xs text-gray-600">
                   <p className="flex items-center gap-2">
-                    <span className="text-green-600">✓</span>
-                    Compra 100% segura
+                    <span className="text-green-600 font-bold">✓</span>
+                    <span className="font-medium">Compra 100% segura</span>
                   </p>
                   <p className="flex items-center gap-2">
-                    <span className="text-green-600">✓</span>
-                    Garantía de devolución
+                    <span className="text-green-600 font-bold">✓</span>
+                    <span className="font-medium">Garantía de devolución</span>
                   </p>
                   <p className="flex items-center gap-2">
-                    <span className="text-green-600">✓</span>
-                    Soporte 24/7
+                    <span className="text-green-600 font-bold">✓</span>
+                    <span className="font-medium">Soporte 24/7</span>
                   </p>
                 </div>
               </CardContent>
