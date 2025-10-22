@@ -51,58 +51,59 @@ export default function ContactoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <section className="bg-gradient-hero text-white py-12">
-        <div className="container mx-auto px-4">
-          <Breadcrumb items={breadcrumbItems} className="text-white" />
-          <h1 className="text-4xl font-bold mb-2">Contacto</h1>
-          <p className="text-white">¿Tienes alguna pregunta? Estamos aquí para ayudarte</p>
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <section className="bg-black text-white py-20">
+        <div className="container-premium">
+          <Breadcrumb items={breadcrumbItems} className="text-gray-300 mb-8" />
+          <h1 className="text-5xl md:text-6xl font-bold mb-4">Contacto</h1>
+          <p className="text-xl text-gray-300">¿Tienes alguna pregunta? Estamos aquí para ayudarte</p>
         </div>
       </section>
 
-      <div className="container mx-auto px-4 py-12">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="container-premium py-20">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Contact Info */}
           <div className="space-y-6">
             <Card>
-              <CardContent className="p-6">
+              <CardContent className="p-8">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-primary-light rounded-full">
-                    <Mail className="w-5 h-5 text-primary" />
+                  <div className="p-3 bg-gray-100 rounded-full flex-shrink-0">
+                    <Mail className="w-6 h-6 text-black" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Email</h3>
-                    <p className="text-sm text-gray-100">info@aguamarina.com</p>
-                    <p className="text-sm text-gray-100">ventas@aguamarina.com</p>
+                    <h3 className="font-semibold text-black mb-2">Email</h3>
+                    <p className="text-sm text-gray-600">info@aguamarina.com</p>
+                    <p className="text-sm text-gray-600">ventas@aguamarina.com</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card>
-              <CardContent className="p-6">
+              <CardContent className="p-8">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-primary-light rounded-full">
-                    <Phone className="w-5 h-5 text-primary" />
+                  <div className="p-3 bg-gray-100 rounded-full flex-shrink-0">
+                    <Phone className="w-6 h-6 text-black" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Teléfono</h3>
-                    <p className="text-sm text-gray-100">+54 11 1234-5678</p>
-                    <p className="text-sm text-gray-100">Lun - Vie: 9:00 - 18:00</p>
+                    <h3 className="font-semibold text-black mb-2">Teléfono</h3>
+                    <p className="text-sm text-gray-600">+54 11 1234-5678</p>
+                    <p className="text-sm text-gray-600">Lun - Vie: 9:00 - 18:00</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card>
-              <CardContent className="p-6">
+              <CardContent className="p-8">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-primary-light rounded-full">
-                    <MapPin className="w-5 h-5 text-primary" />
+                  <div className="p-3 bg-gray-100 rounded-full flex-shrink-0">
+                    <MapPin className="w-6 h-6 text-black" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Dirección</h3>
-                    <p className="text-sm text-gray-100">
+                    <h3 className="font-semibold text-black mb-2">Dirección</h3>
+                    <p className="text-sm text-gray-600">
                       Av. Corrientes 1234<br />
                       Buenos Aires, Argentina
                     </p>
@@ -115,7 +116,8 @@ export default function ContactoPage() {
           {/* Contact Form */}
           <Card className="lg:col-span-2">
             <CardHeader>
-              <CardTitle>Envíanos un mensaje</CardTitle>
+              <CardTitle className="text-2xl text-black">Envíanos un mensaje</CardTitle>
+              <p className="text-gray-600 mt-2">Completa el formulario y te responderemos a la brevedad</p>
             </CardHeader>
             <CardContent>
               {success && (
@@ -135,9 +137,9 @@ export default function ContactoPage() {
               )}
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Nombre Completo *</Label>
+                    <Label htmlFor="name" className="text-black">Nombre Completo *</Label>
                     <Input
                       id="name"
                       name="name"
@@ -145,10 +147,11 @@ export default function ContactoPage() {
                       onChange={handleChange}
                       required
                       disabled={isSubmitting}
+                      className="h-12"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email *</Label>
+                    <Label htmlFor="email" className="text-black">Email *</Label>
                     <Input
                       id="email"
                       name="email"
@@ -157,13 +160,14 @@ export default function ContactoPage() {
                       onChange={handleChange}
                       required
                       disabled={isSubmitting}
+                      className="h-12"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Teléfono</Label>
+                    <Label htmlFor="phone" className="text-black">Teléfono</Label>
                     <Input
                       id="phone"
                       name="phone"
@@ -171,10 +175,11 @@ export default function ContactoPage() {
                       value={formData.phone}
                       onChange={handleChange}
                       disabled={isSubmitting}
+                      className="h-12"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="subject">Asunto *</Label>
+                    <Label htmlFor="subject" className="text-black">Asunto *</Label>
                     <Input
                       id="subject"
                       name="subject"
@@ -182,12 +187,13 @@ export default function ContactoPage() {
                       onChange={handleChange}
                       required
                       disabled={isSubmitting}
+                      className="h-12"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="message">Mensaje *</Label>
+                  <Label htmlFor="message" className="text-black">Mensaje *</Label>
                   <Textarea
                     id="message"
                     name="message"
@@ -196,12 +202,14 @@ export default function ContactoPage() {
                     required
                     disabled={isSubmitting}
                     rows={6}
+                    className="resize-none"
                   />
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full bg-primary hover:bg-primary-hover"
+                  size="lg"
+                  className="w-full"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
