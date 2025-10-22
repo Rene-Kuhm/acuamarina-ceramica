@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Star, X, ChevronLeft, ChevronRight, Upload, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { uploadProductImage } from '@/lib/api/upload';
 import { toast } from 'sonner';
+import Image from 'next/image';
 
 export interface ProductImage {
   id?: number;
@@ -32,7 +33,7 @@ export function CloudinaryImageUploader({
   maxImages = 10,
   disabled = false,
 }: CloudinaryImageUploaderProps) {
-  const [uploading, setUploading] = useState(false);
+  // const [uploading, setUploading] = useState(false); // TODO: Implement loading state
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -190,10 +191,12 @@ export function CloudinaryImageUploader({
               className="relative aspect-square rounded-lg overflow-hidden border border-slate-200 group"
             >
               {/* Image */}
-              <img
+              <Image
                 src={image.url}
                 alt={image.altText || `Imagen ${index + 1}`}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
               />
 
               {/* Uploading Overlay */}
