@@ -28,6 +28,13 @@ export interface DashboardStats {
     orders_count: number;
     total_sales: number;
   }>;
+  topProducts?: Array<{
+    id: string;
+    name: string;
+    sku: string;
+    totalSales: number;
+    revenue: number;
+  }>;
 }
 
 export const statsService = {

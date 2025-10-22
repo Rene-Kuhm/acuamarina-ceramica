@@ -1,5 +1,3 @@
-import { apiClient } from '@/lib/api/client';
-
 export const exportService = {
   exportProducts: async (): Promise<void> => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/export/products`, {
@@ -28,7 +26,7 @@ export const exportService = {
         if (a.parentNode) {
           document.body.removeChild(a);
         }
-      } catch (e) {
+      } catch {
         // Ignorar error si el elemento ya fue removido
       }
     }, 100);
@@ -73,7 +71,7 @@ export const exportService = {
         if (a.parentNode) {
           document.body.removeChild(a);
         }
-      } catch (e) {
+      } catch {
         // Ignorar error si el elemento ya fue removido
       }
     }, 100);
@@ -106,7 +104,7 @@ export const exportService = {
         if (a.parentNode) {
           document.body.removeChild(a);
         }
-      } catch (e) {
+      } catch {
         // Ignorar error si el elemento ya fue removido
       }
     }, 100);

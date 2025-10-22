@@ -5,7 +5,7 @@ export interface Customer {
   user_id: string;
   company_name?: string;
   tax_id?: string;
-  preferences?: any;
+  preferences?: Record<string, unknown>;
   created_at: string;
   updated_at: string;
   email?: string;
@@ -87,7 +87,7 @@ export const customersService = {
   getOrderHistory: async (id: string, params?: {
     page?: number;
     limit?: number;
-  }): Promise<{ success: boolean; data: Order[]; pagination: any }> => {
+  }): Promise<{ success: boolean; data: Order[]; pagination: { page: number; limit: number; total: number; totalPages: number } }> => {
     return apiClient.get(`/customers/${id}/orders`, { params });
   },
 
