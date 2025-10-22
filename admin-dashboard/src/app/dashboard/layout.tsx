@@ -37,10 +37,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   // No renderizar nada hasta que esté montado e inicializado
   if (!mounted || !isInitialized) {
     return (
-      <div className="flex h-screen items-center justify-center bg-slate-950">
+      <div className="flex h-screen items-center justify-center bg-gradient-to-br from-white via-[#f0fdfa] to-[#ccfbf1] dark:bg-slate-950">
         <div className="text-center">
-          <div className="h-8 w-8 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-400 text-sm">Cargando...</p>
+          <div className="h-8 w-8 border-4 border-[#14b8a6] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600 dark:text-slate-400 text-sm">Cargando...</p>
         </div>
       </div>
     );
@@ -60,11 +60,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header />
-        <main className="flex-1 overflow-y-auto bg-gradient-to-br from-slate-50 via-white to-cyan-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-cyan-950/20 relative">
-          {/* Decorative gradient orbs */}
+        <main className="flex-1 overflow-y-auto bg-gradient-to-br from-white via-[#f0fdfa] to-[#ccfbf1]/20 dark:from-slate-950 dark:via-slate-900 dark:to-[#134e4a]/10 relative">
+          {/* Decorative gradient orbs - Aguamarina */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-0 right-1/4 w-96 h-96 bg-cyan-500/5 dark:bg-cyan-500/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-3xl"></div>
+            <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#14b8a6]/5 dark:bg-[#14b8a6]/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-[#2dd4bf]/5 dark:bg-[#2dd4bf]/10 rounded-full blur-3xl"></div>
           </div>
 
           <div className="container mx-auto p-4 sm:p-6 max-w-7xl animate-fade-in relative z-10">

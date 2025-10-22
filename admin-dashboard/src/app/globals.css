@@ -1,44 +1,48 @@
 @import "tailwindcss";
 
 @theme {
-  /* Tema Acuamarina - Colores profesionales */
-  --color-background: #fafbfc;
+  /* === AGUAMARINA PALETTE - Admin Dashboard === */
+  --color-background: #ffffff;
   --color-foreground: #0f172a;
   --color-card: #ffffff;
   --color-card-foreground: #0f172a;
   --color-popover: #ffffff;
   --color-popover-foreground: #0f172a;
 
-  /* Primary - Azul Acuamarina */
-  --color-primary: #0891b2;
+  /* Primary - Aguamarina Main Brand */
+  --color-primary: #14b8a6;
   --color-primary-foreground: #ffffff;
 
-  /* Secondary */
+  /* Secondary - Aguamarina Light */
   --color-secondary: #f0fdfa;
-  --color-secondary-foreground: #0f766e;
+  --color-secondary-foreground: #0d9488;
 
-  /* Accent - Teal */
+  /* Accent - Aguamarina */
   --color-accent: #14b8a6;
   --color-accent-foreground: #ffffff;
 
   /* Muted */
-  --color-muted: #f1f5f9;
+  --color-muted: #f0fdfa;
   --color-muted-foreground: #64748b;
 
-  /* Destructive */
-  --color-destructive: #ef4444;
+  /* Destructive - Terracota */
+  --color-destructive: #e15540;
   --color-destructive-foreground: #ffffff;
 
+  /* Success - Aguamarina Dark */
+  --color-success: #0d9488;
+  --color-success-foreground: #ffffff;
+
   /* Borders */
-  --color-border: #e2e8f0;
-  --color-input: #e2e8f0;
-  --color-ring: #0891b2;
+  --color-border: #e5e7eb;
+  --color-input: #e5e7eb;
+  --color-ring: #14b8a6;
 
   /* Radius */
   --radius: 0.5rem;
 }
 
-/* Dark mode variables */
+/* Dark mode variables - Aguamarina Palette */
 .dark {
   --color-background: #0f172a;
   --color-foreground: #f1f5f9;
@@ -47,15 +51,15 @@
   --color-popover: #1e293b;
   --color-popover-foreground: #f1f5f9;
 
-  /* Primary más brillante en dark */
-  --color-primary: #06b6d4;
+  /* Primary - Aguamarina brighter en dark */
+  --color-primary: #2dd4bf;
   --color-primary-foreground: #0f172a;
 
   /* Secondary */
-  --color-secondary: #0e7490;
+  --color-secondary: #134e4a;
   --color-secondary-foreground: #f0fdfa;
 
-  /* Accent */
+  /* Accent - Aguamarina */
   --color-accent: #14b8a6;
   --color-accent-foreground: #0f172a;
 
@@ -63,14 +67,18 @@
   --color-muted: #1e293b;
   --color-muted-foreground: #94a3b8;
 
-  /* Destructive */
-  --color-destructive: #dc2626;
+  /* Destructive - Terracota */
+  --color-destructive: #e15540;
   --color-destructive-foreground: #f1f5f9;
+
+  /* Success */
+  --color-success: #14b8a6;
+  --color-success-foreground: #0f172a;
 
   /* Borders */
   --color-border: #334155;
   --color-input: #334155;
-  --color-ring: #06b6d4;
+  --color-ring: #2dd4bf;
 }
 
 /* Base styles */
@@ -161,19 +169,30 @@ html {
   animation: slide-in 0.4s ease-out;
 }
 
-/* Gradient backgrounds */
-.bg-gradient-acuamarina {
-  background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+/* === AGUAMARINA GRADIENT BACKGROUNDS === */
+.bg-gradient-aguamarina {
+  background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
 }
 
-.bg-gradient-ceramic {
-  background: linear-gradient(135deg, #0e7490 0%, #14b8a6 100%);
+.bg-gradient-aguamarina-light {
+  background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
 }
 
-/* Glass morphism effect */
+.bg-gradient-aguamarina-dark {
+  background: linear-gradient(135deg, #0d9488 0%, #115e59 100%);
+}
+
+/* Glass morphism effect - Aguamarina */
 .glass-effect {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(240, 253, 250, 0.9);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(20, 184, 166, 0.2);
+}
+
+.glass-effect-dark {
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(45, 212, 191, 0.2);
 }

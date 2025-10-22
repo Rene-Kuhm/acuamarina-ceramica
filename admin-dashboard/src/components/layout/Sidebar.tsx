@@ -37,12 +37,12 @@ export function Sidebar() {
 
   return (
     <div className="flex h-full w-72 flex-col bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 dark:from-slate-950 dark:via-slate-950 dark:to-black text-white shadow-2xl">
-      {/* Logo Section - Premium */}
+      {/* Logo Section - Aguamarina Premium */}
       <div className="p-6 border-b border-slate-800/50 dark:border-slate-900/50">
         <div className="flex items-center gap-3 mb-2">
           <div className="relative">
-            <div className="absolute inset-0 bg-cyan-500 blur-lg opacity-50 rounded-full"></div>
-            <div className="relative h-16 w-16 rounded-full bg-white flex items-center justify-center shadow-lg transform hover:scale-105 transition-transform overflow-hidden">
+            <div className="absolute inset-0 bg-[#14b8a6] blur-lg opacity-50 rounded-full"></div>
+            <div className="relative h-16 w-16 rounded-full bg-white flex items-center justify-center shadow-lg transform hover:scale-105 transition-transform overflow-hidden ring-2 ring-[#14b8a6]/30">
               <Image
                 src="/logo/logo.png"
                 alt="Aguamarina Mosaicos Logo"
@@ -54,14 +54,14 @@ export function Sidebar() {
             </div>
           </div>
           <div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+            <h1 className="text-xl font-bold bg-gradient-to-r from-[#14b8a6] via-[#2dd4bf] to-[#5eead4] bg-clip-text text-transparent">
               Aguamarina
             </h1>
             <p className="text-xs text-slate-400 font-medium">Mosaicos Premium</p>
           </div>
         </div>
-        <div className="mt-3 px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-lg">
-          <p className="text-xs text-cyan-400 font-medium">Panel de Administración</p>
+        <div className="mt-3 px-3 py-1.5 bg-[#14b8a6]/10 border border-[#14b8a6]/20 rounded-lg">
+          <p className="text-xs text-[#14b8a6] font-medium">Panel de Administración</p>
         </div>
       </div>
 
@@ -78,20 +78,20 @@ export function Sidebar() {
               className={cn(
                 'group flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 relative overflow-hidden',
                 isActive
-                  ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white shadow-lg border border-cyan-500/30'
+                  ? 'bg-gradient-to-r from-[#14b8a6]/20 to-[#0d9488]/20 text-white shadow-lg border border-[#14b8a6]/30'
                   : 'text-slate-300 hover:bg-slate-800/50 hover:text-white hover:translate-x-1'
               )}
             >
               {/* Active indicator */}
               {isActive && (
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 to-blue-600 rounded-r-full"></div>
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#14b8a6] to-[#0d9488] rounded-r-full"></div>
               )}
 
               <div className="flex items-center gap-3 z-10">
                 <div className={cn(
                   'p-2 rounded-lg transition-all duration-300',
                   isActive
-                    ? 'bg-gradient-to-br from-cyan-500 to-blue-600 shadow-lg'
+                    ? 'bg-gradient-to-br from-[#14b8a6] to-[#0d9488] shadow-lg'
                     : 'bg-slate-800/50 group-hover:bg-slate-700'
                 )}>
                   <Icon className="h-5 w-5" />
@@ -108,13 +108,13 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* User Section - Premium */}
+      {/* User Section - Aguamarina Premium */}
       <div className="p-4 border-t border-slate-800/50 bg-slate-900/50 backdrop-blur-sm">
-        <div className="mb-3 p-3 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-xl border border-slate-700/50 hover:border-cyan-500/30 transition-all duration-300">
+        <div className="mb-3 p-3 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-xl border border-slate-700/50 hover:border-[#14b8a6]/30 transition-all duration-300">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500 to-blue-600 blur-md opacity-50 rounded-full"></div>
-              <div className="relative h-11 w-11 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-white shadow-lg ring-2 ring-slate-700">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#14b8a6] to-[#0d9488] blur-md opacity-50 rounded-full"></div>
+              <div className="relative h-11 w-11 rounded-full bg-gradient-to-br from-[#14b8a6] to-[#0d9488] flex items-center justify-center font-bold text-white shadow-lg ring-2 ring-slate-700">
                 {user?.firstName?.[0]}{user?.lastName?.[0]}
               </div>
             </div>
@@ -129,11 +129,11 @@ export function Sidebar() {
 
         <Button
           variant="ghost"
-          className="w-full justify-start text-slate-300 hover:text-white hover:bg-red-500/10 hover:border-red-500/20 border border-transparent transition-all duration-300 group"
+          className="w-full justify-start text-slate-300 hover:text-white hover:bg-[#e15540]/10 hover:border-[#e15540]/20 border border-transparent transition-all duration-300 group"
           onClick={handleLogout}
         >
-          <LogOut className="mr-2 h-4 w-4 group-hover:text-red-400 transition-colors" />
-          <span className="group-hover:text-red-400 transition-colors">Cerrar Sesión</span>
+          <LogOut className="mr-2 h-4 w-4 group-hover:text-[#e15540] transition-colors" />
+          <span className="group-hover:text-[#e15540] transition-colors">Cerrar Sesión</span>
         </Button>
       </div>
     </div>
