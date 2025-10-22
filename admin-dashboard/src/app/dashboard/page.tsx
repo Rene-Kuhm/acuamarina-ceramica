@@ -2,18 +2,27 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { statsService } from '@/services/stats.service';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Package, DollarSign, ShoppingCart, Users, TrendingUp, TrendingDown } from 'lucide-react';
+import {
+  Package,
+  DollarSign,
+  ShoppingCart,
+  Users,
+  TrendingUp,
+  Sparkles,
+  Leaf,
+  AlertCircle
+} from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import Link from 'next/link';
 import { useMemo } from 'react';
 
 function StatCardSkeleton() {
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden border-[#f5f3ef]">
       <CardContent className="p-6">
-        <Skeleton className="h-16 w-full" />
+        <Skeleton className="h-24 w-full bg-[#f5f3ef]" />
       </CardContent>
     </Card>
   );
@@ -30,52 +39,77 @@ export default function DashboardPage() {
 
   const stats = useMemo(() => [
     {
-      title: 'TOTAL VENTAS',
-      subtitle: 'Lorem Ipsum',
+      title: 'Ventas del Mes',
+      subtitle: 'Ingresos totales',
       value: formatCurrency(dashboardData?.stats.monthly_revenue || 0),
       icon: DollarSign,
       change: '+12.5%',
-      gradient: 'from-purple-500 to-purple-600',
-      iconBg: 'bg-purple-500/20',
+      bgColor: 'bg-gradient-to-br from-[#4dd0e1]/10 via-[#4dd0e1]/5 to-transparent',
+      iconColor: 'text-[#4dd0e1]',
+      iconBg: 'bg-[#4dd0e1]/10',
       href: '/dashboard/orders',
     },
     {
-      title: 'VENTAS DIARIAS',
-      subtitle: 'Lorem Ipsum',
-      value: '$750',
-      icon: ShoppingCart,
-      change: '+8.3%',
-      gradient: 'from-cyan-400 to-cyan-500',
-      iconBg: 'bg-cyan-400/20',
-      href: '/dashboard/orders',
-    },
-    {
-      title: 'PEDIDOS TOTALES',
-      subtitle: 'Lorem Ipsum',
-      value: '$5,450',
+      title: 'Stock Actual',
+      subtitle: 'Productos en inventario',
+      value: dashboardData?.stats.total_products || 0,
       icon: Package,
-      change: '+18.2%',
-      gradient: 'from-blue-500 to-blue-600',
-      iconBg: 'bg-blue-500/20',
+      change: '+8.3%',
+      bgColor: 'bg-gradient-to-br from-[#a3b18a]/10 via-[#a3b18a]/5 to-transparent',
+      iconColor: 'text-[#a3b18a]',
+      iconBg: 'bg-[#a3b18a]/10',
       href: '/dashboard/products',
+    },
+    {
+      title: 'Pedidos Activos',
+      subtitle: 'Este mes',
+      value: dashboardData?.stats.monthly_orders || 0,
+      icon: ShoppingCart,
+      change: '+18.2%',
+      bgColor: 'bg-gradient-to-br from-[#7a7a7a]/10 via-[#7a7a7a]/5 to-transparent',
+      iconColor: 'text-[#7a7a7a]',
+      iconBg: 'bg-[#7a7a7a]/10',
+      href: '/dashboard/orders',
+    },
+    {
+      title: 'Clientes Nuevos',
+      subtitle: 'Últimos 30 días',
+      value: Math.floor((dashboardData?.stats.total_customers || 0) * 0.15),
+      icon: Users,
+      change: '+15.7%',
+      bgColor: 'bg-gradient-to-br from-[#4dd0e1]/10 via-[#4dd0e1]/5 to-transparent',
+      iconColor: 'text-[#4dd0e1]',
+      iconBg: 'bg-[#4dd0e1]/10',
+      href: '/dashboard/customers',
     },
   ], [dashboardData]);
 
-  // Calcular porcentaje para el gráfico circular
-  const completionPercentage = 50;
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100/50">
-      <div className="p-4 sm:p-6 lg:p-8 space-y-6">
-        {/* Header */}
-        <div>
-          <h1 className="text-xl font-bold text-slate-800">Analytics</h1>
+    <div className="min-h-screen bg-gradient-to-br from-[#f5f3ef] via-white to-[#e8f4f8]">
+      <div className="p-4 sm:p-6 lg:p-8 space-y-8">
+        {/* Header con estilo artesanal */}
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#4dd0e1]/5 via-transparent to-[#a3b18a]/5 rounded-2xl blur-2xl"></div>
+          <div className="relative bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-[#4dd0e1]/20 shadow-sm">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4dd0e1] to-[#4dd0e1]/70 flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-[#333333]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  Bienvenido a Aguamarina
+                </h1>
+                <p className="text-sm text-[#7a7a7a]">Panel de administración artesanal</p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {/* Stats Grid con diseño artesanal */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {isLoading ? (
             <>
+              <StatCardSkeleton />
               <StatCardSkeleton />
               <StatCardSkeleton />
               <StatCardSkeleton />
@@ -85,24 +119,29 @@ export default function DashboardPage() {
               const Icon = stat.icon;
               return (
                 <Link key={stat.title} href={stat.href}>
-                  <Card className={`overflow-hidden border-0 shadow-lg bg-gradient-to-br ${stat.gradient} text-white hover:shadow-xl transition-all duration-300 group cursor-pointer`}>
+                  <Card className={`overflow-hidden border-[#f5f3ef] hover:border-[#4dd0e1]/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${stat.bgColor}`}>
                     <CardContent className="p-6">
-                      <div className="flex items-start justify-between">
-                        <div className="space-y-3">
-                          <div className={`w-12 h-12 rounded-xl ${stat.iconBg} backdrop-blur-sm flex items-center justify-center`}>
-                            <Icon className="w-6 h-6 text-white" />
+                      <div className="space-y-4">
+                        {/* Icon y cambio */}
+                        <div className="flex items-start justify-between">
+                          <div className={`w-12 h-12 rounded-xl ${stat.iconBg} flex items-center justify-center backdrop-blur-sm`}>
+                            <Icon className={`w-6 h-6 ${stat.iconColor}`} />
                           </div>
-                          <div>
-                            <p className="text-xs font-semibold opacity-90 tracking-wide">{stat.title}</p>
-                            <p className="text-[10px] opacity-70">{stat.subtitle}</p>
+                          <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold">
+                            <TrendingUp className="w-3 h-3" />
+                            {stat.change}
                           </div>
                         </div>
-                        <div className="text-right">
-                          <h3 className="text-2xl font-bold mb-1">{stat.value}</h3>
-                          <div className="flex items-center gap-1 text-xs font-medium">
-                            <TrendingUp className="w-3 h-3" />
-                            <span>{stat.change}</span>
-                          </div>
+
+                        {/* Contenido */}
+                        <div>
+                          <h3 className="text-sm font-medium text-[#7a7a7a] mb-1" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                            {stat.title}
+                          </h3>
+                          <p className="text-3xl font-bold text-[#333333] mb-1">
+                            {stat.value}
+                          </p>
+                          <p className="text-xs text-[#7a7a7a]/70">{stat.subtitle}</p>
                         </div>
                       </div>
                     </CardContent>
@@ -113,153 +152,137 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* Reports Section */}
-        <div>
-          <h2 className="text-lg font-bold text-slate-800 mb-4">Reports</h2>
+        {/* Sección de gráficos artesanales */}
+        <div className="grid gap-6 lg:grid-cols-2">
+          {/* Productos más vendidos */}
+          <Card className="border-[#f5f3ef] shadow-md bg-white/80 backdrop-blur-sm">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="w-8 h-8 rounded-lg bg-[#4dd0e1]/10 flex items-center justify-center">
+                  <TrendingUp className="w-4 h-4 text-[#4dd0e1]" />
+                </div>
+                <h3 className="text-base font-bold text-[#333333]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  Productos más vendidos
+                </h3>
+              </div>
 
-          <div className="grid gap-6 lg:grid-cols-2">
-            {/* Circular Progress Chart */}
-            <Card className="border-slate-200 shadow-md">
-              <CardContent className="p-6">
-                <div className="flex flex-col items-center justify-center space-y-4">
-                  {/* SVG Circular Progress */}
-                  <div className="relative w-48 h-48">
-                    <svg className="w-48 h-48 transform -rotate-90">
-                      <circle
-                        cx="96"
-                        cy="96"
-                        r="88"
-                        stroke="#e2e8f0"
-                        strokeWidth="16"
-                        fill="none"
-                      />
-                      <circle
-                        cx="96"
-                        cy="96"
-                        r="88"
-                        stroke="url(#gradient)"
-                        strokeWidth="16"
-                        fill="none"
-                        strokeDasharray={`${2 * Math.PI * 88}`}
-                        strokeDashoffset={`${2 * Math.PI * 88 * (1 - completionPercentage / 100)}`}
-                        strokeLinecap="round"
-                        className="transition-all duration-1000"
-                      />
-                      <defs>
-                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="#14b8a6" />
-                          <stop offset="100%" stopColor="#0d9488" />
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-center">
-                        <p className="text-4xl font-bold text-slate-800">{completionPercentage}%</p>
+              <div className="space-y-4">
+                {['Cerámica Artesanal', 'Aromaterapia Premium', 'Decoración en Vidrio', 'Hierro Forjado'].map((product, i) => (
+                  <div key={i} className="flex items-center gap-4">
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium text-[#333333]">{product}</span>
+                        <span className="text-sm font-bold text-[#4dd0e1]">{95 - i * 15}%</span>
+                      </div>
+                      <div className="h-2 bg-[#f5f3ef] rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-[#4dd0e1] to-[#4dd0e1]/70 rounded-full transition-all duration-1000"
+                          style={{ width: `${95 - i * 15}%` }}
+                        />
                       </div>
                     </div>
                   </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
 
-                  <div className="text-center">
-                    <h3 className="text-sm font-bold text-[#14b8a6] mb-1">LOREM IPSUM</h3>
-                    <p className="text-xs text-slate-500">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-                  </div>
+          {/* Ventas mensuales con diseño orgánico */}
+          <Card className="border-[#f5f3ef] shadow-md bg-white/80 backdrop-blur-sm">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="w-8 h-8 rounded-lg bg-[#a3b18a]/10 flex items-center justify-center">
+                  <Leaf className="w-4 h-4 text-[#a3b18a]" />
                 </div>
-              </CardContent>
-            </Card>
+                <h3 className="text-base font-bold text-[#333333]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  Evolución de ventas
+                </h3>
+              </div>
 
-            {/* Area Chart Placeholder */}
-            <Card className="border-slate-200 shadow-md">
-              <CardContent className="p-6">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-slate-700">Ventas Mensuales</h3>
-                  </div>
-
-                  {/* Simple area chart mockup */}
-                  <div className="relative h-64 bg-gradient-to-b from-[#14b8a6]/10 to-transparent rounded-lg">
-                    <div className="absolute inset-0 flex items-end justify-around p-4">
-                      {[40, 65, 45, 80, 60, 90, 55, 75, 50, 85, 70, 95].map((height, i) => (
-                        <div key={i} className="flex flex-col items-center gap-1">
-                          <div
-                            className="w-8 bg-gradient-to-t from-[#14b8a6] to-[#5eead4] rounded-t-md transition-all duration-500 hover:opacity-80"
-                            style={{ height: `${height}%` }}
-                          />
+              {/* Gráfico de área suave */}
+              <div className="relative h-64">
+                <div className="absolute inset-0 flex items-end justify-around gap-1">
+                  {[45, 62, 48, 75, 58, 82, 50, 70, 55, 85, 68, 92].map((height, i) => (
+                    <div key={i} className="flex-1 flex flex-col items-center">
+                      <div className="relative w-full group">
+                        <div
+                          className="w-full bg-gradient-to-t from-[#4dd0e1] via-[#4dd0e1]/80 to-[#4dd0e1]/60 rounded-t-lg transition-all duration-500 hover:opacity-90 cursor-pointer shadow-sm"
+                          style={{ height: `${height * 2.5}px` }}
+                        >
+                          <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-[#333333] text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                            ${(height * 100).toLocaleString()}
+                          </div>
                         </div>
-                      ))}
-                    </div>
-
-                    {/* Legend */}
-                    <div className="absolute bottom-2 right-4 flex gap-4 text-xs">
-                      <div className="flex items-center gap-1">
-                        <div className="w-3 h-3 rounded-full bg-[#14b8a6]"></div>
-                        <span className="text-slate-600">Lorem Ipsum dolor</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                        <span className="text-slate-600">Lorem Ipsum dolor</span>
-                      </div>
+                      <span className="text-[10px] text-[#7a7a7a] mt-2">
+                        {['E', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'][i]}
+                      </span>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+
+              {/* Leyenda */}
+              <div className="flex items-center justify-center gap-6 mt-6 pt-4 border-t border-[#f5f3ef]">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-[#4dd0e1]"></div>
+                  <span className="text-xs text-[#7a7a7a]">Ventas actuales</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-[#a3b18a]"></div>
+                  <span className="text-xs text-[#7a7a7a]">Objetivo mensual</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Quick Stats */}
+        {/* Tarjetas informativas adicionales */}
         {!isLoading && dashboardData && (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="p-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Total clientes */}
+            <Card className="border-[#f5f3ef] bg-gradient-to-br from-white to-[#4dd0e1]/5 hover:shadow-lg transition-shadow">
+              <CardContent className="p-5">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs text-slate-500 font-medium">Productos</p>
-                    <p className="text-2xl font-bold text-slate-800">{dashboardData.stats.total_products}</p>
+                    <p className="text-xs font-medium text-[#7a7a7a] mb-1">Total Clientes</p>
+                    <p className="text-3xl font-bold text-[#333333]">{dashboardData.stats.total_customers}</p>
+                    <p className="text-xs text-[#a3b18a] mt-1">+24 esta semana</p>
                   </div>
-                  <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
-                    <Package className="w-6 h-6 text-purple-600" />
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#4dd0e1] to-[#4dd0e1]/70 flex items-center justify-center shadow-lg">
+                    <Users className="w-7 h-7 text-white" />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="p-4">
+            {/* Productos con stock bajo */}
+            <Card className="border-[#f5f3ef] bg-gradient-to-br from-white to-amber-50/30 hover:shadow-lg transition-shadow">
+              <CardContent className="p-5">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs text-slate-500 font-medium">Clientes</p>
-                    <p className="text-2xl font-bold text-slate-800">{dashboardData.stats.total_customers}</p>
+                    <p className="text-xs font-medium text-[#7a7a7a] mb-1">Alerta de Stock</p>
+                    <p className="text-3xl font-bold text-[#333333]">{dashboardData.lowStockProducts?.length || 0}</p>
+                    <p className="text-xs text-amber-600 mt-1">Requiere atención</p>
                   </div>
-                  <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
-                    <Users className="w-6 h-6 text-blue-600" />
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center shadow-lg">
+                    <AlertCircle className="w-7 h-7 text-white" />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="p-4">
+            {/* Categoría Aromaterapia */}
+            <Card className="border-[#f5f3ef] bg-gradient-to-br from-white to-[#a3b18a]/5 hover:shadow-lg transition-shadow">
+              <CardContent className="p-5">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs text-slate-500 font-medium">Pedidos</p>
-                    <p className="text-2xl font-bold text-slate-800">{dashboardData.stats.monthly_orders}</p>
+                    <p className="text-xs font-medium text-[#7a7a7a] mb-1">Aromaterapia</p>
+                    <p className="text-3xl font-bold text-[#333333]">156</p>
+                    <p className="text-xs text-[#a3b18a] mt-1">Productos activos</p>
                   </div>
-                  <div className="w-12 h-12 rounded-xl bg-cyan-100 flex items-center justify-center">
-                    <ShoppingCart className="w-6 h-6 text-cyan-600" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-slate-500 font-medium">Stock Bajo</p>
-                    <p className="text-2xl font-bold text-slate-800">{dashboardData.lowStockProducts?.length || 0}</p>
-                  </div>
-                  <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
-                    <TrendingDown className="w-6 h-6 text-amber-600" />
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#a3b18a] to-[#a3b18a]/70 flex items-center justify-center shadow-lg">
+                    <Leaf className="w-7 h-7 text-white" />
                   </div>
                 </div>
               </CardContent>
