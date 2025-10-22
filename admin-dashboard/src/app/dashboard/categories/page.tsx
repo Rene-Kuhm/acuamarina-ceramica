@@ -101,28 +101,32 @@ export default function CategoriesPage() {
         ) : (
           categories.map((parent) => (
             <Card key={parent.id}>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle>{parent.name}</CardTitle>
-                <div className="flex items-center gap-4">
-                  <Badge variant={parent.isActive ? 'default' : 'secondary'}>
-                    {parent.isActive ? 'Activa' : 'Inactiva'}
-                  </Badge>
-                  <Badge variant="outline">{parent.children.length} subcategorías</Badge>
-                  <Button variant="ghost" size="icon" onClick={() => handleDeleteClick(parent.id, parent.name)}>
-                    <Trash2 className="h-4 w-4 text-red-500" />
-                  </Button>
+              <CardHeader className="space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <CardTitle className="text-xl">{parent.name}</CardTitle>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Badge variant={parent.isActive ? 'default' : 'secondary'}>
+                      {parent.isActive ? 'Activa' : 'Inactiva'}
+                    </Badge>
+                    <Badge variant="outline">{parent.children.length} subcategorías</Badge>
+                    <Button variant="ghost" size="sm" onClick={() => handleDeleteClick(parent.id, parent.name)}>
+                      <Trash2 className="h-4 w-4 text-red-500 mr-2" />
+                      Eliminar
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
                 {parent.children.map((child) => (
-                  <div key={child.id} className="flex items-center justify-between p-2 bg-slate-50 rounded-md">
-                    <span>{child.name}</span>
+                  <div key={child.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                    <span className="text-base font-medium text-slate-900">{child.name}</span>
                     <div className="flex items-center gap-2">
-                      <Badge variant={child.isActive ? 'default' : 'secondary'} className="text-xs">
+                      <Badge variant={child.isActive ? 'default' : 'secondary'}>
                         {child.isActive ? 'Activa' : 'Inactiva'}
                       </Badge>
-                      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleDeleteClick(child.id, child.name)}>
-                        <Trash2 className="h-4 w-4 text-red-500" />
+                      <Button variant="ghost" size="sm" onClick={() => handleDeleteClick(child.id, child.name)}>
+                        <Trash2 className="h-4 w-4 text-red-500 mr-2" />
+                        Eliminar
                       </Button>
                     </div>
                   </div>
