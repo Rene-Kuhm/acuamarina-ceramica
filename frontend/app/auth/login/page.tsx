@@ -50,16 +50,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-blue-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-[#f0fdfa] via-[#ccfbf1] to-[#99f6e4] flex items-center justify-center p-4">
+      <Card className="w-full max-w-md shadow-xl border-gray-200">
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-center mb-4">
-            <div className="p-3 bg-gradient-to-br bg-gradient-primary rounded-full">
+            <div className="p-3 bg-gradient-to-br from-[#14b8a6] to-[#0d9488] rounded-full shadow-lg">
               <LogIn className="w-6 h-6 text-white" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold text-center">Iniciar Sesión</CardTitle>
-          <CardDescription className="text-center">
+          <CardTitle className="text-2xl font-bold text-center text-gray-900">Iniciar Sesión</CardTitle>
+          <CardDescription className="text-center text-gray-600">
             Ingresa tus credenciales para acceder a tu cuenta
           </CardDescription>
         </CardHeader>
@@ -67,9 +67,9 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             {error && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
+              <Alert variant="destructive" className="border-[#e15540] bg-[#fef2f2]">
+                <AlertCircle className="h-4 w-4 text-[#e15540]" />
+                <AlertDescription className="text-gray-900">{error}</AlertDescription>
               </Alert>
             )}
 
@@ -96,7 +96,7 @@ export default function LoginPage() {
                 <Label htmlFor="password">Contraseña</Label>
                 <Link
                   href="/auth/forgot-password"
-                  className="text-sm text-primary hover:text-primary-hover hover:underline"
+                  className="text-sm text-[#14b8a6] hover:text-[#0d9488] hover:underline"
                 >
                   ¿Olvidaste tu contraseña?
                 </Link>
@@ -132,7 +132,7 @@ export default function LoginPage() {
           <CardFooter className="flex flex-col space-y-4">
             <Button
               type="submit"
-              className="w-full bg-primary hover:bg-primary-hover"
+              className="w-full bg-gradient-to-r from-[#14b8a6] to-[#0d9488] hover:from-[#0d9488] hover:to-[#115e59] text-white shadow-lg hover:shadow-xl transition-all duration-300"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -152,7 +152,7 @@ export default function LoginPage() {
               ¿No tienes una cuenta?{" "}
               <Link
                 href="/auth/register"
-                className="text-primary hover:text-primary-hover font-medium hover:underline"
+                className="text-[#14b8a6] hover:text-[#0d9488] font-medium hover:underline"
               >
                 Regístrate aquí
               </Link>

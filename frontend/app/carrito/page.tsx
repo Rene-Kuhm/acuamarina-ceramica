@@ -71,19 +71,19 @@ export default function CarritoPage() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <section className="bg-white border-b">
-          <div className="container mx-auto px-4 py-4">
+      <div className="min-h-screen bg-white">
+        <section className="bg-gradient-to-br from-[#f0fdfa] to-[#ccfbf1] border-b py-6">
+          <div className="container mx-auto px-4">
             <Breadcrumb items={breadcrumbItems} />
           </div>
         </section>
 
         <div className="container mx-auto px-4 py-16">
-          <Card className="max-w-2xl mx-auto text-center py-12">
+          <Card className="max-w-2xl mx-auto text-center py-12 border-gray-200 shadow-lg">
             <CardContent>
               <div className="flex justify-center mb-6">
-                <div className="p-4 bg-gray-100 rounded-full">
-                  <ShoppingCart className="w-16 h-16 text-gray-500" />
+                <div className="p-6 bg-gradient-to-br from-[#f0fdfa] to-[#ccfbf1] rounded-full">
+                  <ShoppingCart className="w-16 h-16 text-[#14b8a6]" />
                 </div>
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -95,7 +95,7 @@ export default function CarritoPage() {
               <Button
                 asChild
                 size="lg"
-                className="bg-primary hover:bg-primary-hover"
+                className="bg-gradient-to-r from-[#14b8a6] to-[#0d9488] hover:from-[#0d9488] hover:to-[#115e59] text-white shadow-lg hover:shadow-xl"
               >
                 <Link href="/productos">
                   <ShoppingBag className="w-5 h-5 mr-2" />
@@ -110,10 +110,10 @@ export default function CarritoPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <section className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4">
+      <section className="bg-gradient-to-br from-[#f0fdfa] to-[#ccfbf1] border-b py-6">
+        <div className="container mx-auto px-4">
           <Breadcrumb items={breadcrumbItems} />
         </div>
       </section>
@@ -132,7 +132,7 @@ export default function CarritoPage() {
               variant="ghost"
               onClick={handleClearCart}
               disabled={isClearing}
-              className="text-red-600 hover:text-red-700 hover:bg-red-50"
+              className="text-[#e15540] hover:text-[#c9442e] hover:bg-[#fef2f2]"
             >
               <Trash2 className="w-4 h-4 mr-2" />
               Vaciar carrito
@@ -142,9 +142,9 @@ export default function CarritoPage() {
 
         {/* Free Shipping Alert */}
         {subtotal < 50000 && (
-          <Alert className="mb-6 border-cyan-200 bg-primary-light">
-            <AlertCircle className="h-4 w-4 text-primary" />
-            <AlertDescription className="text-cyan-800">
+          <Alert className="mb-6 border-[#14b8a6] bg-[#f0fdfa]">
+            <AlertCircle className="h-4 w-4 text-[#14b8a6]" />
+            <AlertDescription className="text-gray-900">
               Agrega {formatPrice(50000 - subtotal)} más para obtener{" "}
               <strong>envío gratis</strong>
             </AlertDescription>
@@ -155,7 +155,7 @@ export default function CarritoPage() {
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {items.map((item) => (
-              <Card key={item.id}>
+              <Card key={item.id} className="border-gray-200 hover:border-[#14b8a6] transition-colors duration-300">
                 <CardContent className="p-4 sm:p-6">
                   <div className="flex gap-4">
                     {/* Product Image */}
@@ -179,11 +179,11 @@ export default function CarritoPage() {
                         <div className="flex-1">
                           <Link
                             href={`/productos/${item.slug}`}
-                            className="font-semibold text-gray-900 hover:text-primary transition-colors line-clamp-2"
+                            className="font-semibold text-gray-900 hover:text-[#14b8a6] transition-colors line-clamp-2"
                           >
                             {item.name}
                           </Link>
-                          <p className="text-lg font-bold text-primary mt-2">
+                          <p className="text-lg font-bold text-[#14b8a6] mt-2">
                             {formatPrice(item.price)}
                           </p>
                         </div>
@@ -225,7 +225,7 @@ export default function CarritoPage() {
                             variant="ghost"
                             size="sm"
                             onClick={() => handleRemoveItem(item.id)}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            className="text-[#e15540] hover:text-[#c9442e] hover:bg-[#fef2f2]"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
@@ -247,17 +247,17 @@ export default function CarritoPage() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-4 border-2 border-gray-900 shadow-xl">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-xl font-bold text-black">Resumen del Pedido</CardTitle>
+            <Card className="sticky top-4 border-2 border-[#14b8a6] shadow-xl">
+              <CardHeader className="pb-4 bg-gradient-to-br from-[#f0fdfa] to-[#ccfbf1]">
+                <CardTitle className="text-xl font-bold text-gray-900">Resumen del Pedido</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Total destacado arriba */}
-                <div className="bg-gray-50 rounded-lg p-6 border-2 border-gray-200">
+                <div className="bg-gradient-to-br from-[#f0fdfa] to-[#ccfbf1] rounded-lg p-6 border-2 border-[#14b8a6]">
                   <div className="text-center space-y-2">
                     <p className="text-sm text-gray-600 font-medium uppercase tracking-wide">Total a Pagar</p>
-                    <p className="text-4xl font-bold text-black">{formatPrice(total)}</p>
-                    <p className="text-xs text-gray-500">{totalItems} {totalItems === 1 ? "producto" : "productos"}</p>
+                    <p className="text-4xl font-bold bg-gradient-to-r from-[#14b8a6] to-[#0d9488] bg-clip-text text-transparent">{formatPrice(total)}</p>
+                    <p className="text-xs text-gray-600">{totalItems} {totalItems === 1 ? "producto" : "productos"}</p>
                   </div>
                 </div>
 
@@ -284,7 +284,7 @@ export default function CarritoPage() {
                 <Button
                   onClick={handleCheckout}
                   size="lg"
-                  className="w-full bg-black hover:bg-gray-800 text-white text-base font-bold py-6 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
+                  className="w-full bg-gradient-to-r from-[#14b8a6] to-[#0d9488] hover:from-[#0d9488] hover:to-[#115e59] text-white text-base font-bold py-6 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
                 >
                   Proceder al Pago
                   <ArrowRight className="w-5 h-5 ml-2" />
@@ -294,7 +294,7 @@ export default function CarritoPage() {
                   asChild
                   variant="outline"
                   size="lg"
-                  className="w-full border-black text-black hover:bg-gray-100"
+                  className="w-full border-[#14b8a6] text-[#14b8a6] hover:bg-[#f0fdfa]"
                 >
                   <Link href="/productos">Seguir Comprando</Link>
                 </Button>
