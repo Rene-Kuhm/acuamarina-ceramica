@@ -41,8 +41,8 @@ export function Sidebar() {
       <div className="p-6 border-b border-slate-800/50 dark:border-slate-900/50">
         <div className="flex items-center gap-3 mb-2">
           <div className="relative">
-            <div className="absolute inset-0 bg-aqua-500 blur-lg opacity-50 rounded-full"></div>
-            <div className="relative h-16 w-16 rounded-full bg-white flex items-center justify-center shadow-lg transform hover:scale-105 transition-transform overflow-hidden ring-2 ring-aqua-500/30">
+            <div className="absolute inset-0 bg-[#14b8a6] blur-lg opacity-50 rounded-full"></div>
+            <div className="relative h-16 w-16 rounded-full bg-white flex items-center justify-center shadow-lg transform hover:scale-105 transition-transform overflow-hidden ring-2 ring-[#14b8a6]/30">
               <Image
                 src="/logo/logo.png"
                 alt="Aguamarina Mosaicos Logo"
@@ -54,14 +54,14 @@ export function Sidebar() {
             </div>
           </div>
           <div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-aqua-500 via-aqua-400 to-aqua-300 bg-clip-text text-transparent">
+            <h1 className="text-xl font-bold bg-gradient-to-r from-[#14b8a6] via-[#2dd4bf] to-[#5eead4] bg-clip-text text-transparent">
               Aguamarina
             </h1>
             <p className="text-xs text-slate-400 font-medium">Mosaicos Premium</p>
           </div>
         </div>
-        <div className="mt-3 px-3 py-1.5 bg-aqua-500/10 border border-aqua-500/20 rounded-lg">
-          <p className="text-xs text-aqua-500 font-medium">Panel de Administración</p>
+        <div className="mt-3 px-3 py-1.5 bg-[#14b8a6]/10 border border-[#14b8a6]/20 rounded-lg">
+          <p className="text-xs text-[#14b8a6] font-medium">Panel de Administración</p>
         </div>
       </div>
 
@@ -78,20 +78,20 @@ export function Sidebar() {
               className={cn(
                 'group flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 relative overflow-hidden',
                 isActive
-                  ? 'bg-gradient-to-r from-aqua-500/20 to-aqua-600/20 text-white shadow-lg border border-aqua-500/30'
+                  ? 'bg-gradient-to-r from-[#14b8a6]/20 to-[#0d9488]/20 text-white shadow-lg border border-[#14b8a6]/30'
                   : 'text-slate-300 hover:bg-slate-800/50 hover:text-white hover:translate-x-1'
               )}
             >
               {/* Active indicator */}
               {isActive && (
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-aqua-500 to-aqua-600 rounded-r-full"></div>
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#14b8a6] to-[#0d9488] rounded-r-full"></div>
               )}
 
               <div className="flex items-center gap-3 z-10">
                 <div className={cn(
                   'p-2 rounded-lg transition-all duration-300',
                   isActive
-                    ? 'bg-gradient-to-br from-aqua-500 to-aqua-600 shadow-lg'
+                    ? 'bg-gradient-to-br from-[#14b8a6] to-[#0d9488] shadow-lg'
                     : 'bg-slate-800/50 group-hover:bg-slate-700'
                 )}>
                   <Icon className="h-5 w-5" />
@@ -110,11 +110,11 @@ export function Sidebar() {
 
       {/* User Section - Aguamarina Premium */}
       <div className="p-4 border-t border-slate-800/50 bg-slate-900/50 backdrop-blur-sm">
-        <div className="mb-3 p-3 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-xl border border-slate-700/50 hover:border-aqua-500/30 transition-all duration-300">
+        <div className="mb-3 p-3 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-xl border border-slate-700/50 hover:border-[#14b8a6]/30 transition-all duration-300">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-aqua-500 to-aqua-600 blur-md opacity-50 rounded-full"></div>
-              <div className="relative h-11 w-11 rounded-full bg-gradient-to-br from-aqua-500 to-aqua-600 flex items-center justify-center font-bold text-white shadow-lg ring-2 ring-slate-700">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#14b8a6] to-[#0d9488] blur-md opacity-50 rounded-full"></div>
+              <div className="relative h-11 w-11 rounded-full bg-gradient-to-br from-[#14b8a6] to-[#0d9488] flex items-center justify-center font-bold text-white shadow-lg ring-2 ring-slate-700">
                 {user?.firstName?.[0]}{user?.lastName?.[0]}
               </div>
             </div>
