@@ -115,7 +115,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#14b8a6]"
             >
               <option value="">Seleccionar estado...</option>
               <option value="pending">Pendiente</option>

@@ -104,7 +104,7 @@ export default function ProductsPage() {
             variant="outline"
             onClick={handleExport}
             disabled={isExporting}
-            className="border-cyan-500/20 hover:bg-cyan-500/10"
+            className="border-[#14b8a6]/20 hover:bg-[#14b8a6]/10"
           >
             <Download className="mr-2 h-4 w-4" />
             {isExporting ? 'Exportando...' : 'Exportar'}
@@ -118,7 +118,7 @@ export default function ProductsPage() {
           </Link>
 
           <Link href="/dashboard/products/new">
-            <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 shadow-lg shadow-cyan-500/20">
+            <Button className="bg-gradient-to-r from-[#14b8a6] to-[#0d9488] hover:from-[#0d9488] hover:to-[#115e59] shadow-lg shadow-[#14b8a6]/20">
               <Plus className="mr-2 h-4 w-4" />
               Nuevo Producto
             </Button>
@@ -157,7 +157,7 @@ export default function ProductsPage() {
           {isLoading ? (
             <div className="text-center py-12">
               <div className="inline-flex items-center gap-2 text-muted-foreground">
-                <div className="h-4 w-4 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin" />
+                <div className="h-4 w-4 border-2 border-[#14b8a6] border-t-transparent rounded-full animate-spin" />
                 Cargando productos...
               </div>
             </div>

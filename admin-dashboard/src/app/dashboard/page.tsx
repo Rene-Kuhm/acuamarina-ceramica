@@ -62,9 +62,9 @@ export default function DashboardPage() {
       icon: Package,
       change: '+12.5%',
       changeType: 'positive' as const,
-      bgColor: 'bg-cyan-50 dark:bg-cyan-950/30',
-      iconColor: 'text-cyan-600 dark:text-cyan-400',
-      borderColor: 'hover:border-l-cyan-500 dark:hover:border-l-cyan-400',
+      bgColor: 'bg-[#f0fdfa] dark:bg-[#14b8a6]/10',
+      iconColor: 'text-[#14b8a6] dark:text-[#2dd4bf]',
+      borderColor: 'hover:border-l-[#14b8a6] dark:hover:border-l-[#2dd4bf]',
     },
     {
       title: 'Ventas del Mes',
@@ -227,11 +227,11 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-xl transition-all duration-300 border-t-4 border-t-cyan-500 dark:border-t-cyan-400">
-          <CardHeader className="border-b bg-gradient-to-br from-cyan-50/80 via-blue-50/50 to-white dark:from-cyan-950/20 dark:via-blue-950/10 dark:to-transparent dark:border-slate-700">
+        <Card className="hover:shadow-xl transition-all duration-300 border-t-4 border-t-[#14b8a6] dark:border-t-[#2dd4bf]">
+          <CardHeader className="border-b bg-gradient-to-br from-[#f0fdfa]/80 via-[#ccfbf1]/50 to-white dark:from-[#14b8a6]/20 dark:via-[#0d9488]/10 dark:to-transparent dark:border-slate-700">
             <CardTitle className="flex items-center gap-2 text-slate-800 dark:text-slate-100">
-              <div className="p-2 rounded-lg bg-cyan-100 dark:bg-cyan-900/30">
-                <ShoppingCart className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
+              <div className="p-2 rounded-lg bg-[#ccfbf1] dark:bg-[#14b8a6]/30">
+                <ShoppingCart className="h-5 w-5 text-[#14b8a6] dark:text-[#2dd4bf]" />
               </div>
               Últimos Pedidos
             </CardTitle>
@@ -243,8 +243,8 @@ export default function DashboardPage() {
               <div className="space-y-3">
                 {!dashboardData?.recentOrders || dashboardData.recentOrders.length === 0 ? (
                   <div className="text-center py-10">
-                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-cyan-100 to-blue-100 dark:from-cyan-950/30 dark:to-blue-950/30 mb-4 shadow-lg">
-                      <ShoppingCart className="h-10 w-10 text-cyan-600 dark:text-cyan-400" />
+                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#ccfbf1] to-[#99f6e4] dark:from-[#14b8a6]/30 dark:to-[#0d9488]/30 mb-4 shadow-lg">
+                      <ShoppingCart className="h-10 w-10 text-[#14b8a6] dark:text-[#2dd4bf]" />
                     </div>
                     <p className="text-base font-semibold text-slate-800 dark:text-slate-200">No hay pedidos aún</p>
                     <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Los nuevos pedidos aparecerán aquí</p>
@@ -254,10 +254,10 @@ export default function DashboardPage() {
                     <Link
                       key={order.id}
                       href={`/dashboard/orders/${order.id}`}
-                      className="flex items-center justify-between py-3 px-3 rounded-xl hover:bg-cyan-50/50 dark:hover:bg-cyan-950/20 transition-all duration-200 border-b border-slate-100 dark:border-slate-800 last:border-0 group"
+                      className="flex items-center justify-between py-3 px-3 rounded-xl hover:bg-[#f0fdfa]/50 dark:hover:bg-[#14b8a6]/20 transition-all duration-200 border-b border-slate-100 dark:border-slate-800 last:border-0 group"
                     >
                       <div className="flex-1 min-w-0">
-                        <p className="font-bold text-sm font-mono text-slate-800 dark:text-slate-200 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                        <p className="font-bold text-sm font-mono text-slate-800 dark:text-slate-200 group-hover:text-[#14b8a6] dark:group-hover:text-[#2dd4bf] transition-colors">
                           {order.order_number}
                         </p>
                         <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">

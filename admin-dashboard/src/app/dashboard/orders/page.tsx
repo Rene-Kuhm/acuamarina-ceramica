@@ -114,7 +114,7 @@ export default function OrdersPage() {
           variant="outline"
           onClick={handleExport}
           disabled={isExporting}
-          className="border-cyan-500/20 hover:bg-cyan-500/10"
+          className="border-[#14b8a6]/20 hover:bg-[#14b8a6]/10"
         >
           <Download className="mr-2 h-4 w-4" />
           {isExporting ? 'Exportando...' : 'Exportar'}
@@ -125,7 +125,7 @@ export default function OrdersPage() {
       <Card className="border-slate-200">
         <CardHeader className="border-b bg-slate-50/50">
           <div className="flex items-center gap-2">
-            <Filter className="h-5 w-5 text-cyan-600" />
+            <Filter className="h-5 w-5 text-[#14b8a6]" />
             <CardTitle className="text-lg">Filtros</CardTitle>
           </div>
         </CardHeader>
@@ -169,7 +169,7 @@ export default function OrdersPage() {
         <CardHeader className="border-b bg-slate-50/50">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <ShoppingBag className="h-5 w-5 text-cyan-600" />
+              <ShoppingBag className="h-5 w-5 text-[#14b8a6]" />
               <CardTitle className="text-lg">Lista de Pedidos</CardTitle>
             </div>
             {data?.data && (
@@ -183,7 +183,7 @@ export default function OrdersPage() {
           {isLoading ? (
             <div className="text-center py-12">
               <div className="inline-flex items-center gap-2 text-muted-foreground">
-                <div className="h-4 w-4 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin" />
+                <div className="h-4 w-4 border-2 border-[#14b8a6] border-t-transparent rounded-full animate-spin" />
                 Cargando pedidos...
               </div>
             </div>
@@ -211,7 +211,7 @@ export default function OrdersPage() {
               <TableBody>
                 {data.data.map((order) => (
                   <TableRow key={order.id} className="group">
-                    <TableCell className="font-mono font-semibold text-cyan-700">
+                    <TableCell className="font-mono font-semibold text-[#14b8a6]">
                       #{order.order_number}
                     </TableCell>
                     <TableCell>
