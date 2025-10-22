@@ -43,7 +43,6 @@ export default function DashboardPage() {
       subtitle: 'Ingresos totales',
       value: formatCurrency(dashboardData?.stats.monthly_revenue || 0),
       icon: DollarSign,
-      change: '+12.5%',
       bgColor: 'bg-gradient-to-br from-[#4dd0e1]/10 via-[#4dd0e1]/5 to-transparent',
       iconColor: 'text-[#4dd0e1]',
       iconBg: 'bg-[#4dd0e1]/10',
@@ -54,7 +53,6 @@ export default function DashboardPage() {
       subtitle: 'Productos en inventario',
       value: dashboardData?.stats.total_products || 0,
       icon: Package,
-      change: '+8.3%',
       bgColor: 'bg-gradient-to-br from-[#a3b18a]/10 via-[#a3b18a]/5 to-transparent',
       iconColor: 'text-[#a3b18a]',
       iconBg: 'bg-[#a3b18a]/10',
@@ -65,18 +63,16 @@ export default function DashboardPage() {
       subtitle: 'Este mes',
       value: dashboardData?.stats.monthly_orders || 0,
       icon: ShoppingCart,
-      change: '+18.2%',
       bgColor: 'bg-gradient-to-br from-[#7a7a7a]/10 via-[#7a7a7a]/5 to-transparent',
       iconColor: 'text-[#7a7a7a]',
       iconBg: 'bg-[#7a7a7a]/10',
       href: '/dashboard/orders',
     },
     {
-      title: 'Clientes Nuevos',
-      subtitle: 'Últimos 30 días',
-      value: Math.floor((dashboardData?.stats.total_customers || 0) * 0.15),
+      title: 'Total Clientes',
+      subtitle: 'Registrados',
+      value: dashboardData?.stats.total_customers || 0,
       icon: Users,
-      change: '+15.7%',
       bgColor: 'bg-gradient-to-br from-[#4dd0e1]/10 via-[#4dd0e1]/5 to-transparent',
       iconColor: 'text-[#4dd0e1]',
       iconBg: 'bg-[#4dd0e1]/10',
@@ -122,14 +118,10 @@ export default function DashboardPage() {
                   <Card className={`overflow-hidden border-[#f5f3ef] hover:border-[#4dd0e1]/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${stat.bgColor}`}>
                     <CardContent className="p-6">
                       <div className="space-y-4">
-                        {/* Icon y cambio */}
+                        {/* Icon */}
                         <div className="flex items-start justify-between">
                           <div className={`w-12 h-12 rounded-xl ${stat.iconBg} flex items-center justify-center backdrop-blur-sm`}>
                             <Icon className={`w-6 h-6 ${stat.iconColor}`} />
-                          </div>
-                          <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold">
-                            <TrendingUp className="w-3 h-3" />
-                            {stat.change}
                           </div>
                         </div>
 
@@ -153,89 +145,65 @@ export default function DashboardPage() {
         </div>
 
         {/* Sección de gráficos artesanales */}
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* Productos más vendidos */}
-          <Card className="border-[#f5f3ef] shadow-md bg-white/80 backdrop-blur-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-8 h-8 rounded-lg bg-[#4dd0e1]/10 flex items-center justify-center">
-                  <TrendingUp className="w-4 h-4 text-[#4dd0e1]" />
-                </div>
-                <h3 className="text-base font-bold text-[#333333]" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                  Productos más vendidos
-                </h3>
-              </div>
-
-              <div className="space-y-4">
-                {['Cerámica Artesanal', 'Aromaterapia Premium', 'Decoración en Vidrio', 'Hierro Forjado'].map((product, i) => (
-                  <div key={i} className="flex items-center gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium text-[#333333]">{product}</span>
-                        <span className="text-sm font-bold text-[#4dd0e1]">{95 - i * 15}%</span>
-                      </div>
-                      <div className="h-2 bg-[#f5f3ef] rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-[#4dd0e1] to-[#4dd0e1]/70 rounded-full transition-all duration-1000"
-                          style={{ width: `${95 - i * 15}%` }}
-                        />
-                      </div>
-                    </div>
+        {!isLoading && dashboardData && dashboardData.topProducts && dashboardData.topProducts.length > 0 && (
+          <div className="grid gap-6 lg:grid-cols-2">
+            {/* Productos más vendidos */}
+            <Card className="border-[#f5f3ef] shadow-md bg-white/80 backdrop-blur-sm">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-6">
+                  <div className="w-8 h-8 rounded-lg bg-[#4dd0e1]/10 flex items-center justify-center">
+                    <TrendingUp className="w-4 h-4 text-[#4dd0e1]" />
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Ventas mensuales con diseño orgánico */}
-          <Card className="border-[#f5f3ef] shadow-md bg-white/80 backdrop-blur-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-8 h-8 rounded-lg bg-[#a3b18a]/10 flex items-center justify-center">
-                  <Leaf className="w-4 h-4 text-[#a3b18a]" />
+                  <h3 className="text-base font-bold text-[#333333]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                    Productos más vendidos
+                  </h3>
                 </div>
-                <h3 className="text-base font-bold text-[#333333]" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                  Evolución de ventas
-                </h3>
-              </div>
 
-              {/* Gráfico de área suave */}
-              <div className="relative h-64">
-                <div className="absolute inset-0 flex items-end justify-around gap-1">
-                  {[45, 62, 48, 75, 58, 82, 50, 70, 55, 85, 68, 92].map((height, i) => (
-                    <div key={i} className="flex-1 flex flex-col items-center">
-                      <div className="relative w-full group">
-                        <div
-                          className="w-full bg-gradient-to-t from-[#4dd0e1] via-[#4dd0e1]/80 to-[#4dd0e1]/60 rounded-t-lg transition-all duration-500 hover:opacity-90 cursor-pointer shadow-sm"
-                          style={{ height: `${height * 2.5}px` }}
-                        >
-                          <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-[#333333] text-white text-xs px-2 py-1 rounded whitespace-nowrap">
-                            ${(height * 100).toLocaleString()}
+                <div className="space-y-4">
+                  {dashboardData.topProducts.slice(0, 4).map((product) => {
+                    const maxSales = dashboardData.topProducts[0]?.totalSales || 1;
+                    const percentage = ((product.totalSales / maxSales) * 100).toFixed(0);
+
+                    return (
+                      <div key={product.id} className="flex items-center gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-sm font-medium text-[#333333]">{product.name}</span>
+                            <span className="text-sm font-bold text-[#4dd0e1]">{percentage}%</span>
+                          </div>
+                          <div className="h-2 bg-[#f5f3ef] rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-gradient-to-r from-[#4dd0e1] to-[#4dd0e1]/70 rounded-full transition-all duration-1000"
+                              style={{ width: `${percentage}%` }}
+                            />
                           </div>
                         </div>
                       </div>
-                      <span className="text-[10px] text-[#7a7a7a] mt-2">
-                        {['E', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'][i]}
-                      </span>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
-              </div>
+              </CardContent>
+            </Card>
 
-              {/* Leyenda */}
-              <div className="flex items-center justify-center gap-6 mt-6 pt-4 border-t border-[#f5f3ef]">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-[#4dd0e1]"></div>
-                  <span className="text-xs text-[#7a7a7a]">Ventas actuales</span>
+            {/* Espacio para futuro gráfico de ventas */}
+            <Card className="border-[#f5f3ef] shadow-md bg-white/80 backdrop-blur-sm">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-6">
+                  <div className="w-8 h-8 rounded-lg bg-[#a3b18a]/10 flex items-center justify-center">
+                    <Leaf className="w-4 h-4 text-[#a3b18a]" />
+                  </div>
+                  <h3 className="text-base font-bold text-[#333333]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                    Estadísticas de ventas
+                  </h3>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-[#a3b18a]"></div>
-                  <span className="text-xs text-[#7a7a7a]">Objetivo mensual</span>
+
+                <div className="flex items-center justify-center h-64 text-[#7a7a7a]">
+                  <p className="text-sm">Datos de ventas mensuales próximamente</p>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         {/* Tarjetas informativas adicionales */}
         {!isLoading && dashboardData && (
@@ -247,7 +215,6 @@ export default function DashboardPage() {
                   <div>
                     <p className="text-xs font-medium text-[#7a7a7a] mb-1">Total Clientes</p>
                     <p className="text-3xl font-bold text-[#333333]">{dashboardData.stats.total_customers}</p>
-                    <p className="text-xs text-[#a3b18a] mt-1">+24 esta semana</p>
                   </div>
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#4dd0e1] to-[#4dd0e1]/70 flex items-center justify-center shadow-lg">
                     <Users className="w-7 h-7 text-white" />
@@ -272,14 +239,14 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            {/* Categoría Aromaterapia */}
+            {/* Total productos */}
             <Card className="border-[#f5f3ef] bg-gradient-to-br from-white to-[#a3b18a]/5 hover:shadow-lg transition-shadow">
               <CardContent className="p-5">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-medium text-[#7a7a7a] mb-1">Aromaterapia</p>
-                    <p className="text-3xl font-bold text-[#333333]">156</p>
-                    <p className="text-xs text-[#a3b18a] mt-1">Productos activos</p>
+                    <p className="text-xs font-medium text-[#7a7a7a] mb-1">Total Productos</p>
+                    <p className="text-3xl font-bold text-[#333333]">{dashboardData.stats.total_products}</p>
+                    <p className="text-xs text-[#a3b18a] mt-1">En inventario</p>
                   </div>
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#a3b18a] to-[#a3b18a]/70 flex items-center justify-center shadow-lg">
                     <Leaf className="w-7 h-7 text-white" />
