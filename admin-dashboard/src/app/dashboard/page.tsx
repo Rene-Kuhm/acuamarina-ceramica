@@ -100,19 +100,18 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-4 sm:space-y-6 animate-in fade-in duration-500">
-      {/* Header mejorado */}
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
             Dashboard
           </h1>
-          <p className="text-sm text-muted-foreground flex items-center gap-2 mt-1">
-            <Clock className="h-4 w-4" />
-            <span className="hidden xs:inline">Bienvenido al panel de administración</span>
-            <span className="xs:hidden">Panel de administración</span>
+          <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
+            <Clock className="h-3 w-3" />
+            <span>Bienvenido al panel de administración</span>
           </p>
         </div>
-        <div className="hidden sm:block text-sm text-muted-foreground">
+        <div className="hidden sm:block text-xs text-gray-500">
           {new Date().toLocaleDateString('es-ES', {
             weekday: 'long',
             year: 'numeric',
@@ -137,26 +136,26 @@ export default function DashboardPage() {
             return (
               <Card
                 key={stat.title}
-                className={`hover:shadow-xl transition-all duration-300 border-l-4 border-l-transparent ${stat.borderColor} group`}
+                className={`hover:shadow-lg transition-all duration-200 border border-gray-200`}
               >
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 sm:p-6">
-                  <CardTitle className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4">
+                  <CardTitle className="text-xs font-medium text-gray-600">
                     {stat.title}
                   </CardTitle>
-                  <div className={`p-1.5 sm:p-2 rounded-xl ${stat.bgColor} transition-all duration-300 group-hover:scale-110`}>
-                    <Icon className={`h-4 w-4 sm:h-5 sm:w-5 ${stat.iconColor}`} />
+                  <div className={`p-1.5 rounded-lg ${stat.bgColor}`}>
+                    <Icon className={`h-4 w-4 ${stat.iconColor}`} />
                   </div>
                 </CardHeader>
-                <CardContent className="p-4 sm:p-6 pt-0">
-                  <div className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-2">
+                <CardContent className="p-4 pt-0">
+                  <div className="text-2xl font-bold text-gray-900 mb-1">
                     {stat.value}
                   </div>
-                  <div className="flex items-center gap-1 flex-wrap">
-                    <TrendingUp className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
-                    <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">
+                  <div className="flex items-center gap-1">
+                    <TrendingUp className="h-3 w-3 text-emerald-600" />
+                    <p className="text-xs text-emerald-600 font-medium">
                       {stat.change}
                     </p>
-                    <span className="text-xs text-slate-500 dark:text-slate-400 hidden xs:inline">
+                    <span className="text-xs text-gray-500">
                       vs mes anterior
                     </span>
                   </div>
@@ -167,18 +166,18 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Recent Activity con mejor diseño */}
+      {/* Recent Activity */}
       <div className="grid gap-4 md:grid-cols-2">
-        <Card className="hover:shadow-xl transition-all duration-300 border-t-4 border-t-yellow-500 dark:border-t-yellow-400">
-          <CardHeader className="flex flex-row items-center justify-between border-b bg-gradient-to-br from-yellow-50/80 via-orange-50/50 to-white dark:from-yellow-950/20 dark:via-orange-950/10 dark:to-transparent dark:border-slate-700">
-            <CardTitle className="flex items-center gap-2 text-slate-800 dark:text-slate-100">
-              <div className="p-2 rounded-lg bg-yellow-100 dark:bg-yellow-900/30">
-                <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
+        <Card className="hover:shadow-lg transition-all duration-200 border border-gray-200">
+          <CardHeader className="flex flex-row items-center justify-between border-b border-gray-200 bg-gray-50">
+            <CardTitle className="flex items-center gap-2 text-sm text-gray-900">
+              <div className="p-1.5 rounded-lg bg-yellow-100">
+                <AlertTriangle className="h-4 w-4 text-yellow-600" />
               </div>
               Productos con Stock Bajo
             </CardTitle>
             {!isLoading && dashboardData?.lowStockProducts && dashboardData.lowStockProducts.length > 0 && (
-              <span className="bg-yellow-500/20 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-300 text-xs font-bold px-3 py-1.5 rounded-full ring-2 ring-yellow-500/30">
+              <span className="bg-yellow-100 text-yellow-700 text-xs font-bold px-2 py-1 rounded-full">
                 {dashboardData.lowStockProducts.length}
               </span>
             )}
@@ -227,11 +226,11 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-xl transition-all duration-300 border-t-4 border-t-[#14b8a6] dark:border-t-[#2dd4bf]">
-          <CardHeader className="border-b bg-gradient-to-br from-[#f0fdfa]/80 via-[#ccfbf1]/50 to-white dark:from-[#14b8a6]/20 dark:via-[#0d9488]/10 dark:to-transparent dark:border-slate-700">
-            <CardTitle className="flex items-center gap-2 text-slate-800 dark:text-slate-100">
-              <div className="p-2 rounded-lg bg-[#ccfbf1] dark:bg-[#14b8a6]/30">
-                <ShoppingCart className="h-5 w-5 text-[#14b8a6] dark:text-[#2dd4bf]" />
+        <Card className="hover:shadow-lg transition-all duration-200 border border-gray-200">
+          <CardHeader className="border-b border-gray-200 bg-gray-50">
+            <CardTitle className="flex items-center gap-2 text-sm text-gray-900">
+              <div className="p-1.5 rounded-lg bg-[#ccfbf1]">
+                <ShoppingCart className="h-4 w-4 text-[#14b8a6]" />
               </div>
               Últimos Pedidos
             </CardTitle>
