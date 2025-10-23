@@ -21,7 +21,10 @@ const seedDatabase = async () => {
 
     logger.info('✓ Usuario admin creado');
 
-    // Crear categorías
+    // NOTA: Las categorías deben ser creadas por el dueño desde el panel de administración
+    // No se crean categorías de prueba automáticamente para evitar datos ficticios
+
+    /* CATEGORÍAS DESHABILITADAS - El dueño debe crearlas desde el admin dashboard
     const categoriesData = [
       {
         name: 'Pisos Cerámicos',
@@ -65,6 +68,9 @@ const seedDatabase = async () => {
     }
 
     logger.info('✓ Categorías creadas');
+    */
+
+    logger.info('✓ Categorías omitidas (deben crearse desde el admin)');
 
     logger.info('✓ Seed completado exitosamente');
 
