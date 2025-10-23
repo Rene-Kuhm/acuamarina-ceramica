@@ -17,10 +17,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { ProductGrid } from "@/components/productos/ProductGrid";
 import { useProductsDestacados } from "@/lib/hooks/useProducts";
+import { useCategorias } from "@/lib/hooks/useCategorias";
 import { QRCatalogo } from "@/components/QRCatalogo";
 
 export default function HomePage() {
   const { data: productosDestacados, isLoading } = useProductsDestacados();
+  const { data: categorias, isLoading: isLoadingCategorias } = useCategorias();
 
   return (
     <div className="flex flex-col">
@@ -182,71 +184,73 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Bento Grid Premium */}
+          {/* Bento Grid Premium - Dynamic Categories */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-fr">
-            {/* Card 1 - Span 2 columns */}
-            <CategoryCardBento
-              icon={<Shapes className="w-10 h-10" />}
-              title="Mosaicos Cerámicos"
-              description="Diseños clásicos y modernos para pisos y paredes"
-              href="/categorias/mosaicos-ceramicos"
-              gradient="from-[#f0fdfa] to-[#99f6e4]"
-              iconColor="#14b8a6"
-              span="md:col-span-2"
-            />
-            {/* Card 2 */}
-            <CategoryCardBento
-              icon={<Palette className="w-10 h-10" />}
-              title="Azulejos Decorativos"
-              description="Dale vida a tus espacios"
-              href="/categorias/azulejos-decorativos"
-              gradient="from-[#fdf4f3] to-[#f9d0ca]"
-              iconColor="#e15540"
-              span="md:col-span-1"
-            />
-            {/* Card 3 */}
-            <CategoryCardBento
-              icon={<Layers className="w-10 h-10" />}
-              title="Revestimientos"
-              description="Protección y estilo"
-              href="/categorias/revestimientos"
-              gradient="from-[#fefce8] to-[#fde047]"
-              iconColor="#eab308"
-              span="md:col-span-1"
-            />
-            {/* Card 4 */}
-            <CategoryCardBento
-              icon={<Grid3x3 className="w-10 h-10" />}
-              title="Pisos Cerámicos"
-              description="Durabilidad y elegancia"
-              href="/categorias/pisos-ceramicos"
-              gradient="from-[#ccfbf1] to-[#5eead4]"
-              iconColor="#0d9488"
-              span="md:col-span-1"
-            />
-            {/* Card 5 - Span 3 columns */}
-            <div className="md:col-span-3 glass rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300 border border-white/40 backdrop-blur-lg">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div>
-                  <h3 className="text-2xl font-bold mb-2 text-gray-900">¿No encuentras lo que buscas?</h3>
-                  <p className="text-gray-700">Explora todo nuestro catálogo de productos premium</p>
-                </div>
-                <Button
-                  asChild
-                  size="lg"
-                  className="font-bold"
-                  style={{
-                    background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
-                    color: 'white'
-                  }}
-                >
-                  <Link href="/productos">
-                    Ver Todo
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Link>
-                </Button>
+            {isLoadingCategorias ? (
+              // Loading skeleton
+              <>
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="h-48 bg-white/50 rounded-2xl animate-pulse" />
+                ))}
+              </>
+            ) : categorias && categorias.length > 0 ? (
+              <>
+                {/* Dynamic Categories - Show first 4 */}
+                {categorias.slice(0, 4).map((categoria, index) => {
+                  // Cycle through gradients and colors
+                  const gradients = [
+                    { gradient: "from-[#f0fdfa] to-[#99f6e4]", iconColor: "#14b8a6", icon: <Shapes className="w-10 h-10" /> },
+                    { gradient: "from-[#fdf4f3] to-[#f9d0ca]", iconColor: "#e15540", icon: <Palette className="w-10 h-10" /> },
+                    { gradient: "from-[#fefce8] to-[#fde047]", iconColor: "#eab308", icon: <Layers className="w-10 h-10" /> },
+                    { gradient: "from-[#ccfbf1] to-[#5eead4]", iconColor: "#0d9488", icon: <Grid3x3 className="w-10 h-10" /> },
+                  ];
+                  const style = gradients[index % gradients.length];
+
+                  return (
+                    <CategoryCardBento
+                      key={categoria.id}
+                      icon={style.icon}
+                      title={categoria.name}
+                      description={categoria.description || `Explora nuestra selección de ${categoria.name.toLowerCase()}`}
+                      href={`/categorias/${categoria.slug}`}
+                      gradient={style.gradient}
+                      iconColor={style.iconColor}
+                      span={index === 0 ? "md:col-span-2" : "md:col-span-1"}
+                    />
+                  );
+                })}
+                {/* CTA Card - only show if we have categories */}
+                {categorias.length > 0 && (
+                  <div className="md:col-span-3 glass rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300 border border-white/40 backdrop-blur-lg">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                      <div>
+                        <h3 className="text-2xl font-bold mb-2 text-gray-900">¿No encuentras lo que buscas?</h3>
+                        <p className="text-gray-700">Explora todo nuestro catálogo de productos premium</p>
+                      </div>
+                      <Button
+                        asChild
+                        size="lg"
+                        className="font-bold"
+                        style={{
+                          background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
+                          color: 'white'
+                        }}
+                      >
+                        <Link href="/productos">
+                          Ver Todo
+                          <ArrowRight className="w-5 h-5 ml-2" />
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              // No categories fallback
+              <div className="md:col-span-4 text-center py-12">
+                <p className="text-gray-600">No hay categorías disponibles en este momento.</p>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
