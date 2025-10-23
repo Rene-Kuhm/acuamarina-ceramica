@@ -10,14 +10,14 @@ export class StatsController {
   static async getDashboard(req: Request, res: Response, next: NextFunction) {
     try {
       // Ejecutar todas las queries en paralelo para mejor rendimiento
-      const [statsQuery, lowStockQuery, recentOrdersQuery, salesByMonthQuery] = await Promise.all([
+      const [statsQuery, lowStockQuery, recentOrdersQuery, salesByMonthQuery, topProductsQuery] = await Promise.all([
         // General stats - optimizado
         getPool().query(`
           SELECT
             (SELECT COUNT(*) FROM products WHERE is_active = true) as total_products,
             (SELECT COUNT(*) FROM orders WHERE created_at >= NOW() - INTERVAL '30 days') as monthly_orders,
             (SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE created_at >= NOW() - INTERVAL '30 days') as monthly_revenue,
-            (SELECT COUNT(DISTINCT user_id) FROM customers) as total_customers
+            (SELECT COUNT(*) FROM users WHERE role = 'customer') as total_customers
         `),
 
         // Low stock products - usa índice
@@ -50,6 +50,22 @@ export class StatsController {
           WHERE created_at >= NOW() - INTERVAL '6 months'
           GROUP BY TO_CHAR(created_at, 'YYYY-MM')
           ORDER BY month DESC
+        `),
+
+        // Top products - productos más vendidos
+        getPool().query(`
+          SELECT
+            p.id,
+            p.name,
+            p.sku,
+            COALESCE(SUM(oi.quantity), 0) as total_sales
+          FROM products p
+          LEFT JOIN order_items oi ON p.id = oi.product_id
+          LEFT JOIN orders o ON oi.order_id = o.id AND o.created_at >= NOW() - INTERVAL '30 days'
+          WHERE p.is_active = true
+          GROUP BY p.id, p.name, p.sku
+          ORDER BY total_sales DESC
+          LIMIT 5
         `)
       ]);
 
@@ -60,6 +76,7 @@ export class StatsController {
           lowStockProducts: lowStockQuery.rows,
           recentOrders: recentOrdersQuery.rows,
           salesByMonth: salesByMonthQuery.rows,
+          topProducts: topProductsQuery.rows,
         },
       });
     } catch (error) {
