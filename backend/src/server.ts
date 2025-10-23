@@ -63,10 +63,10 @@ app.use((req, res, next) => {
   next();
 });
 
-// Swagger UI
+// Swagger UI - Documentación de API
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: 'API aguamarina - Documentación',
+  customSiteTitle: 'API Aguamarina - Documentación',
 }));
 
 // Swagger JSON
