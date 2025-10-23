@@ -13,25 +13,36 @@ export interface CreateCategoryDTO {
   metaDescription?: string;
 }
 
+// API Response wrapper type
+interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+  message?: string;
+}
+
 export const categoriesService = {
   getAll: async (activeOnly: boolean = false): Promise<Category[]> => {
     const params = activeOnly ? '?activeOnly=true' : '';
-    return apiClient.get<Category[]>(`/categories${params}`);
+    const response = await apiClient.get<ApiResponse<Category[]>>(`/categories${params}`);
+    return response.data;
   },
 
   getById: async (id: string): Promise<Category> => {
-    return apiClient.get<Category>(`/categories/${id}`);
+    const response = await apiClient.get<ApiResponse<Category>>(`/categories/${id}`);
+    return response.data;
   },
 
   create: async (data: CreateCategoryDTO): Promise<Category> => {
-    return apiClient.post<Category>('/categories', data);
+    const response = await apiClient.post<ApiResponse<Category>>('/categories', data);
+    return response.data;
   },
 
   update: async (id: string, data: Partial<CreateCategoryDTO>): Promise<Category> => {
-    return apiClient.patch<Category>(`/categories/${id}`, data);
+    const response = await apiClient.patch<ApiResponse<Category>>(`/categories/${id}`, data);
+    return response.data;
   },
 
   delete: async (id: string): Promise<void> => {
-    return apiClient.delete(`/categories/${id}`);
+    await apiClient.delete<ApiResponse<void>>(`/categories/${id}`);
   },
 };
