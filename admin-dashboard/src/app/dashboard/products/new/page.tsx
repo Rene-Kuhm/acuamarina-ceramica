@@ -365,7 +365,7 @@ export default function NewProductPage() {
                             <SelectItem value={category.id}>
                               {category.name}
                             </SelectItem>
-                            {category.children.map((child) => (
+                            {category.children?.map((child) => (
                               <SelectItem key={child.id} value={child.id} className="pl-6">
                                 {child.name}
                               </SelectItem>

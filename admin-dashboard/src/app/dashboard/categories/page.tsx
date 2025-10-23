@@ -110,7 +110,7 @@ export default function CategoriesPage() {
                     <Badge variant={parent.isActive ? 'default' : 'secondary'}>
                       {parent.isActive ? 'Activa' : 'Inactiva'}
                     </Badge>
-                    <Badge variant="outline">{parent.children.length} subcategorías</Badge>
+                    <Badge variant="outline">{parent.children?.length || 0} subcategorías</Badge>
                     <Button variant="ghost" size="sm" onClick={() => handleDeleteClick(parent.id, parent.name)}>
                       <Trash2 className="h-4 w-4 text-red-500 mr-2" />
                       Eliminar
@@ -119,7 +119,7 @@ export default function CategoriesPage() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                {parent.children.map((child) => (
+                {parent.children?.map((child) => (
                   <div key={child.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
                     <span className="text-base font-medium text-slate-900">{child.name}</span>
                     <div className="flex items-center gap-2">
