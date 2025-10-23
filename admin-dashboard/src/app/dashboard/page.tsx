@@ -161,7 +161,7 @@ export default function DashboardPage() {
 
                 <div className="space-y-4">
                   {dashboardData.topProducts.slice(0, 4).map((product) => {
-                    const maxSales = dashboardData.topProducts[0]?.totalSales || 1;
+                    const maxSales = dashboardData.topProducts?.[0]?.totalSales || 1;
                     const percentage = ((product.totalSales / maxSales) * 100).toFixed(0);
 
                     return (
