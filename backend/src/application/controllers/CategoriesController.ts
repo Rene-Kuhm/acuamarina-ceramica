@@ -111,7 +111,7 @@ export class CategoriesController {
 
       const result = await getPool().query(
         `INSERT INTO categories (
-          name, slug, description, parent_id, image_url, display_order,
+          name, slug, description, parent_id, image, display_order,
           is_active, meta_title, meta_description
         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING *`,
