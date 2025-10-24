@@ -32,6 +32,18 @@ router.post(
 );
 
 /**
+ * @route   POST /api/v1/upload/link-images
+ * @desc    Link existing Cloudinary images to a product
+ * @access  Private (Admin/Manager)
+ */
+router.post(
+  '/link-images',
+  authenticate,
+  authorize('admin', 'manager'),
+  UploadController.linkImagesToProduct
+);
+
+/**
  * @route   DELETE /api/v1/upload/:imageId
  * @desc    Delete image from Cloudinary and database
  * @access  Private (Admin/Manager)

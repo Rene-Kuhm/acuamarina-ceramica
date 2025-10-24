@@ -262,4 +262,86 @@ export class UploadController {
       next(error);
     }
   }
+
+  /**
+   * Link existing Cloudinary images to a product
+   * POST /api/v1/upload/link-images
+   */
+  static async linkImagesToProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { productId, images } = req.body;
+
+      if (!productId) {
+        return res.status(400).json({
+          success: false,
+          message: 'productId es requerido',
+        });
+      }
+
+      if (!images || !Array.isArray(images) || images.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: 'images debe ser un array con al menos una imagen',
+        });
+      }
+
+      // Verificar que el producto existe
+      const productCheck = await getPool().query(
+        'SELECT id FROM products WHERE id = $1',
+        [productId]
+      );
+
+      if (productCheck.rows.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: 'Producto no encontrado',
+        });
+      }
+
+      logger.info(`🔗 Vinculando ${images.length} imágenes al producto ${productId}`);
+
+      const linkedImages = [];
+
+      for (let i = 0; i < images.length; i++) {
+        const image = images[i];
+
+        // Insertar imagen en product_images
+        const imageResult = await getPool().query(
+          `INSERT INTO product_images (
+            product_id, image_url, cloudinary_id, alt_text, is_primary, display_order
+          ) VALUES ($1, $2, $3, $4, $5, $6)
+          RETURNING *`,
+          [
+            productId,
+            image.url,
+            image.cloudinaryId,
+            image.altText || '',
+            image.isPrimary || false,
+            i + 1, // display_order basado en el índice
+          ]
+        );
+
+        // Si esta es la imagen principal, desmarcar otras
+        if (image.isPrimary) {
+          await getPool().query(
+            'UPDATE product_images SET is_primary = false WHERE product_id = $1 AND id != $2',
+            [productId, imageResult.rows[0].id]
+          );
+        }
+
+        linkedImages.push(imageResult.rows[0]);
+      }
+
+      logger.info(`✅ ${linkedImages.length} imágenes vinculadas al producto ${productId}`);
+
+      res.json({
+        success: true,
+        data: linkedImages,
+        message: `${linkedImages.length} imagen(es) vinculada(s) correctamente`,
+      });
+    } catch (error) {
+      logger.error('Error al vincular imágenes:', error);
+      next(error);
+    }
+  }
 }

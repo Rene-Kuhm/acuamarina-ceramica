@@ -139,27 +139,26 @@ export default function NewProductPage() {
       if (images && images.length > 0) {
         toast.info(`Vinculando ${images.length} imagen(es) al producto...`);
 
-        // Re-upload images with productId to link them to the product
-        const uploadPromises = images.map(async (img, index) => {
-          try {
-            // Fetch the image from Cloudinary URL
-            const response = await fetch(img.url);
-            const blob = await response.blob();
-            const file = new File([blob], `product-image-${index}.jpg`, { type: blob.type });
-
-            // Upload with productId
-            const { uploadProductImage } = await import('@/lib/api/upload');
-            await uploadProductImage(file, productId, {
+        try {
+          // Usar el nuevo endpoint para vincular imágenes directamente
+          const { linkImagesToProduct } = await import('@/lib/api/upload');
+          const imagesToLink = images
+            .filter(img => img.cloudinaryId) // Solo imágenes con cloudinaryId válido
+            .map(img => ({
+              url: img.url,
+              cloudinaryId: img.cloudinaryId!,
               altText: img.altText,
               isPrimary: img.isPrimary,
-            });
-          } catch (error) {
-            console.error(`Error linking image ${index}:`, error);
-          }
-        });
+            }));
 
-        await Promise.all(uploadPromises);
-        toast.success('Todas las imágenes han sido vinculadas al producto.');
+          if (imagesToLink.length > 0) {
+            await linkImagesToProduct(productId, imagesToLink);
+            toast.success('Todas las imágenes han sido vinculadas al producto.');
+          }
+        } catch (error) {
+          console.error('Error linking images:', error);
+          toast.error('Error al vincular las imágenes. Por favor, edita el producto para agregar las imágenes manualmente.');
+        }
       }
 
       // Redirect to products list after success

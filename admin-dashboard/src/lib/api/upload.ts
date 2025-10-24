@@ -71,6 +71,28 @@ export async function uploadCategoryImage(
 }
 
 /**
+ * Link existing Cloudinary images to a product
+ */
+export async function linkImagesToProduct(
+  productId: number,
+  images: Array<{
+    url: string;
+    cloudinaryId: string;
+    altText?: string;
+    isPrimary?: boolean;
+  }>
+): Promise<{
+  success: boolean;
+  data: any[];
+  message: string;
+}> {
+  return apiClient.post('/upload/link-images', {
+    productId,
+    images,
+  });
+}
+
+/**
  * Delete image from Cloudinary and database
  */
 export async function deleteImage(imageId: number): Promise<DeleteImageResponse> {
