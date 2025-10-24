@@ -36,7 +36,7 @@ export function ProductCard({ product, featured = false, className }: ProductCar
       name: product.name,
       slug: product.slug,
       price: product.price,
-      image: product.images[0] || "/placeholder-product.jpg",
+      image: product.images[0] || "/placeholder-product.svg",
       stock: product.stock,
     });
 
@@ -72,7 +72,7 @@ export function ProductCard({ product, featured = false, className }: ProductCar
       name: product.name,
       slug: product.slug,
       price: product.price,
-      image: product.images[0] || "/placeholder-product.jpg",
+      image: product.images[0] || "/placeholder-product.svg",
     });
 
     if (wasInWishlist) {
@@ -110,7 +110,7 @@ export function ProductCard({ product, featured = false, className }: ProductCar
         {/* Image Container */}
         <div className="relative aspect-square w-full overflow-hidden bg-gray-100">
           <Image
-            src={product.images[0] || "/placeholder-product.jpg"}
+            src={product.images[0] || "/placeholder-product.svg"}
             alt={product.name}
             fill
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.15] group-hover:rotate-1"

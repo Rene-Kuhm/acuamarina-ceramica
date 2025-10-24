@@ -157,7 +157,7 @@ export function ProductCardGSAP({ product, featured = false, index = 0 }: Produc
       name: product.name,
       slug: product.slug,
       price: product.price,
-      image: product.images[0] || "/placeholder-product.jpg",
+      image: product.images[0] || "/placeholder-product.svg",
       stock: product.stock,
     });
 
@@ -213,7 +213,7 @@ export function ProductCardGSAP({ product, featured = false, index = 0 }: Produc
       name: product.name,
       slug: product.slug,
       price: product.price,
-      image: product.images[0] || "/placeholder-product.jpg",
+      image: product.images[0] || "/placeholder-product.svg",
     });
 
     if (wasInWishlist) {
@@ -255,7 +255,7 @@ export function ProductCardGSAP({ product, featured = false, index = 0 }: Produc
         <div className="relative aspect-square w-full overflow-hidden bg-gray-50">
           <div ref={imageRef} className="w-full h-full">
             <Image
-              src={product.images[0] || "/placeholder-product.jpg"}
+              src={product.images[0] || "/placeholder-product.svg"}
               alt={product.name}
               fill
               className="object-cover"

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { getPool } from '../../infrastructure/database/connection';
 import { logger } from '../../shared/utils/logger';
 import { z } from 'zod';
+import { transformProductToAPI } from '../../shared/utils/caseConverter';
 
 // Esquemas de validación
 const createProductSchema = z.object({
@@ -163,12 +164,10 @@ export class ProductsController {
         });
       }
 
-      // Transform products to match frontend expectations
-      const transformedProducts = result.rows.map(product => ({
-        ...product,
-        stock: product.stock_quantity || 0, // Map stock_quantity to stock for frontend
-        images: imagesMap[product.id] || [], // Add images array
-      }));
+      // Transform products to match frontend expectations (camelCase)
+      const transformedProducts = result.rows.map(product =>
+        transformProductToAPI(product, imagesMap[product.id] || [])
+      );
 
       res.json({
         success: true,
@@ -251,12 +250,10 @@ export class ProductsController {
         });
       }
 
-      // Transform products to match frontend expectations
-      const transformedProducts = result.rows.map(product => ({
-        ...product,
-        stock: product.stock_quantity || 0,
-        images: imagesMap[product.id] || [],
-      }));
+      // Transform products to match frontend expectations (camelCase)
+      const transformedProducts = result.rows.map(product =>
+        transformProductToAPI(product, imagesMap[product.id] || [])
+      );
 
       res.json({
         success: true,
@@ -321,13 +318,10 @@ export class ProductsController {
       );
 
       const productData = result.rows[0];
+      const images = imagesResult.rows.map(img => img.url);
 
-      // Transform response to match frontend expectations
-      const product = {
-        ...productData,
-        stock: productData.stock_quantity || 0, // Map stock_quantity to stock for frontend
-        images: imagesResult.rows.map(img => img.url), // Transform to array of URLs
-      };
+      // Transform response to match frontend expectations (camelCase)
+      const product = transformProductToAPI(productData, images);
 
       res.json({
         success: true,
