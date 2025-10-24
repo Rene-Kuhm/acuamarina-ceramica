@@ -148,7 +148,7 @@ export class ProductsController {
 
       if (productIds.length > 0) {
         const imagesResult = await getPool().query(
-          `SELECT product_id, image_url FROM product_images
+          `SELECT product_id, url FROM product_images
            WHERE product_id = ANY($1)
            ORDER BY is_primary DESC, display_order, created_at`,
           [productIds]
@@ -159,7 +159,7 @@ export class ProductsController {
           if (!imagesMap[img.product_id]) {
             imagesMap[img.product_id] = [];
           }
-          imagesMap[img.product_id].push(img.image_url);
+          imagesMap[img.product_id].push(img.url);
         });
       }
 
@@ -236,7 +236,7 @@ export class ProductsController {
 
       if (productIds.length > 0) {
         const imagesResult = await getPool().query(
-          `SELECT product_id, image_url FROM product_images
+          `SELECT product_id, url FROM product_images
            WHERE product_id = ANY($1)
            ORDER BY is_primary DESC, display_order, created_at`,
           [productIds]
@@ -247,7 +247,7 @@ export class ProductsController {
           if (!imagesMap[img.product_id]) {
             imagesMap[img.product_id] = [];
           }
-          imagesMap[img.product_id].push(img.image_url);
+          imagesMap[img.product_id].push(img.url);
         });
       }
 
@@ -326,7 +326,7 @@ export class ProductsController {
       const product = {
         ...productData,
         stock: productData.stock_quantity || 0, // Map stock_quantity to stock for frontend
-        images: imagesResult.rows.map(img => img.image_url), // Transform to array of URLs
+        images: imagesResult.rows.map(img => img.url), // Transform to array of URLs
       };
 
       res.json({

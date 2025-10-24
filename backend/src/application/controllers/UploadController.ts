@@ -78,13 +78,12 @@ export class UploadController {
 
         // Insert image into product_images table
         const imageResult = await getPool().query(
-          `INSERT INTO product_images (product_id, image_url, cloudinary_id, alt_text, is_primary, display_order)
-           VALUES ($1, $2, $3, $4, $5, (SELECT COALESCE(MAX(display_order), 0) + 1 FROM product_images WHERE product_id = $1))
+          `INSERT INTO product_images (product_id, url, alt_text, is_primary, display_order)
+           VALUES ($1, $2, $3, $4, (SELECT COALESCE(MAX(display_order), 0) + 1 FROM product_images WHERE product_id = $1))
            RETURNING *`,
           [
             productId,
             uploadResult.secure_url,
-            uploadResult.public_id,
             req.body.altText || '',
             req.body.isPrimary === 'true' || false,
           ]
@@ -160,9 +159,11 @@ export class UploadController {
       const image = imageResult.rows[0];
 
       // Delete from Cloudinary
-      if (image.cloudinary_id) {
-        await cloudinary.uploader.destroy(image.cloudinary_id);
-      }
+      // TODO: cloudinary_id column doesn't exist in product_images table
+      // Need to extract public_id from URL or add cloudinary_id column
+      // if (image.cloudinary_id) {
+      //   await cloudinary.uploader.destroy(image.cloudinary_id);
+      // }
 
       // Delete from database
       await getPool().query('DELETE FROM product_images WHERE id = $1', [imageId]);
@@ -219,7 +220,7 @@ export class UploadController {
       // If categoryId is provided, update category
       if (categoryId) {
         const categoryCheck = await getPool().query(
-          'SELECT id, image_url, cloudinary_id FROM categories WHERE id = $1',
+          'SELECT id, image FROM categories WHERE id = $1',
           [categoryId]
         );
 
@@ -235,14 +236,15 @@ export class UploadController {
         const category = categoryCheck.rows[0];
 
         // Delete old image from Cloudinary if exists
-        if (category.cloudinary_id) {
-          await cloudinary.uploader.destroy(category.cloudinary_id);
-        }
+        // TODO: Need to extract public_id from old URL or add cloudinary_id column
+        // if (category.cloudinary_id) {
+        //   await cloudinary.uploader.destroy(category.cloudinary_id);
+        // }
 
         // Update category with new image
         await getPool().query(
-          'UPDATE categories SET image_url = $1, cloudinary_id = $2 WHERE id = $3',
-          [uploadResult.secure_url, uploadResult.public_id, categoryId]
+          'UPDATE categories SET image = $1 WHERE id = $2',
+          [uploadResult.secure_url, categoryId]
         );
 
         logger.info(`Imagen de categoría actualizada ${categoryId}: ${uploadResult.secure_url}`);
@@ -308,13 +310,12 @@ export class UploadController {
         // Insertar imagen en product_images
         const imageResult = await getPool().query(
           `INSERT INTO product_images (
-            product_id, image_url, cloudinary_id, alt_text, is_primary, display_order
-          ) VALUES ($1, $2, $3, $4, $5, $6)
+            product_id, url, alt_text, is_primary, display_order
+          ) VALUES ($1, $2, $3, $4, $5)
           RETURNING *`,
           [
             productId,
             image.url,
-            image.cloudinaryId,
             image.altText || '',
             image.isPrimary || false,
             i + 1, // display_order basado en el índice
