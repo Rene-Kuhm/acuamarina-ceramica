@@ -23,7 +23,7 @@ const createProductSchema = z.object({
       return null;
     })
     .nullable(),
-  price: z.union([z.number(), z.string()]).transform(val => typeof val === 'string' ? parseFloat(val) : val).refine(val => val > 0, 'Precio debe ser positivo'),
+  price: z.union([z.number(), z.string()]).transform(val => typeof val === 'string' ? parseFloat(val) : val).refine(val => val >= 0, 'Precio no puede ser negativo'),
   comparePrice: z.union([z.number(), z.string()])
     .transform(val => {
       if (!val || val === '') return null;

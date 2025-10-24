@@ -37,7 +37,11 @@ const formSchema = z.object({
 	// Coerce strings to numbers safely using preprocess so Zod infers number types
 	price: z.preprocess(
 		(val) => {
-			if (typeof val === 'string') return val.trim() === '' ? NaN : Number(val);
+			if (typeof val === 'string') {
+				const trimmed = val.trim();
+				if (trimmed === '') return 0;
+				return Number(trimmed);
+			}
 			return val;
 		},
 		z.number().min(0, 'El precio no puede ser negativo')
