@@ -70,6 +70,8 @@ function ProductDetailContent() {
     { label: product.name },
   ];
 
+  const productStock = product.stockQuantity ?? product.stock ?? 0;
+
   const handleAddToCart = () => {
     addItem({
       id: product.id,
@@ -77,14 +79,14 @@ function ProductDetailContent() {
       slug: product.slug,
       price: product.price,
       image: product.images[0] || "/placeholder.jpg",
-      stock: product.stock,
+      stock: productStock,
       quantity,
     });
   };
 
   const handleQuantityChange = (delta: number) => {
     const newQuantity = quantity + delta;
-    if (newQuantity >= 1 && newQuantity <= product.stock) {
+    if (newQuantity >= 1 && newQuantity <= productStock) {
       setQuantity(newQuantity);
     }
   };
@@ -108,7 +110,7 @@ function ProductDetailContent() {
       image: product.images[0] || "/placeholder.jpg",
       category: product.category,
       specifications: product.specifications || {},
-      stock: product.stock,
+      stock: productStock,
     });
 
     if (!result.added && comparisonCount >= 4) {
@@ -116,7 +118,7 @@ function ProductDetailContent() {
     }
   };
 
-  const inStock = product.stock > 0;
+  const inStock = productStock > 0;
   const formattedPrice = new Intl.NumberFormat("es-AR", {
     style: "currency",
     currency: "ARS",
@@ -253,14 +255,14 @@ function ProductDetailContent() {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleQuantityChange(1)}
-                        disabled={quantity >= product.stock}
+                        disabled={quantity >= productStock}
                         className="rounded-l-none"
                       >
                         <Plus className="w-4 h-4" />
                       </Button>
                     </div>
                     <span className="text-sm text-gray-500">
-                      {product.stock} disponibles
+                      {productStock} disponibles
                     </span>
                   </div>
                 </div>

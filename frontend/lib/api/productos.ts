@@ -7,6 +7,7 @@ export interface Producto {
   description: string;
   price: number;
   stock: number;
+  stockQuantity?: number; // New field from backend API
   images: string[];
   categoryId: number;
   category?: {
