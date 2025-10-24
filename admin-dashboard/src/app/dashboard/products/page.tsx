@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useProducts, useDeleteProduct } from '@/hooks/useProducts';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -197,10 +198,12 @@ export default function ProductsPage() {
                     <TableCell>
                       <div className="relative h-12 w-12 rounded-md overflow-hidden bg-slate-100">
                         {product.images && product.images.length > 0 ? (
-                          <img
+                          <Image
                             src={product.images[0]}
                             alt={product.name}
-                            className="h-full w-full object-cover"
+                            fill
+                            className="object-cover"
+                            sizes="48px"
                           />
                         ) : (
                           <div className="h-full w-full flex items-center justify-center text-slate-400 text-xs">
