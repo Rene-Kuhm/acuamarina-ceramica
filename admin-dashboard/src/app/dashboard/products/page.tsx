@@ -181,6 +181,7 @@ export default function ProductsPage() {
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent">
+                  <TableHead className="font-semibold">Imagen</TableHead>
                   <TableHead className="font-semibold">SKU</TableHead>
                   <TableHead className="font-semibold">Nombre</TableHead>
                   <TableHead className="font-semibold">Categoría</TableHead>
@@ -193,12 +194,27 @@ export default function ProductsPage() {
               <TableBody>
                 {data.data.map((product) => (
                   <TableRow key={product.id} className="group">
+                    <TableCell>
+                      <div className="relative h-12 w-12 rounded-md overflow-hidden bg-slate-100">
+                        {product.images && product.images.length > 0 ? (
+                          <img
+                            src={product.images[0]}
+                            alt={product.name}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <div className="h-full w-full flex items-center justify-center text-slate-400 text-xs">
+                            Sin imagen
+                          </div>
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell className="font-mono text-sm text-slate-600">
                       {product.sku}
                     </TableCell>
                     <TableCell className="font-medium">{product.name}</TableCell>
                     <TableCell className="text-sm text-muted-foreground">
-                      {product.categoryId || '-'}
+                      {product.categoryName || '-'}
                     </TableCell>
                     <TableCell className="text-right font-semibold">
                       {formatCurrency(product.price)}

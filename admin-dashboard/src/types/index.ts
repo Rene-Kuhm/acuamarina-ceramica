@@ -28,6 +28,8 @@ export interface Product {
   description?: string;
   shortDescription?: string;
   categoryId?: string;
+  categoryName?: string;
+  categorySlug?: string;
   price: number;
   comparePrice?: number;
   costPrice?: number;
@@ -45,6 +47,7 @@ export interface Product {
   lowStockThreshold: number;
   viewsCount: number;
   salesCount: number;
+  images?: string[];
   createdAt: string;
   updatedAt: string;
 }
