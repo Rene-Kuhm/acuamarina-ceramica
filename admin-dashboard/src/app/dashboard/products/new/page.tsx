@@ -76,6 +76,7 @@ const formSchema = z.object({
 	color: z.string().optional(),
 
 	isActive: z.boolean().default(true),
+	isFeatured: z.boolean().default(false),
 
 	images: z.array(z.custom<ProductImage>()).optional().default([]),
 });
@@ -99,6 +100,7 @@ export default function NewProductPage() {
 		stockQuantity: 0,
 		lowStockThreshold: 10,
 		isActive: true,
+		isFeatured: false,
 		images: [],
 	},
   });
@@ -418,7 +420,7 @@ export default function NewProductPage() {
             <CardHeader>
               <CardTitle>Estado</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <FormField
                 control={form.control}
                 name="isActive"
@@ -428,6 +430,23 @@ export default function NewProductPage() {
                       <FormLabel>Publicado</FormLabel>
                       <FormDescription>
                         Si está activo, el producto será visible en la tienda.
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="isFeatured"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <FormLabel>Producto Destacado</FormLabel>
+                      <FormDescription>
+                        Los productos destacados aparecen en la página principal.
                       </FormDescription>
                     </div>
                     <FormControl>
