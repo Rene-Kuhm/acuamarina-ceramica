@@ -225,9 +225,18 @@ export default function ProductsPage() {
                     <TableCell className="text-right">
                       <Badge
                         variant={
-                          product.stockQuantity <= product.lowStockThreshold
+                          product.stockQuantity === 0
                             ? 'destructive'
+                            : product.stockQuantity <= product.lowStockThreshold
+                            ? 'default'
                             : 'secondary'
+                        }
+                        className={
+                          product.stockQuantity === 0
+                            ? 'bg-red-500 hover:bg-red-600'
+                            : product.stockQuantity <= product.lowStockThreshold
+                            ? 'bg-amber-500 hover:bg-amber-600'
+                            : 'bg-green-500 hover:bg-green-600'
                         }
                       >
                         {product.stockQuantity}
