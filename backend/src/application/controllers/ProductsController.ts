@@ -204,9 +204,26 @@ export class ProductsController {
     try {
       const { id } = req.params;
 
-      // Check if it's a UUID or slug
+      // Check if it's a numeric ID, UUID, or slug
+      const isNumeric = /^\d+$/.test(id);
       const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
-      const whereClause = isUUID ? 'p.id = $1' : 'p.slug = $1';
+
+      let whereClause: string;
+      let paramValue: any;
+
+      if (isNumeric) {
+        // It's a numeric ID
+        whereClause = 'p.id = $1';
+        paramValue = parseInt(id);
+      } else if (isUUID) {
+        // It's a UUID (for future compatibility)
+        whereClause = 'p.id = $1';
+        paramValue = id;
+      } else {
+        // It's a slug
+        whereClause = 'p.slug = $1';
+        paramValue = id;
+      }
 
       const result = await getPool().query(
         `SELECT
@@ -216,7 +233,7 @@ export class ProductsController {
          FROM products p
          LEFT JOIN categories c ON p.category_id = c.id
          WHERE ${whereClause}`,
-        [id]
+        [paramValue]
       );
 
       if (result.rows.length === 0) {
