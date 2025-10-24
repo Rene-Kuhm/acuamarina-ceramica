@@ -139,6 +139,7 @@ export default function NewProductPage() {
 
       // 4. Si había imágenes pre-cargadas, vincularlas al producto
       if (images && images.length > 0) {
+        console.log('📸 Intentando vincular imágenes:', images);
         toast.info(`Vinculando ${images.length} imagen(es) al producto...`);
 
         try {
@@ -153,14 +154,29 @@ export default function NewProductPage() {
               isPrimary: img.isPrimary,
             }));
 
+          console.log('📸 Imágenes filtradas para vincular:', imagesToLink);
+
           if (imagesToLink.length > 0) {
-            await linkImagesToProduct(productId, imagesToLink);
+            console.log('🔗 Llamando a linkImagesToProduct...');
+            const result = await linkImagesToProduct(productId, imagesToLink);
+            console.log('✅ Resultado de vinculación:', result);
             toast.success('Todas las imágenes han sido vinculadas al producto.');
+          } else {
+            console.warn('⚠️ No hay imágenes con cloudinaryId para vincular');
+            toast.warning('Las imágenes no tienen cloudinaryId. Verifica la configuración de Cloudinary.');
           }
-        } catch (error) {
-          console.error('Error linking images:', error);
-          toast.error('Error al vincular las imágenes. Por favor, edita el producto para agregar las imágenes manualmente.');
+        } catch (error: any) {
+          console.error('❌ Error linking images:', error);
+          console.error('Error details:', {
+            message: error?.message,
+            response: error?.response?.data,
+            status: error?.response?.status,
+          });
+          const errorMsg = error?.response?.data?.message || error?.message || 'Error desconocido';
+          toast.error(`Error al vincular las imágenes: ${errorMsg}`);
         }
+      } else {
+        console.log('ℹ️ No hay imágenes para vincular');
       }
 
       // Redirect to products list after success
