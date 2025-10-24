@@ -56,30 +56,43 @@ export function CloudinaryImageUploader({
 
         // Create preview
         const previewUrl = URL.createObjectURL(file);
+        const isFirstImage = value.length === 0;
         const tempImage: ProductImage = {
           url: previewUrl,
           file,
           uploading: true,
-          isPrimary: value.length === 0, // First image is primary
+          isPrimary: isFirstImage, // First image is primary
         };
 
-        // Add to UI immediately
-        onChange([...value, tempImage]);
+        // Add to UI immediately - create new array with temp image
+        const imagesWithTemp = [...value, tempImage];
+        onChange(imagesWithTemp);
 
         try {
-          // Upload to Cloudinary
-          const response = await uploadProductImage(file, productId, {
-            isPrimary: value.length === 0,
+          console.log('📤 Subiendo imagen a Cloudinary...', {
+            fileName: file.name,
+            productId: productId || 'sin productId (nuevo producto)',
           });
 
-          // Replace preview with real URL
-          const updatedImages = value.map((img) =>
+          // Upload to Cloudinary
+          const response = await uploadProductImage(file, productId, {
+            isPrimary: isFirstImage,
+          });
+
+          console.log('✅ Respuesta de Cloudinary:', {
+            url: response.data.url,
+            cloudinaryId: response.data.cloudinaryId,
+            hasId: !!response.data.id,
+          });
+
+          // Replace preview with real URL in the updated array
+          const updatedImages = imagesWithTemp.map((img) =>
             img.url === previewUrl
               ? {
                   id: response.data.id,
                   url: response.data.url,
                   cloudinaryId: response.data.cloudinaryId,
-                  isPrimary: value.length === 0,
+                  isPrimary: isFirstImage,
                   uploading: false,
                 }
               : img
@@ -87,12 +100,19 @@ export function CloudinaryImageUploader({
           onChange(updatedImages);
 
           toast.success('Imagen subida correctamente');
-        } catch (error) {
-          console.error('Error uploading image:', error);
-          toast.error('Error al subir la imagen');
+        } catch (error: any) {
+          console.error('❌ Error uploading image:', error);
+          console.error('Error details:', {
+            message: error?.message,
+            response: error?.response?.data,
+            status: error?.response?.status,
+          });
 
-          // Remove failed image
-          const filteredImages = value.filter((img) => img.url !== previewUrl);
+          const errorMsg = error?.response?.data?.message || error?.message || 'Error desconocido';
+          toast.error(`Error al subir la imagen: ${errorMsg}`);
+
+          // Remove failed image from the array that includes the temp image
+          const filteredImages = imagesWithTemp.filter((img) => img.url !== previewUrl);
           onChange(filteredImages);
         }
       }

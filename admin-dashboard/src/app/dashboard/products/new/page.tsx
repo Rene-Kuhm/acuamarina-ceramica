@@ -143,6 +143,23 @@ export default function NewProductPage() {
         toast.info(`Vinculando ${images.length} imagen(es) al producto...`);
 
         try {
+          // Verificar autenticación antes de intentar vincular
+          if (typeof window !== 'undefined') {
+            const accessToken = localStorage.getItem('accessToken');
+            console.log('🔐 Estado de autenticación:', {
+              hasToken: !!accessToken,
+              tokenLength: accessToken?.length || 0,
+            });
+
+            if (!accessToken) {
+              console.error('❌ No hay token de autenticación');
+              toast.error('Sesión expirada. Por favor, inicia sesión nuevamente.');
+              // No lanzar error, solo advertir
+              console.warn('⚠️ Imágenes subidas a Cloudinary pero no vinculadas a la base de datos');
+              return;
+            }
+          }
+
           // Usar el nuevo endpoint para vincular imágenes directamente
           const { linkImagesToProduct } = await import('@/lib/api/upload');
           const imagesToLink = images
@@ -150,19 +167,21 @@ export default function NewProductPage() {
             .map(img => ({
               url: img.url,
               cloudinaryId: img.cloudinaryId!,
-              altText: img.altText,
-              isPrimary: img.isPrimary,
+              altText: img.altText || '',
+              isPrimary: img.isPrimary || false,
             }));
 
           console.log('📸 Imágenes filtradas para vincular:', imagesToLink);
+          console.log(`   Total: ${imagesToLink.length} de ${images.length} imágenes tienen cloudinaryId`);
 
           if (imagesToLink.length > 0) {
-            console.log('🔗 Llamando a linkImagesToProduct...');
+            console.log('🔗 Llamando a linkImagesToProduct con productId:', productId);
             const result = await linkImagesToProduct(productId, imagesToLink);
             console.log('✅ Resultado de vinculación:', result);
-            toast.success('Todas las imágenes han sido vinculadas al producto.');
+            toast.success(`${imagesToLink.length} imagen(es) vinculada(s) correctamente al producto.`);
           } else {
             console.warn('⚠️ No hay imágenes con cloudinaryId para vincular');
+            console.warn('Imágenes recibidas:', images.map(img => ({ url: img.url, hasCloudinaryId: !!img.cloudinaryId })));
             toast.warning('Las imágenes no tienen cloudinaryId. Verifica la configuración de Cloudinary.');
           }
         } catch (error: any) {
@@ -171,9 +190,24 @@ export default function NewProductPage() {
             message: error?.message,
             response: error?.response?.data,
             status: error?.response?.status,
+            config: error?.config ? {
+              url: error.config.url,
+              method: error.config.method,
+              hasAuth: !!error.config.headers?.Authorization,
+            } : 'No config',
           });
-          const errorMsg = error?.response?.data?.message || error?.message || 'Error desconocido';
-          toast.error(`Error al vincular las imágenes: ${errorMsg}`);
+
+          // Mensajes de error más específicos
+          if (error?.response?.status === 401) {
+            toast.error('Sesión expirada. Por favor, inicia sesión nuevamente e intenta crear el producto de nuevo.');
+          } else if (error?.response?.status === 403) {
+            toast.error('No tienes permisos para vincular imágenes. Contacta al administrador.');
+          } else if (error?.response?.status === 404) {
+            toast.error('Producto no encontrado. Por favor, intenta de nuevo.');
+          } else {
+            const errorMsg = error?.response?.data?.message || error?.message || 'Error desconocido';
+            toast.error(`Error al vincular las imágenes: ${errorMsg}`);
+          }
         }
       } else {
         console.log('ℹ️ No hay imágenes para vincular');
