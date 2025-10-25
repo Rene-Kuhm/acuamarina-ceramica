@@ -7,14 +7,14 @@ import { z } from 'zod';
 const createReviewSchema = z.object({
   product_id: z.number().int().positive('El ID del producto es requerido'),
   rating: z.number().int().min(1, 'La calificación mínima es 1').max(5, 'La calificación máxima es 5'),
-  title: z.string().min(3, 'El título debe tener al menos 3 caracteres').max(100, 'El título no puede exceder 100 caracteres'),
+  title: z.string().max(100, 'El título no puede exceder 100 caracteres').optional().or(z.literal('')),
   comment: z.string().min(10, 'El comentario debe tener al menos 10 caracteres').max(1000, 'El comentario no puede exceder 1000 caracteres'),
 });
 
 // Esquema de validación para actualizar reseña
 const updateReviewSchema = z.object({
   rating: z.number().int().min(1).max(5).optional(),
-  title: z.string().min(3).max(100).optional(),
+  title: z.string().max(100).optional().or(z.literal('')),
   comment: z.string().min(10).max(1000).optional(),
 });
 
@@ -161,7 +161,7 @@ export class ReviewController {
         `INSERT INTO reviews (user_id, product_id, rating, title, comment, verified_purchase)
          VALUES ($1, $2, $3, $4, $5, $6)
          RETURNING *`,
-        [userId, data.product_id, data.rating, data.title, data.comment, verifiedPurchase]
+        [userId, data.product_id, data.rating, data.title || null, data.comment, verifiedPurchase]
       );
 
       const review = result.rows[0];
