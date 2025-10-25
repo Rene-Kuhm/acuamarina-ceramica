@@ -4,13 +4,24 @@ import { getPool } from '../../infrastructure/database/connection';
 import { config } from '../../config/environment';
 import { logger } from '../../shared/utils/logger';
 
-// Inicializar cliente de MercadoPago
-const client = new MercadoPagoConfig({
-  accessToken: config.mercadopago.accessToken,
-});
+// Lazy initialization helpers
+let mercadoPagoClient: MercadoPagoConfig | null = null;
+let preferenceClient: Preference | null = null;
+let paymentClient: Payment | null = null;
 
-const preferenceClient = new Preference(client);
-const paymentClient = new Payment(client);
+function initializeMercadoPago() {
+  if (!mercadoPagoClient) {
+    if (!config.mercadopago.accessToken) {
+      throw new Error('MercadoPago access token no está configurado');
+    }
+    mercadoPagoClient = new MercadoPagoConfig({
+      accessToken: config.mercadopago.accessToken,
+    });
+    preferenceClient = new Preference(mercadoPagoClient);
+    paymentClient = new Payment(mercadoPagoClient);
+  }
+  return { preferenceClient: preferenceClient!, paymentClient: paymentClient! };
+}
 
 export class MercadoPagoController {
   /**
@@ -58,8 +69,11 @@ export class MercadoPagoController {
 
       const order = orderResult.rows[0];
 
+      // Inicializar MercadoPago
+      const { preferenceClient: mpPreferenceClient } = initializeMercadoPago();
+
       // Crear preferencia de pago
-      const preference = await preferenceClient.create({
+      const preference = await mpPreferenceClient.create({
         body: {
           items: order.items.map((item: any) => ({
             id: String(item.product_id),
@@ -121,8 +135,11 @@ export class MercadoPagoController {
         const paymentId = data.id;
 
         try {
+          // Inicializar MercadoPago
+          const { paymentClient: mpPaymentClient } = initializeMercadoPago();
+
           // Obtener información del pago
-          const payment = await paymentClient.get({ id: paymentId });
+          const payment = await mpPaymentClient.get({ id: paymentId });
 
           const externalReference = payment.external_reference;
           const status = payment.status;
@@ -182,7 +199,10 @@ export class MercadoPagoController {
     try {
       const { paymentId } = req.params;
 
-      const payment = await paymentClient.get({ id: paymentId });
+      // Inicializar MercadoPago
+      const { paymentClient: mpPaymentClient } = initializeMercadoPago();
+
+      const payment = await mpPaymentClient.get({ id: paymentId });
 
       res.json({
         success: true,
