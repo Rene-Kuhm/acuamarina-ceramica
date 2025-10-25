@@ -391,7 +391,8 @@ export default function CheckoutPage() {
                     <p className="text-gray-600 text-sm">
                       {paymentMethod === "credit_card" && "Tarjeta de Crédito"}
                       {paymentMethod === "debit_card" && "Tarjeta de Débito"}
-                      {paymentMethod === "transfer" && "Transferencia Bancaria"}
+                      {paymentMethod === "bank_transfer" && "Transferencia Bancaria"}
+                      {paymentMethod === "cash" && "Efectivo"}
                     </p>
                   </div>
                   <Separator />
