@@ -90,9 +90,9 @@ export class MercadoPagoController {
             },
           },
           back_urls: {
-            success: `${process.env.FRONTEND_URL || 'http://localhost:3001'}/pedidos/success`,
-            failure: `${process.env.FRONTEND_URL || 'http://localhost:3001'}/pedidos/failure`,
-            pending: `${process.env.FRONTEND_URL || 'http://localhost:3001'}/pedidos/pending`,
+            success: `${process.env.FRONTEND_URL || 'https://acuamarina-ceramica.vercel.app'}/pedidos/success`,
+            failure: `${process.env.FRONTEND_URL || 'https://acuamarina-ceramica.vercel.app'}/pedidos/failure`,
+            pending: `${process.env.FRONTEND_URL || 'https://acuamarina-ceramica.vercel.app'}/pedidos/pending`,
           },
           auto_return: 'approved',
           external_reference: order.order_number,
