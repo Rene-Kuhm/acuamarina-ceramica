@@ -98,6 +98,16 @@ export const config = {
     publicKey: process.env.MERCADOPAGO_PUBLIC_KEY || '',
   },
 
+  // Email (Gmail)
+  email: {
+    user: process.env.EMAIL_USER || '',
+    password: process.env.EMAIL_PASSWORD || '',
+    fromName: process.env.EMAIL_FROM_NAME || 'Aguamarina Mosaicos',
+  },
+
+  // Frontend URL
+  frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3001',
+
   // Upload
   upload: {
     maxFileSize: parseInt(process.env.MAX_FILE_SIZE || '5242880'), // 5MB
