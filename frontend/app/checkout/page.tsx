@@ -101,10 +101,8 @@ export default function CheckoutPage() {
       // Create MercadoPago preference
       const preference = await mercadopagoApi.createPreference({ orderId: order.id });
 
-      // Clear cart before redirecting
-      clearCart();
-
       // Redirect to MercadoPago payment page
+      // Note: Cart will be cleared after successful payment
       window.location.href = preference.initPoint;
     } catch (err) {
       const error = err as { response?: { data?: { message?: string } } };

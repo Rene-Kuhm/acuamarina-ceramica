@@ -7,13 +7,18 @@ import { CheckCircle, Package, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { mercadopagoApi, PaymentStatusResponse } from "@/lib/api/mercadopago";
+import { useCartStore } from "@/lib/store/cart";
 
 function PaymentSuccessContent() {
   const searchParams = useSearchParams();
+  const { clearCart } = useCartStore();
   const [paymentInfo, setPaymentInfo] = useState<PaymentStatusResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Clear cart on successful payment
+    clearCart();
+
     const paymentId = searchParams.get("payment_id");
 
     if (paymentId) {
@@ -30,7 +35,7 @@ function PaymentSuccessContent() {
     } else {
       setLoading(false);
     }
-  }, [searchParams]);
+  }, [searchParams, clearCart]);
 
   return (
     <div className="min-h-screen bg-gray-50">
