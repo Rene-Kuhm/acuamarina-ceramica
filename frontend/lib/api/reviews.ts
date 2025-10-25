@@ -38,12 +38,12 @@ export interface ReviewsResponse {
 export const reviewsApi = {
   getProductReviews: async (productId: number): Promise<ReviewsResponse> => {
     const { data } = await apiClient.get(`/reviews/product/${productId}`);
-    return data;
+    return data.data; // Backend devuelve { success: true, data: { reviews: ... } }
   },
 
   createReview: async (reviewData: CreateReviewDTO): Promise<Review> => {
     const { data } = await apiClient.post("/reviews", reviewData);
-    return data;
+    return data.data; // Backend devuelve { success: true, data: { review } }
   },
 
   updateReview: async (
@@ -51,7 +51,7 @@ export const reviewsApi = {
     reviewData: Partial<CreateReviewDTO>
   ): Promise<Review> => {
     const { data } = await apiClient.put(`/reviews/${reviewId}`, reviewData);
-    return data;
+    return data.data; // Backend devuelve { success: true, data: { review } }
   },
 
   deleteReview: async (reviewId: number): Promise<void> => {
