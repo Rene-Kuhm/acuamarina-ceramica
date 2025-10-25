@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mail, Phone, MapPin, Package, Heart, Settings } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,11 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { useAuth } from "@/lib/hooks/useAuth";
+import { EditProfileDialog } from "@/components/cuenta/EditProfileDialog";
 import Link from "next/link";
 
 export default function CuentaPage() {
   const router = useRouter();
   const { isAuthenticated, user, isLoading } = useAuth();
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -66,7 +68,7 @@ export default function CuentaPage() {
                       <CardDescription>{user.email}</CardDescription>
                     </div>
                   </div>
-                  <Button variant="outline">
+                  <Button variant="outline" onClick={() => setIsEditDialogOpen(true)}>
                     <Settings className="w-4 h-4 mr-2" />
                     Editar Perfil
                   </Button>
@@ -161,11 +163,13 @@ export default function CuentaPage() {
                 <div>
                   <p className="font-medium">Miembro desde</p>
                   <p className="text-sm text-gray-500">
-                    {new Date(user.createdAt).toLocaleDateString("es-AR", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
+                    {user.createdAt
+                      ? new Date(user.createdAt).toLocaleDateString("es-AR", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })
+                      : "Fecha no disponible"}
                   </p>
                 </div>
               </div>
@@ -173,6 +177,12 @@ export default function CuentaPage() {
           </Card>
         </div>
       </div>
+
+      <EditProfileDialog
+        isOpen={isEditDialogOpen}
+        onClose={() => setIsEditDialogOpen(false)}
+        user={user}
+      />
     </div>
   );
 }

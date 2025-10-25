@@ -39,4 +39,11 @@ router.post('/logout', AuthController.logout);
  */
 router.get('/me', authenticate, AuthController.me);
 
+/**
+ * @route   PUT /api/v1/auth/profile
+ * @desc    Actualizar perfil de usuario
+ * @access  Private
+ */
+router.put('/profile', authenticate, AuthController.updateProfile);
+
 export default router;

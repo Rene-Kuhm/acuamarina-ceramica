@@ -377,4 +377,105 @@ export class AuthController {
       next(error);
     }
   }
+
+  /**
+   * Update user profile
+   * PUT /api/v1/auth/profile
+   */
+  static async updateProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = (req as any).user?.userId;
+
+      if (!userId) {
+        res.status(401).json({
+          success: false,
+          message: 'No autenticado',
+        });
+        return;
+      }
+
+      const { firstName, lastName, phone } = req.body;
+
+      // Validar que al menos un campo esté presente
+      if (!firstName && !lastName && phone === undefined) {
+        res.status(400).json({
+          success: false,
+          message: 'Debe proporcionar al menos un campo para actualizar',
+        });
+        return;
+      }
+
+      // Construir el nombre completo
+      let fullName: string | undefined;
+      if (firstName || lastName) {
+        const first = firstName || '';
+        const last = lastName || '';
+        fullName = `${first} ${last}`.trim();
+      }
+
+      // Construir la query de actualización
+      const updates: string[] = [];
+      const values: any[] = [];
+      let paramCount = 1;
+
+      if (fullName) {
+        updates.push(`name = $${paramCount++}`);
+        values.push(fullName);
+      }
+
+      if (phone !== undefined) {
+        updates.push(`phone = $${paramCount++}`);
+        values.push(phone);
+      }
+
+      if (updates.length === 0) {
+        res.status(400).json({
+          success: false,
+          message: 'No hay cambios para actualizar',
+        });
+        return;
+      }
+
+      updates.push(`updated_at = NOW()`);
+      values.push(userId);
+
+      const result = await getPool().query(
+        `UPDATE users
+         SET ${updates.join(', ')}
+         WHERE id = $${paramCount}
+         RETURNING id, email, name, phone, role, created_at`,
+        values
+      );
+
+      if (result.rows.length === 0) {
+        res.status(404).json({
+          success: false,
+          message: 'Usuario no encontrado',
+        });
+        return;
+      }
+
+      const user = result.rows[0];
+
+      logger.info(`Perfil actualizado para usuario ${userId}`);
+
+      res.json({
+        success: true,
+        data: {
+          user: {
+            id: user.id,
+            email: user.email,
+            firstName: user.name.split(' ')[0] || user.name,
+            lastName: user.name.split(' ').slice(1).join(' ') || '',
+            phone: user.phone,
+            role: user.role,
+            createdAt: user.created_at,
+          },
+        },
+      });
+    } catch (error) {
+      logger.error('Error actualizando perfil:', error);
+      next(error);
+    }
+  }
 }
