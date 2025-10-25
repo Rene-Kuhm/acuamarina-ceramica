@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Trash2, Loader2 } from 'lucide-react';
+import { Plus, Trash2, Loader2, Pencil } from 'lucide-react';
+import Link from 'next/link';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -111,6 +112,12 @@ export default function CategoriesPage() {
                       {parent.isActive ? 'Activa' : 'Inactiva'}
                     </Badge>
                     <Badge variant="outline">{parent.children?.length || 0} subcategorías</Badge>
+                    <Link href={`/dashboard/categories/${parent.id}/edit`}>
+                      <Button variant="ghost" size="sm">
+                        <Pencil className="h-4 w-4 text-blue-500 mr-2" />
+                        Editar
+                      </Button>
+                    </Link>
                     <Button variant="ghost" size="sm" onClick={() => handleDeleteClick(parent.id, parent.name)}>
                       <Trash2 className="h-4 w-4 text-red-500 mr-2" />
                       Eliminar
@@ -126,6 +133,12 @@ export default function CategoriesPage() {
                       <Badge variant={child.isActive ? 'default' : 'secondary'}>
                         {child.isActive ? 'Activa' : 'Inactiva'}
                       </Badge>
+                      <Link href={`/dashboard/categories/${child.id}/edit`}>
+                        <Button variant="ghost" size="sm">
+                          <Pencil className="h-4 w-4 text-blue-500 mr-2" />
+                          Editar
+                        </Button>
+                      </Link>
                       <Button variant="ghost" size="sm" onClick={() => handleDeleteClick(child.id, child.name)}>
                         <Trash2 className="h-4 w-4 text-red-500 mr-2" />
                         Eliminar

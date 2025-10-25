@@ -44,14 +44,15 @@ export function Header() {
               <Menu className="h-5 w-5" />
             </Button>
 
-            {/* Search Bar */}
+            {/* Search Bar - Deshabilitado temporalmente */}
             <div className="flex-1 max-w-xl">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
                 <Input
                   type="search"
-                  placeholder="Buscar..."
+                  placeholder="Búsqueda global (Próximamente)..."
                   className="pl-10 h-10 w-full bg-slate-50 border-slate-200 text-sm"
+                  disabled
                 />
               </div>
             </div>
@@ -59,15 +60,15 @@ export function Header() {
 
           {/* Right Section: Actions */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            {/* Notifications */}
-            <Button
+            {/* Notifications - Oculto temporalmente */}
+            {/* <Button
               variant="ghost"
               size="icon"
               className="relative text-slate-600 hover:text-slate-900 flex-shrink-0"
             >
               <Bell className="h-5 w-5" />
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#e15540] rounded-full ring-2 ring-white"></span>
-            </Button>
+            </Button> */}
 
             {/* User Menu */}
             <DropdownMenu>
@@ -100,9 +101,9 @@ export function Header() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem disabled className="cursor-not-allowed">
                   <User className="mr-2 h-4 w-4" />
-                  <span>Perfil</span>
+                  <span>Perfil (Próximamente)</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/dashboard/settings')}>
                   <Settings className="mr-2 h-4 w-4" />

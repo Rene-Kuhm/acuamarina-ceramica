@@ -8,8 +8,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CloudinaryImageUploader, ProductImage } from '@/components/ui/cloudinary-image-uploader';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { Switch } from '@/components/ui/switch';
 
 export default function EditProductPage() {
   const router = useRouter();
@@ -20,6 +22,7 @@ export default function EditProductPage() {
   const updateProduct = useUpdateProduct();
   const { data: categories } = useCategories();
 
+  const [images, setImages] = useState<ProductImage[]>([]);
   const [formData, setFormData] = useState({
     sku: '',
     name: '',
@@ -35,6 +38,8 @@ export default function EditProductPage() {
     color: '',
     stockQuantity: '0',
     lowStockThreshold: '5',
+    isActive: true,
+    isFeatured: false,
   });
 
   useEffect(() => {
@@ -54,7 +59,19 @@ export default function EditProductPage() {
         color: productData.color || '',
         stockQuantity: productData.stockQuantity?.toString() || '0',
         lowStockThreshold: productData.lowStockThreshold?.toString() || '5',
+        isActive: productData.isActive ?? true,
+        isFeatured: productData.isFeatured ?? false,
       });
+
+      // Cargar imágenes existentes
+      if (productData.images && Array.isArray(productData.images)) {
+        const existingImages: ProductImage[] = productData.images.map((url: string, index: number) => ({
+          id: index,
+          url,
+          cloudinaryId: '',
+        }));
+        setImages(existingImages);
+      }
     }
   }, [productData]);
 
@@ -239,6 +256,25 @@ export default function EditProductPage() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Imágenes del Producto */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Imágenes del Producto</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CloudinaryImageUploader
+                  value={images}
+                  onChange={setImages}
+                  productId={parseInt(id)}
+                  maxImages={8}
+                  disabled={updateProduct.isPending}
+                />
+                <p className="text-sm text-muted-foreground mt-2">
+                  Sube hasta 8 imágenes del producto. La primera imagen será la principal.
+                </p>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Sidebar */}
@@ -323,6 +359,45 @@ export default function EditProductPage() {
                     value={formData.lowStockThreshold}
                     onChange={(e) =>
                       setFormData({ ...formData, lowStockThreshold: e.target.value })
+                    }
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Estado</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="isActive">Producto Activo</Label>
+                    <p className="text-xs text-muted-foreground">
+                      El producto será visible en la tienda
+                    </p>
+                  </div>
+                  <Switch
+                    id="isActive"
+                    checked={formData.isActive}
+                    onCheckedChange={(checked) =>
+                      setFormData({ ...formData, isActive: checked })
+                    }
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="isFeatured">Producto Destacado</Label>
+                    <p className="text-xs text-muted-foreground">
+                      Aparecerá en la sección destacada
+                    </p>
+                  </div>
+                  <Switch
+                    id="isFeatured"
+                    checked={formData.isFeatured}
+                    onCheckedChange={(checked) =>
+                      setFormData({ ...formData, isFeatured: checked })
                     }
                   />
                 </div>

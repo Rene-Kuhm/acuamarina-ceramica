@@ -28,6 +28,14 @@ export const useCategories = () => {
   });
 };
 
+export const useCategory = (id: string) => {
+  return useQuery<Category, Error>({
+    queryKey: ['category', id],
+    queryFn: () => categoriesService.getById(id),
+    enabled: !!id,
+  });
+};
+
 interface CreateCategoryParams {
   name: string;
   slug?: string;
@@ -56,6 +64,29 @@ export const useCreateCategory = () => {
     },
     onError: (error) => {
       toast.error(`Error al crear categoría: ${error.message}`);
+    },
+  });
+};
+
+export const useUpdateCategory = () => {
+  const queryClient = useQueryClient();
+  return useMutation<Category, Error, { id: string; data: Partial<CreateCategoryParams> }>({
+    mutationFn: async ({ id, data }) => {
+      const dto: Partial<CreateCategoryDTO> = {
+        name: data.name,
+        slug: data.slug,
+        description: data.description,
+        parentId: data.parentId || null,
+        imageUrl: data.imageUrl || null,
+      };
+      return categoriesService.update(id, dto);
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      toast.success(`Categoría "${data.name}" actualizada correctamente.`);
+    },
+    onError: (error) => {
+      toast.error(`Error al actualizar categoría: ${error.message}`);
     },
   });
 };
