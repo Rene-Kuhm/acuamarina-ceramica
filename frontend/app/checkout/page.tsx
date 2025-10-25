@@ -32,6 +32,12 @@ export default function CheckoutPage() {
   const [error, setError] = useState("");
   const [currentStep, setCurrentStep] = useState<"address" | "payment" | "confirm">("address");
 
+  const [customerData, setCustomerData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
+
   const [shippingData, setShippingData] = useState({
     street: "",
     city: "",
@@ -40,7 +46,7 @@ export default function CheckoutPage() {
     country: "Argentina",
   });
 
-  const [paymentMethod, setPaymentMethod] = useState<"credit_card" | "debit_card" | "paypal" | "transfer">("credit_card");
+  const [paymentMethod, setPaymentMethod] = useState<"credit_card" | "debit_card" | "bank_transfer" | "cash">("credit_card");
 
   const breadcrumbItems = [
     { label: "Inicio", href: "/" },
@@ -83,6 +89,9 @@ export default function CheckoutPage() {
 
     try {
       const orderData = {
+        customerName: customerData.name,
+        customerEmail: customerData.email,
+        customerPhone: customerData.phone,
         items: items.map(item => ({
           productId: item.id,
           quantity: item.quantity,
@@ -205,6 +214,41 @@ export default function CheckoutPage() {
                 <CardContent>
                   <form onSubmit={handleAddressSubmit} className="space-y-4">
                     <div className="space-y-2">
+                      <Label htmlFor="customerName">Nombre Completo</Label>
+                      <Input
+                        id="customerName"
+                        placeholder="Juan Pérez"
+                        value={customerData.name}
+                        onChange={(e) => setCustomerData({ ...customerData, name: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="customerEmail">Email</Label>
+                        <Input
+                          id="customerEmail"
+                          type="email"
+                          placeholder="juan@example.com"
+                          value={customerData.email}
+                          onChange={(e) => setCustomerData({ ...customerData, email: e.target.value })}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="customerPhone">Teléfono</Label>
+                        <Input
+                          id="customerPhone"
+                          type="tel"
+                          placeholder="+54 9 11 1234-5678"
+                          value={customerData.phone}
+                          onChange={(e) => setCustomerData({ ...customerData, phone: e.target.value })}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <Separator className="my-6" />
+                    <div className="space-y-2">
                       <Label htmlFor="street">Calle y Número</Label>
                       <Input
                         id="street"
@@ -291,10 +335,17 @@ export default function CheckoutPage() {
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2 border rounded-lg p-4 cursor-pointer hover:bg-gray-50">
-                        <RadioGroupItem value="transfer" id="transfer" />
-                        <Label htmlFor="transfer" className="flex-1 cursor-pointer">
+                        <RadioGroupItem value="bank_transfer" id="bank_transfer" />
+                        <Label htmlFor="bank_transfer" className="flex-1 cursor-pointer">
                           <div className="font-medium">Transferencia Bancaria</div>
                           <div className="text-sm text-gray-500">CBU o Alias</div>
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2 border rounded-lg p-4 cursor-pointer hover:bg-gray-50">
+                        <RadioGroupItem value="cash" id="cash" />
+                        <Label htmlFor="cash" className="flex-1 cursor-pointer">
+                          <div className="font-medium">Efectivo</div>
+                          <div className="text-sm text-gray-500">Pago contra entrega</div>
                         </Label>
                       </div>
                     </RadioGroup>

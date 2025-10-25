@@ -2,6 +2,9 @@ import { apiClient } from "./client";
 import type { Order } from "@/lib/types";
 
 export interface CreateOrderData {
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
   items: Array<{
     productId: number;
     quantity: number;
@@ -12,9 +15,10 @@ export interface CreateOrderData {
     city: string;
     state: string;
     zipCode: string;
-    country: string;
+    country?: string;
   };
-  paymentMethod: "credit_card" | "debit_card" | "paypal" | "transfer";
+  paymentMethod: "credit_card" | "debit_card" | "bank_transfer" | "cash";
+  notes?: string;
 }
 
 export const ordersApi = {
