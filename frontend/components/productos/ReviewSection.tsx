@@ -19,7 +19,7 @@ interface ReviewSectionProps {
 export function ReviewSection({ productId }: ReviewSectionProps) {
   const [showReviewForm, setShowReviewForm] = useState(false);
   const { data, isLoading } = useProductReviews(productId);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   if (isLoading) {
     return (
@@ -41,6 +41,9 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
     4: 0,
     5: 0,
   };
+
+  // Verificar si el usuario ya dejó una reseña
+  const userHasReviewed = user && reviews.some(review => review.user_id === user.id);
 
   return (
     <div className="space-y-6">
@@ -98,7 +101,7 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
           <Separator />
 
           {/* Write Review Button */}
-          {isAuthenticated && !showReviewForm && (
+          {isAuthenticated && !showReviewForm && !userHasReviewed && (
             <div className="text-center">
               <Button
                 onClick={() => setShowReviewForm(true)}
@@ -107,6 +110,14 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
               >
                 Escribir una Reseña
               </Button>
+            </div>
+          )}
+
+          {isAuthenticated && userHasReviewed && !showReviewForm && (
+            <div className="text-center p-4 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-green-700 font-medium">
+                ✓ Ya has dejado una reseña para este producto
+              </p>
             </div>
           )}
 

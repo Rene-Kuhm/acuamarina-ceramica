@@ -52,7 +52,14 @@ export function ReviewForm({ productId, onSuccess, onCancel }: ReviewFormProps) 
 
       onSuccess?.();
     } catch (error) {
+      // El error ya es manejado por React Query y se mostrará en la UI
       console.error("Error creating review:", error);
+
+      // Mostrar mensaje específico para error 409 (ya existe reseña)
+      const axiosError = error as { response?: { status?: number; data?: { message?: string } } };
+      if (axiosError?.response?.status === 409) {
+        alert(axiosError?.response?.data?.message || "Ya has dejado una reseña para este producto");
+      }
     }
   };
 
@@ -126,7 +133,9 @@ export function ReviewForm({ productId, onSuccess, onCancel }: ReviewFormProps) 
           {createReview.isError && (
             <Alert variant="destructive">
               <AlertDescription>
-                Error al enviar la reseña. {createReview.error?.message || "Por favor intenta nuevamente."}
+                {((createReview.error as { response?: { data?: { message?: string } } })?.response?.data?.message) ||
+                 createReview.error?.message ||
+                 "Error al enviar la reseña. Por favor intenta nuevamente."}
               </AlertDescription>
             </Alert>
           )}
