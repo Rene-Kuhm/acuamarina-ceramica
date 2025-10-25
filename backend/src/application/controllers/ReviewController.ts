@@ -27,16 +27,14 @@ export class ReviewController {
     try {
       const { productId } = req.params;
 
-      // Obtener reseñas
+      // Obtener reseñas (solo columnas existentes)
       const reviewsResult = await getPool().query(
         `SELECT
           r.id,
           r.user_id,
           r.product_id,
           r.rating,
-          r.title,
           r.comment,
-          r.verified_purchase,
           r.created_at,
           u.name as user_name,
           u.email as user_email
@@ -72,9 +70,9 @@ export class ReviewController {
             user_id: row.user_id,
             product_id: row.product_id,
             rating: row.rating,
-            title: row.title,
+            title: null, // Columna no existe aún en la tabla
             comment: row.comment,
-            verified_purchase: row.verified_purchase,
+            verified_purchase: false, // Columna no existe aún en la tabla
             created_at: row.created_at,
             user: row.user_name ? {
               id: row.user_id,
@@ -156,12 +154,12 @@ export class ReviewController {
 
       const verifiedPurchase = purchaseResult.rows.length > 0;
 
-      // Crear la reseña
+      // Crear la reseña (solo columnas existentes en la tabla actual)
       const result = await getPool().query(
-        `INSERT INTO reviews (user_id, product_id, rating, title, comment, verified_purchase)
-         VALUES ($1, $2, $3, $4, $5, $6)
+        `INSERT INTO reviews (user_id, product_id, rating, comment)
+         VALUES ($1, $2, $3, $4)
          RETURNING *`,
-        [userId, data.product_id, data.rating, data.title || null, data.comment, verifiedPurchase]
+        [userId, data.product_id, data.rating, data.comment]
       );
 
       const review = result.rows[0];
@@ -181,9 +179,9 @@ export class ReviewController {
           user_id: review.user_id,
           product_id: review.product_id,
           rating: review.rating,
-          title: review.title,
+          title: data.title || null,
           comment: review.comment,
-          verified_purchase: review.verified_purchase,
+          verified_purchase: verifiedPurchase,
           created_at: review.created_at,
           user: {
             id: userId,
