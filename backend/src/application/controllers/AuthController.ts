@@ -15,8 +15,10 @@ const loginSchema = z.object({
 const registerSchema = z.object({
   email: z.string().email('Email inválido'),
   password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
-  firstName: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
-  lastName: z.string().min(2, 'El apellido debe tener al menos 2 caracteres'),
+  firstName: z.string().min(2, 'El nombre debe tener al menos 2 caracteres').optional(),
+  lastName: z.string().min(2, 'El apellido debe tener al menos 2 caracteres').optional(),
+  name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres').optional(),
+  phone: z.string().optional(),
 });
 
 interface JwtPayload {
@@ -62,7 +64,7 @@ export class AuthController {
 
       // Buscar usuario
       const result = await getPool().query(
-        `SELECT id, email, password_hash, first_name, last_name, role, is_active
+        `SELECT id, email, password, name, role
          FROM users
          WHERE email = $1`,
         [email]
@@ -78,17 +80,8 @@ export class AuthController {
 
       const user = result.rows[0];
 
-      // Verificar si el usuario está activo
-      if (!user.is_active) {
-        res.status(401).json({
-          success: false,
-          message: 'Usuario inactivo',
-        });
-        return;
-      }
-
       // Verificar contraseña
-      const isValidPassword = await bcrypt.compare(password, user.password_hash);
+      const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) {
         res.status(401).json({
           success: false,
@@ -125,8 +118,8 @@ export class AuthController {
           user: {
             id: user.id,
             email: user.email,
-            firstName: user.first_name,
-            lastName: user.last_name,
+            firstName: user.name.split(' ')[0] || user.name,
+            lastName: user.name.split(' ').slice(1).join(' ') || '',
             role: user.role,
           },
           accessToken,
@@ -169,15 +162,31 @@ export class AuthController {
         return;
       }
 
+      // Determinar el nombre completo
+      let fullName: string;
+      if (data.name) {
+        fullName = data.name;
+      } else if (data.firstName && data.lastName) {
+        fullName = `${data.firstName} ${data.lastName}`;
+      } else if (data.firstName) {
+        fullName = data.firstName;
+      } else {
+        res.status(400).json({
+          success: false,
+          message: 'Debe proporcionar un nombre',
+        });
+        return;
+      }
+
       // Hash de la contraseña
       const passwordHash = await bcrypt.hash(data.password, 10);
 
-      // Crear usuario
+      // Crear usuario (role 'user' en lugar de 'customer')
       const result = await getPool().query(
-        `INSERT INTO users (email, password_hash, first_name, last_name, role)
-         VALUES ($1, $2, $3, $4, 'customer')
-         RETURNING id, email, first_name, last_name, role`,
-        [data.email, passwordHash, data.firstName, data.lastName]
+        `INSERT INTO users (email, password, name, phone, role)
+         VALUES ($1, $2, $3, $4, 'user')
+         RETURNING id, email, name, phone, role`,
+        [data.email, passwordHash, fullName, data.phone || null]
       );
 
       const user = result.rows[0];
@@ -203,8 +212,8 @@ export class AuthController {
           user: {
             id: user.id,
             email: user.email,
-            firstName: user.first_name,
-            lastName: user.last_name,
+            firstName: user.name.split(' ')[0] || user.name,
+            lastName: user.name.split(' ').slice(1).join(' ') || '',
             role: user.role,
           },
           accessToken,
@@ -335,7 +344,7 @@ export class AuthController {
       }
 
       const result = await getPool().query(
-        `SELECT id, email, first_name, last_name, role, created_at
+        `SELECT id, email, name, role, created_at
          FROM users
          WHERE id = $1`,
         [userId]
@@ -357,8 +366,8 @@ export class AuthController {
           user: {
             id: user.id,
             email: user.email,
-            firstName: user.first_name,
-            lastName: user.last_name,
+            firstName: user.name.split(' ')[0] || user.name,
+            lastName: user.name.split(' ').slice(1).join(' ') || '',
             role: user.role,
             createdAt: user.created_at,
           },
