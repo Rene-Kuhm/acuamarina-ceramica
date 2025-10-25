@@ -2,6 +2,7 @@
 
 import { ThemeProvider } from "./theme-provider";
 import { QueryProvider } from "./query-provider";
+import { AuthProvider } from "@/lib/context/AuthContext";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -11,7 +12,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
       enableSystem
       disableTransitionOnChange
     >
-      <QueryProvider>{children}</QueryProvider>
+      <QueryProvider>
+        <AuthProvider>{children}</AuthProvider>
+      </QueryProvider>
     </ThemeProvider>
   );
 }
