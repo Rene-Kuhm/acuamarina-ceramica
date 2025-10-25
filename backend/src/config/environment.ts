@@ -92,6 +92,12 @@ export const config = {
     apiSecret: process.env.CLOUDINARY_API_SECRET || '',
   },
 
+  // MercadoPago
+  mercadopago: {
+    accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN || '',
+    publicKey: process.env.MERCADOPAGO_PUBLIC_KEY || '',
+  },
+
   // Upload
   upload: {
     maxFileSize: parseInt(process.env.MAX_FILE_SIZE || '5242880'), // 5MB

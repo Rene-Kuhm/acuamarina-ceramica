@@ -23,6 +23,7 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { useCartStore } from "@/lib/store/cart";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { ordersApi } from "@/lib/api/orders";
+import { mercadopagoApi } from "@/lib/api/mercadopago";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -79,11 +80,6 @@ export default function CheckoutPage() {
   };
 
   const handleConfirmOrder = async () => {
-    if (!isAuthenticated) {
-      router.push("/auth/login?redirect=/checkout");
-      return;
-    }
-
     setIsProcessing(true);
     setError("");
 
@@ -101,13 +97,21 @@ export default function CheckoutPage() {
         paymentMethod,
       };
 
-      await ordersApi.create(orderData);
+      // Create the order
+      const orderResponse = await ordersApi.create(orderData);
+      const orderId = orderResponse.data.id;
+
+      // Create MercadoPago preference
+      const preference = await mercadopagoApi.createPreference({ orderId });
+
+      // Clear cart before redirecting
       clearCart();
-      router.push("/pedidos?success=true");
+
+      // Redirect to MercadoPago payment page
+      window.location.href = preference.initPoint;
     } catch (err) {
       const error = err as { response?: { data?: { message?: string } } };
       setError(error.response?.data?.message || "Error al procesar el pedido");
-    } finally {
       setIsProcessing(false);
     }
   };
