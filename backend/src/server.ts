@@ -23,6 +23,7 @@ import customersRoutes from './application/routes/customers.routes';
 import uploadRoutes from './application/routes/upload.routes';
 import exportRoutes from './application/routes/export.routes';
 import mercadopagoRoutes from './application/routes/mercadopago.routes';
+import addressesRoutes from './application/routes/addresses.routes';
 
 // Validar variables de entorno al inicio
 validateEnv();
@@ -143,6 +144,7 @@ apiRouter.use('/customers', customersRoutes);
 apiRouter.use('/upload', uploadRoutes);
 apiRouter.use('/export', exportRoutes);
 apiRouter.use('/mercadopago', mercadopagoRoutes);
+apiRouter.use('/addresses', addressesRoutes);
 
 // API info endpoint
 apiRouter.get('/', (req, res) => {
@@ -158,6 +160,7 @@ apiRouter.get('/', (req, res) => {
       users: '/users',
       stats: '/stats',
       mercadopago: '/mercadopago',
+      addresses: '/addresses',
     },
   });
 });
