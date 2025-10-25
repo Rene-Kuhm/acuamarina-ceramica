@@ -1,49 +1,14 @@
 'use client';
 
-import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuthStore } from '@/store/authStore';
 import { User, Lock, Bell, Palette } from 'lucide-react';
-import { toast } from 'sonner';
 
 export default function SettingsPage() {
   const user = useAuthStore((state) => state.user);
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
-  const [passwordForm, setPasswordForm] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: '',
-  });
-
-  const handlePasswordChange = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      toast.error('Las contraseñas no coinciden');
-      return;
-    }
-
-    if (passwordForm.newPassword.length < 8) {
-      toast.error('La contraseña debe tener al menos 8 caracteres');
-      return;
-    }
-
-    setIsChangingPassword(true);
-
-    // Simular cambio de contraseña
-    setTimeout(() => {
-      toast.success('Contraseña actualizada correctamente');
-      setPasswordForm({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
-      });
-      setIsChangingPassword(false);
-    }, 1000);
-  };
 
   return (
     <div className="space-y-6">
@@ -103,17 +68,14 @@ export default function SettingsPage() {
             <CardDescription>Actualiza tu contraseña de acceso</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handlePasswordChange} className="space-y-4">
+            <div className="space-y-4">
               <div>
                 <Label htmlFor="currentPassword">Contraseña Actual</Label>
                 <Input
                   id="currentPassword"
                   type="password"
-                  value={passwordForm.currentPassword}
-                  onChange={(e) =>
-                    setPasswordForm({ ...passwordForm, currentPassword: e.target.value })
-                  }
-                  required
+                  disabled
+                  placeholder="••••••••"
                   className="mt-1"
                 />
               </div>
@@ -122,11 +84,8 @@ export default function SettingsPage() {
                 <Input
                   id="newPassword"
                   type="password"
-                  value={passwordForm.newPassword}
-                  onChange={(e) =>
-                    setPasswordForm({ ...passwordForm, newPassword: e.target.value })
-                  }
-                  required
+                  disabled
+                  placeholder="••••••••"
                   className="mt-1"
                 />
               </div>
@@ -135,18 +94,18 @@ export default function SettingsPage() {
                 <Input
                   id="confirmPassword"
                   type="password"
-                  value={passwordForm.confirmPassword}
-                  onChange={(e) =>
-                    setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })
-                  }
-                  required
+                  disabled
+                  placeholder="••••••••"
                   className="mt-1"
                 />
               </div>
-              <Button type="submit" disabled={isChangingPassword} className="w-full">
-                {isChangingPassword ? 'Actualizando...' : 'Actualizar Contraseña'}
+              <Button type="button" disabled className="w-full">
+                Próximamente
               </Button>
-            </form>
+              <p className="text-xs text-muted-foreground text-center">
+                Esta funcionalidad estará disponible próximamente
+              </p>
+            </div>
           </CardContent>
         </Card>
 
@@ -170,6 +129,7 @@ export default function SettingsPage() {
               <input
                 type="checkbox"
                 defaultChecked
+                disabled
                 className="h-4 w-4 rounded border-gray-300"
               />
             </div>
@@ -183,6 +143,7 @@ export default function SettingsPage() {
               <input
                 type="checkbox"
                 defaultChecked
+                disabled
                 className="h-4 w-4 rounded border-gray-300"
               />
             </div>
@@ -195,16 +156,20 @@ export default function SettingsPage() {
               </div>
               <input
                 type="checkbox"
+                disabled
                 className="h-4 w-4 rounded border-gray-300"
               />
             </div>
             <Button
               variant="outline"
               className="w-full"
-              onClick={() => toast.success('Preferencias guardadas')}
+              disabled
             >
-              Guardar Preferencias
+              Próximamente
             </Button>
+            <p className="text-xs text-muted-foreground text-center">
+              Esta funcionalidad estará disponible próximamente
+            </p>
           </CardContent>
         </Card>
 
@@ -220,7 +185,7 @@ export default function SettingsPage() {
           <CardContent className="space-y-4">
             <div>
               <Label>Tema</Label>
-              <select className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md">
+              <select disabled className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
                 <option value="light">Claro</option>
                 <option value="dark">Oscuro</option>
                 <option value="system">Sistema</option>
@@ -228,7 +193,7 @@ export default function SettingsPage() {
             </div>
             <div>
               <Label>Idioma</Label>
-              <select className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md">
+              <select disabled className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
                 <option value="es">Español</option>
                 <option value="en">English</option>
               </select>
@@ -236,10 +201,13 @@ export default function SettingsPage() {
             <Button
               variant="outline"
               className="w-full"
-              onClick={() => toast.success('Configuración de apariencia guardada')}
+              disabled
             >
-              Guardar Configuración
+              Próximamente
             </Button>
+            <p className="text-xs text-muted-foreground text-center">
+              Esta funcionalidad estará disponible próximamente
+            </p>
           </CardContent>
         </Card>
       </div>

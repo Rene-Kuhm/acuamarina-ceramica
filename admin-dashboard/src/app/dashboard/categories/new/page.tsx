@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useCreateCategory, useCategories } from '@/hooks/useCategories';
 import { Button } from '@/components/ui/button';
@@ -14,6 +15,7 @@ import { toast } from 'sonner';
 import { uploadCategoryImage } from '@/lib/api/upload';
 
 export default function NewCategoryPage() {
+  const router = useRouter();
   const createCategory = useCreateCategory();
   const { data: categories } = useCategories();
   const [isUploading, setIsUploading] = useState(false);
@@ -79,20 +81,8 @@ export default function NewCategoryPage() {
 
       toast.success('Categoría creada exitosamente');
 
-      // Reset form
-      setFormData({
-        name: '',
-        slug: '',
-        description: '',
-        parentId: '',
-        displayOrder: '0',
-        isActive: true,
-      });
-      setImageFile(null);
-      setImagePreview(null);
-
-      // Optionally redirect
-      // router.push('/dashboard/categories');
+      // Redirect to categories list
+      router.push('/dashboard/categories');
     } catch (error) {
       console.error('Error creating category:', error);
       const errorMessage = error instanceof Error
