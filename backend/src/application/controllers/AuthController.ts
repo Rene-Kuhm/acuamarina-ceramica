@@ -102,14 +102,24 @@ export class AuthController {
       // Guardar refresh token
       await saveRefreshToken(user.id, refreshToken);
 
-      // Registrar en audit log
-      await getPool().query(
-        `INSERT INTO audit_logs (user_id, action, entity_type, entity_id, new_values, ip_address)
-         VALUES ($1, 'LOGIN', 'USER', $2, $3, $4)`,
-        [user.id, user.id, JSON.stringify({ email }), req.ip]
-      );
+      // Registrar en audit log (opcional - no bloquea el login si falla)
+      try {
+        await getPool().query(
+          `INSERT INTO audit_logs (user_id, action, entity_type, entity_id, new_values, ip_address)
+           VALUES ($1, 'LOGIN', 'USER', $2, $3, $4)`,
+          [user.id, user.id, JSON.stringify({ email }), req.ip]
+        );
+      } catch (auditError) {
+        logger.warn('No se pudo registrar en audit log:', auditError);
+      }
 
       logger.info(`Usuario autenticado: ${email}`);
+
+      // Preparar nombre del usuario
+      const fullName = user.name || user.email.split('@')[0];
+      const nameParts = fullName.split(' ');
+      const firstName = nameParts[0] || fullName;
+      const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
 
       // Responder
       res.json({
@@ -118,8 +128,8 @@ export class AuthController {
           user: {
             id: user.id,
             email: user.email,
-            firstName: user.name.split(' ')[0] || user.name,
-            lastName: user.name.split(' ').slice(1).join(' ') || '',
+            firstName,
+            lastName,
             role: user.role,
           },
           accessToken,
