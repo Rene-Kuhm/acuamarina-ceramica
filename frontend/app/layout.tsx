@@ -28,6 +28,11 @@ export const metadata: Metadata = {
     "Descubre la mejor selección de cerámicos para tu hogar. Calidad, diseño y precios accesibles en Aguamarina Mosaicos.",
   keywords:
     "cerámicos, azulejos, pisos, revestimientos, construcción, decoración, mosaicos, porcelanato",
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({

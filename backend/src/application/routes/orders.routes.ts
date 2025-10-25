@@ -5,6 +5,13 @@ import { authenticate, authorize } from '../middleware/authenticate';
 const router = Router();
 
 /**
+ * @route   POST /api/v1/orders
+ * @desc    Create a new order (public endpoint for customers)
+ * @access  Public
+ */
+router.post('/', OrdersController.create);
+
+/**
  * @route   GET /api/v1/orders
  * @desc    Get all orders with pagination and filters
  * @access  Private (Admin/Manager)

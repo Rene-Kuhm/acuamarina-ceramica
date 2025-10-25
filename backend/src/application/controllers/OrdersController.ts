@@ -11,7 +11,108 @@ const querySchema = z.object({
   search: z.string().optional(),
 });
 
+const createOrderSchema = z.object({
+  customerName: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
+  customerEmail: z.string().email('Email inválido'),
+  customerPhone: z.string().min(8, 'Teléfono inválido'),
+  shippingAddress: z.object({
+    street: z.string().min(3),
+    city: z.string().min(2),
+    state: z.string().min(2),
+    zipCode: z.string().min(3),
+    country: z.string().default('Argentina'),
+  }),
+  items: z.array(z.object({
+    productId: z.number(),
+    quantity: z.number().min(1),
+    price: z.number().min(0),
+  })).min(1, 'Debe incluir al menos un producto'),
+  paymentMethod: z.enum(['credit_card', 'debit_card', 'bank_transfer', 'cash']),
+  notes: z.string().optional(),
+});
+
 export class OrdersController {
+  /**
+   * Create a new order
+   * POST /api/v1/orders
+   */
+  static async create(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = createOrderSchema.parse(req.body);
+
+      // Calculate total amount
+      const totalAmount = data.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+      // Generate order number
+      const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+
+      // Start transaction
+      const client = await getPool().connect();
+
+      try {
+        await client.query('BEGIN');
+
+        // Create order
+        const orderResult = await client.query(
+          `INSERT INTO orders (
+            order_number, customer_name, customer_email, customer_phone,
+            shipping_address, total_amount, status, payment_method, payment_status, notes
+          ) VALUES ($1, $2, $3, $4, $5, $6, 'pending', $7, 'pending', $8)
+          RETURNING *`,
+          [
+            orderNumber,
+            data.customerName,
+            data.customerEmail,
+            data.customerPhone,
+            JSON.stringify(data.shippingAddress),
+            totalAmount,
+            data.paymentMethod,
+            data.notes || null,
+          ]
+        );
+
+        const order = orderResult.rows[0];
+
+        // Create order items
+        for (const item of data.items) {
+          await client.query(
+            `INSERT INTO order_items (order_id, product_id, quantity, price, subtotal)
+             VALUES ($1, $2, $3, $4, $5)`,
+            [order.id, item.productId, item.quantity, item.price, item.price * item.quantity]
+          );
+        }
+
+        await client.query('COMMIT');
+
+        logger.info(`Nueva orden creada: ${orderNumber}`);
+
+        res.status(201).json({
+          success: true,
+          data: {
+            id: order.id,
+            orderNumber: order.order_number,
+            totalAmount: order.total_amount,
+            status: order.status,
+          },
+          message: 'Orden creada exitosamente',
+        });
+      } catch (error) {
+        await client.query('ROLLBACK');
+        throw error;
+      } finally {
+        client.release();
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({
+          success: false,
+          message: 'Datos inválidos',
+          errors: error.errors,
+        });
+      }
+      next(error);
+    }
+  }
   /**
    * Get all orders with pagination and filters
    * GET /api/v1/orders
