@@ -111,21 +111,23 @@ export default function CuentaPage() {
               </Card>
             </Link>
 
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-              <CardContent className="p-6">
-                <div className="flex flex-col items-center text-center space-y-3">
-                  <div className="p-3 bg-pink-100 rounded-full">
-                    <Heart className="w-6 h-6 text-pink-600" />
+            <Link href="/favoritos" className="block">
+              <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
+                <CardContent className="p-6">
+                  <div className="flex flex-col items-center text-center space-y-3">
+                    <div className="p-3 bg-pink-100 rounded-full">
+                      <Heart className="w-6 h-6 text-pink-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold">Favoritos</h3>
+                      <p className="text-sm text-gray-500">Productos guardados</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold">Favoritos</h3>
-                    <p className="text-sm text-gray-500">Productos guardados</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </Link>
 
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+            <Card className="opacity-60 cursor-not-allowed">
               <CardContent className="p-6">
                 <div className="flex flex-col items-center text-center space-y-3">
                   <div className="p-3 bg-green-100 rounded-full">
@@ -134,6 +136,7 @@ export default function CuentaPage() {
                   <div>
                     <h3 className="font-semibold">Direcciones</h3>
                     <p className="text-sm text-gray-500">Gestionar envíos</p>
+                    <p className="text-xs text-gray-400 mt-1">Próximamente</p>
                   </div>
                 </div>
               </CardContent>
