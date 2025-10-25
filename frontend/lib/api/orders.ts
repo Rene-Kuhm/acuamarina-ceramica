@@ -24,16 +24,16 @@ export interface CreateOrderData {
 export const ordersApi = {
   create: async (data: CreateOrderData): Promise<Order> => {
     const response = await apiClient.post("/orders", data);
-    return response.data;
+    return response.data.data;
   },
 
   getAll: async (): Promise<Order[]> => {
     const response = await apiClient.get("/orders");
-    return response.data;
+    return response.data.data;
   },
 
   getById: async (id: number): Promise<Order> => {
     const response = await apiClient.get(`/orders/${id}`);
-    return response.data;
+    return response.data.data;
   },
 };
