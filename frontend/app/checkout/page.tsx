@@ -21,13 +21,11 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { useCartStore } from "@/lib/store/cart";
-import { useAuth } from "@/lib/hooks/useAuth";
 import { ordersApi } from "@/lib/api/orders";
 import { mercadopagoApi } from "@/lib/api/mercadopago";
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
   const { items, getTotalItems, getTotalPrice, clearCart } = useCartStore();
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState("");
@@ -98,11 +96,10 @@ export default function CheckoutPage() {
       };
 
       // Create the order
-      const orderResponse = await ordersApi.create(orderData);
-      const orderId = orderResponse.data.id;
+      const order = await ordersApi.create(orderData);
 
       // Create MercadoPago preference
-      const preference = await mercadopagoApi.createPreference({ orderId });
+      const preference = await mercadopagoApi.createPreference({ orderId: order.id });
 
       // Clear cart before redirecting
       clearCart();
