@@ -56,8 +56,8 @@ export class OrdersController {
         const orderResult = await client.query(
           `INSERT INTO orders (
             order_number, customer_name, customer_email, customer_phone,
-            shipping_address, total_amount, status, payment_method, payment_status, notes
-          ) VALUES ($1, $2, $3, $4, $5, $6, 'pending', $7, 'pending', $8)
+            shipping_address, total, total_amount, status, payment_method, payment_status, notes
+          ) VALUES ($1, $2, $3, $4, $5, $6, $6, 'pending', $7, 'pending', $8)
           RETURNING *`,
           [
             orderNumber,
@@ -75,10 +75,30 @@ export class OrdersController {
 
         // Create order items
         for (const item of data.items) {
+          // Get product details
+          const productResult = await client.query(
+            'SELECT name, price FROM products WHERE id = $1',
+            [item.productId]
+          );
+
+          if (productResult.rows.length === 0) {
+            throw new Error(`Producto con ID ${item.productId} no encontrado`);
+          }
+
+          const product = productResult.rows[0];
+
           await client.query(
-            `INSERT INTO order_items (order_id, product_id, quantity, price, subtotal)
-             VALUES ($1, $2, $3, $4, $5)`,
-            [order.id, item.productId, item.quantity, item.price, item.price * item.quantity]
+            `INSERT INTO order_items (order_id, product_id, product_name, product_price, quantity, price, subtotal)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+            [
+              order.id,
+              item.productId,
+              product.name,
+              product.price,
+              item.quantity,
+              item.price,
+              item.price * item.quantity
+            ]
           );
         }
 
