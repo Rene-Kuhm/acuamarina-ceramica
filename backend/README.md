@@ -1,4 +1,4 @@
-# Backend Acuamarina Cerámicos
+# Backend Aguamarina Cerámicos
 
 <div align="center">
 
@@ -1187,3 +1187,4 @@ Desarrollado para **Acuamarina Cerámicos** con las mejores prácticas de la ind
 [⬆ Volver arriba](#backend-acuamarina-cerámicos)
 
 </div>
+
