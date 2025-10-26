@@ -1,4 +1,4 @@
-# Frontend Acuamarina Cerámicos
+# Frontend Aguamarina Cerámicos
 
 <div align="center">
 
