@@ -1,4 +1,4 @@
-# 🎨 Admin Dashboard - Acuamarina Cerámicos
+# 🎨 Admin Dashboard - Aguamarina Cerámicos
 
 > Dashboard administrativo profesional para gestión de e-commerce de cerámicos y mosaicos
 
