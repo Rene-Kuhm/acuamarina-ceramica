@@ -28,6 +28,27 @@ jspm_packages/
 .env.production.local
 .env*.local
 
+# Specific environment files with sensitive data
+.env.production
+.env.development
+.env.test
+.env.backup
+.env.railway
+.env.supabase
+.env.vercel
+
+# Backend specific
+backend/.env
+backend/.env.*
+
+# Frontend specific
+frontend/.env
+frontend/.env.*
+
+# Admin Dashboard specific
+admin-dashboard/.env
+admin-dashboard/.env.*
+
 # Build outputs
 dist/
 build/
