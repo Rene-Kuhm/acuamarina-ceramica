@@ -1,4 +1,4 @@
-# 🏺 Acuamarina Cerámicos - Sistema Empresarial Completo
+# 🏺 Aguamarina Cerámicos - Sistema Empresarial Completo
 
 > Sistema de gestión empresarial de nivel enterprise para comercio de cerámicos con backend profesional, panel de administración y tienda e-commerce.
 
