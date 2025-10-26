@@ -8,7 +8,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "vercel-build": "echo 'Build completed - Vercel will handle TypeScript compilation'",
-    "db:create": "node crear-db.js",
+    "db:create": "node scripts/crear-db.js",
     "db:migrate": "tsx src/infrastructure/database/migrate.ts",
     "db:seed": "tsx src/infrastructure/database/seed.ts",
     "db:reset": "tsx src/infrastructure/database/reset.ts",
