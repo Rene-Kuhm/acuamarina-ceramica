@@ -27,14 +27,19 @@ export const sendEmail = async (options: SendEmailOptions): Promise<void> => {
       return;
     }
 
+    const fromEmail = options.from || `Aguamarina Mosaicos <${process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev'}>`;
+
     logger.info('📧 Enviando email con Resend...', {
       to: options.to,
+      from: fromEmail,
       subject: options.subject,
+      hasApiKey: !!process.env.RESEND_API_KEY,
+      apiKeyPrefix: process.env.RESEND_API_KEY?.substring(0, 10),
     });
 
     // Enviar email con Resend
     const data = await resend.emails.send({
-      from: options.from || `Aguamarina Mosaicos <${process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev'}>`,
+      from: fromEmail,
       to: options.to,
       replyTo: options.replyTo || 'contacto@aguamarinamosaicos.com',
       subject: options.subject,
@@ -45,14 +50,19 @@ export const sendEmail = async (options: SendEmailOptions): Promise<void> => {
       id: data.data?.id,
       to: options.to,
       subject: options.subject,
+      response: JSON.stringify(data),
     });
   } catch (error: any) {
     logger.error('❌ Error al enviar email con Resend:', {
       message: error.message,
       statusCode: error.statusCode,
       name: error.name,
+      response: error.response,
+      stack: error.stack,
     });
-    throw new Error(`Error al enviar email: ${error.message}`);
+    // No hacer throw para que el formulario siga funcionando
+    // aunque falle el email
+    logger.warn('⚠️ Email no enviado pero continuando con la ejecución');
   }
 };
 
