@@ -4,30 +4,53 @@ import { logger } from '../../shared/utils/logger';
 // Configuración de Valkey
 // Valkey es un fork open-source de Redis completamente compatible con el protocolo Redis
 // Usamos ioredis como cliente ya que es compatible con ambos
-const valkeyConfig = {
-  host: process.env.VALKEY_HOST || 'localhost',
-  port: parseInt(process.env.VALKEY_PORT || '6379'),
-  password: process.env.VALKEY_PASSWORD,
-  db: parseInt(process.env.VALKEY_DB || '0'),
-  retryStrategy: (times: number) => {
-    // Dejar de intentar después de 3 intentos
-    if (times > 3) {
-      logger.warn('⚠️ Valkey no disponible - continuando sin cache');
-      return null;
-    }
-    const delay = Math.min(times * 1000, 3000);
-    return delay;
-  },
-  maxRetriesPerRequest: 3,
-  enableReadyCheck: true,
-  lazyConnect: true,
-  // Configuración adicional para Railway
-  connectTimeout: 10000,
-  keepAlive: 30000,
+
+// Railway puede proporcionar REDIS_URL o variables individuales
+const getValkeyConfig = () => {
+  // Opción 1: Usar REDIS_URL si está disponible (más confiable en Railway)
+  if (process.env.REDIS_URL) {
+    logger.info('📍 Usando REDIS_URL para conectar a Valkey');
+    return {
+      connectionString: process.env.REDIS_URL,
+      retryStrategy: (times: number) => {
+        if (times > 3) {
+          logger.warn('⚠️ Valkey no disponible - continuando sin cache');
+          return null;
+        }
+        return Math.min(times * 1000, 3000);
+      },
+      maxRetriesPerRequest: 3,
+      enableReadyCheck: true,
+      lazyConnect: true,
+      connectTimeout: 10000,
+      keepAlive: 30000,
+    };
+  }
+
+  // Opción 2: Usar variables individuales (VALKEY_HOST, etc.)
+  logger.info('📍 Usando variables individuales para conectar a Valkey');
+  return {
+    host: process.env.VALKEY_HOST || 'localhost',
+    port: parseInt(process.env.VALKEY_PORT || '6379'),
+    password: process.env.VALKEY_PASSWORD,
+    db: parseInt(process.env.VALKEY_DB || '0'),
+    retryStrategy: (times: number) => {
+      if (times > 3) {
+        logger.warn('⚠️ Valkey no disponible - continuando sin cache');
+        return null;
+      }
+      return Math.min(times * 1000, 3000);
+    },
+    maxRetriesPerRequest: 3,
+    enableReadyCheck: true,
+    lazyConnect: true,
+    connectTimeout: 10000,
+    keepAlive: 30000,
+  };
 };
 
 // Cliente Valkey
-export const valkey = new Redis(valkeyConfig);
+export const valkey = new Redis(getValkeyConfig() as any);
 
 // Eventos de conexión
 valkey.on('connect', () => {
