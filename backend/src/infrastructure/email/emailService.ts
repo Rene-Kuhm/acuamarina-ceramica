@@ -3,7 +3,20 @@ import { logger } from '../../shared/utils/logger';
 
 // Configuración del transporter de email
 const createTransporter = () => {
-  // Opción 1: Usar Gmail (más común y fácil)
+  // Opción 1: Usar Zoho Mail (configurado para aguamarinamosaicos.com)
+  if (process.env.EMAIL_SERVICE === 'zoho') {
+    return nodemailer.createTransport({
+      host: 'smtp.zoho.com',
+      port: 465,
+      secure: true, // SSL/TLS
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+  }
+
+  // Opción 2: Usar Gmail
   if (process.env.EMAIL_SERVICE === 'gmail') {
     return nodemailer.createTransport({
       service: 'gmail',
@@ -14,10 +27,10 @@ const createTransporter = () => {
     });
   }
 
-  // Opción 2: Usar SMTP genérico
+  // Opción 3: Usar SMTP genérico
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: parseInt(process.env.SMTP_PORT || '587'),
+    host: process.env.SMTP_HOST || 'smtp.zoho.com',
+    port: parseInt(process.env.SMTP_PORT || '465'),
     secure: process.env.SMTP_SECURE === 'true', // true para 465, false para otros puertos
     auth: {
       user: process.env.EMAIL_USER,
