@@ -10,21 +10,9 @@ const getValkeyConfig = () => {
   // Opción 1: Usar REDIS_URL si está disponible (más confiable en Railway)
   if (process.env.REDIS_URL) {
     logger.info('📍 Usando REDIS_URL para conectar a Valkey');
-    return {
-      connectionString: process.env.REDIS_URL,
-      retryStrategy: (times: number) => {
-        if (times > 3) {
-          logger.warn('⚠️ Valkey no disponible - continuando sin cache');
-          return null;
-        }
-        return Math.min(times * 1000, 3000);
-      },
-      maxRetriesPerRequest: 3,
-      enableReadyCheck: true,
-      lazyConnect: true,
-      connectTimeout: 10000,
-      keepAlive: 30000,
-    };
+    // ioredis acepta directamente la URL en el constructor
+    // No necesitamos parsearla manualmente
+    return process.env.REDIS_URL;
   }
 
   // Opción 2: Usar variables individuales (VALKEY_HOST, etc.)
@@ -50,7 +38,32 @@ const getValkeyConfig = () => {
 };
 
 // Cliente Valkey
-export const valkey = new Redis(getValkeyConfig() as any);
+// Si recibimos una URL string, ioredis la parseará automáticamente
+// Si recibimos un objeto config, lo usará directamente
+const valkeyConfig = getValkeyConfig();
+
+// Opciones comunes para ambos casos
+const commonOptions = {
+  retryStrategy: (times: number) => {
+    if (times > 3) {
+      logger.warn('⚠️ Valkey no disponible - continuando sin cache');
+      return null;
+    }
+    return Math.min(times * 1000, 3000);
+  },
+  maxRetriesPerRequest: 3,
+  enableReadyCheck: true,
+  lazyConnect: true,
+  connectTimeout: 10000,
+  keepAlive: 30000,
+};
+
+export const valkey = new Redis(
+  typeof valkeyConfig === 'string'
+    ? valkeyConfig // ioredis acepta URL directamente
+    : valkeyConfig, // O un objeto de configuración
+  typeof valkeyConfig === 'string' ? commonOptions : undefined // Opciones adicionales si es URL
+);
 
 // Eventos de conexión
 valkey.on('connect', () => {
