@@ -27,6 +27,7 @@ import addressesRoutes from './application/routes/addresses.routes';
 import newsletterRoutes from './application/routes/newsletter.routes';
 import reviewRoutes from './application/routes/review.routes';
 import contactRoutes from './application/routes/contact.routes';
+import testEmailRoutes from './application/routes/test-email.routes';
 
 // Validar variables de entorno al inicio
 validateEnv();
@@ -151,6 +152,7 @@ apiRouter.use('/addresses', addressesRoutes);
 apiRouter.use('/newsletter', newsletterRoutes);
 apiRouter.use('/reviews', reviewRoutes);
 apiRouter.use('/contact', contactRoutes);
+apiRouter.use('/test-email', testEmailRoutes);
 
 // API info endpoint
 apiRouter.get('/', (req, res) => {
