@@ -7,12 +7,16 @@ const createTransporter = () => {
   if (process.env.EMAIL_SERVICE === 'zoho') {
     return nodemailer.createTransport({
       host: 'smtp.zoho.com',
-      port: 465,
-      secure: true, // SSL/TLS
+      port: 587, // Puerto 587 con STARTTLS (mejor compatibilidad en cloud)
+      secure: false, // false para STARTTLS
+      requireTLS: true, // Requiere TLS
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASSWORD,
       },
+      connectionTimeout: 10000, // 10 segundos de timeout
+      greetingTimeout: 10000,
+      socketTimeout: 10000,
     });
   }
 
@@ -62,11 +66,26 @@ export const sendEmail = async (options: SendEmailOptions): Promise<void> => {
       return;
     }
 
+    logger.info('📧 Configurando transporter de email...', {
+      service: process.env.EMAIL_SERVICE,
+      user: process.env.EMAIL_USER,
+    });
+
     const transporter = createTransporter();
 
-    // Verificar conexión
-    await transporter.verify();
-    logger.info('✓ Conexión SMTP verificada');
+    // Verificar conexión con timeout
+    logger.info('🔌 Verificando conexión SMTP...');
+    try {
+      await transporter.verify();
+      logger.info('✅ Conexión SMTP verificada correctamente');
+    } catch (verifyError: any) {
+      logger.error('❌ Error al verificar conexión SMTP:', {
+        message: verifyError.message,
+        code: verifyError.code,
+        command: verifyError.command,
+      });
+      throw verifyError;
+    }
 
     // Configurar opciones del email
     const mailOptions = {
@@ -78,6 +97,7 @@ export const sendEmail = async (options: SendEmailOptions): Promise<void> => {
     };
 
     // Enviar email
+    logger.info('📤 Enviando email...');
     const info = await transporter.sendMail(mailOptions);
 
     logger.info('✅ Email enviado correctamente', {
@@ -85,9 +105,14 @@ export const sendEmail = async (options: SendEmailOptions): Promise<void> => {
       to: options.to,
       subject: options.subject,
     });
-  } catch (error) {
-    logger.error('❌ Error al enviar email:', error);
-    throw new Error('Error al enviar email');
+  } catch (error: any) {
+    logger.error('❌ Error al enviar email:', {
+      message: error.message,
+      code: error.code,
+      command: error.command,
+      stack: error.stack,
+    });
+    throw new Error(`Error al enviar email: ${error.message}`);
   }
 };
 
