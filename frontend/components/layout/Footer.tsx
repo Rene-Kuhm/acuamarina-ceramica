@@ -142,28 +142,39 @@ export function Footer() {
               <li className="flex items-start space-x-3">
                 <Mail className="h-4 w-4 mt-0.5 text-[#14b8a6] flex-shrink-0" />
                 <a
-                  href="mailto:info@acuamarina.com"
+                  href="mailto:contacto@aguamarinamosaicos.com"
                   className="text-sm text-gray-600 transition-colors hover:text-[#14b8a6]"
                 >
-                  info@acuamarina.com
+                  contacto@aguamarinamosaicos.com
                 </a>
               </li>
               <li className="flex items-start space-x-3">
                 <Phone className="h-4 w-4 mt-0.5 text-[#14b8a6] flex-shrink-0" />
-                <a
-                  href="tel:+541123456789"
-                  className="text-sm text-gray-600 transition-colors hover:text-[#14b8a6]"
-                >
-                  +54 telefono
-                </a>
+                <div className="text-sm text-gray-600">
+                  <a
+                    href="https://wa.me/5492334404670"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition-colors hover:text-[#14b8a6] block"
+                  >
+                    WhatsApp: 2334-404670
+                  </a>
+                  <a
+                    href="tel:+5492334404331"
+                    className="transition-colors hover:text-[#14b8a6]"
+                  >
+                    Tel: 2334-404331
+                  </a>
+                </div>
               </li>
               <li className="flex items-start space-x-3">
                 <MapPin className="h-4 w-4 mt-0.5 text-[#14b8a6] flex-shrink-0" />
-                <span className="text-sm text-gray-600">
-                  Av. Ejemplo 1234
-                  <br />
-                  ejemplo, Argentina
-                </span>
+                <div className="text-sm text-gray-600">
+                  <p className="font-medium">Local Comercial:</p>
+                  <p>Av. Buccino y Piquillines</p>
+                  <p>Playas Doradas - Sierra Grande</p>
+                  <p className="mt-1 text-xs">Lun-Dom: 09:00-13:30 | 17:00-23:00</p>
+                </div>
               </li>
             </ul>
 

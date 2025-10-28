@@ -96,8 +96,12 @@ export default function ContactoPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-2">Email</h3>
-                    <p className="text-sm text-gray-600">info@aguamarina.com</p>
-                    <p className="text-sm text-gray-600">ventas@aguamarina.com</p>
+                    <a
+                      href="mailto:contacto@aguamarinamosaicos.com"
+                      className="text-sm text-gray-600 hover:text-[#14b8a6] transition-colors"
+                    >
+                      contacto@aguamarinamosaicos.com
+                    </a>
                   </div>
                 </div>
               </CardContent>
@@ -110,9 +114,21 @@ export default function ContactoPage() {
                     <Phone className="w-6 h-6 text-[#14b8a6]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Teléfono</h3>
-                    <p className="text-sm text-gray-600">+54 11 1234-5678</p>
-                    <p className="text-sm text-gray-600">Lun - Vie: 9:00 - 18:00</p>
+                    <h3 className="font-semibold text-gray-900 mb-2">Teléfonos</h3>
+                    <a
+                      href="https://wa.me/5492334404670"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-gray-600 hover:text-[#14b8a6] transition-colors block mb-1"
+                    >
+                      📱 WhatsApp: 2334-404670
+                    </a>
+                    <a
+                      href="tel:+5492334404331"
+                      className="text-sm text-gray-600 hover:text-[#14b8a6] transition-colors block"
+                    >
+                      📞 Tel: 2334-404331
+                    </a>
                   </div>
                 </div>
               </CardContent>
@@ -124,12 +140,29 @@ export default function ContactoPage() {
                   <div className="p-3 bg-gradient-to-br from-[#f0fdfa] to-[#ccfbf1] rounded-full flex-shrink-0">
                     <MapPin className="w-6 h-6 text-[#14b8a6]" />
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Dirección</h3>
-                    <p className="text-sm text-gray-600">
-                      Av. Corrientes 1234<br />
-                      Buenos Aires, Argentina
-                    </p>
+                  <div className="space-y-3">
+                    <div>
+                      <h3 className="font-semibold text-gray-900 mb-1">Local Comercial</h3>
+                      <p className="text-sm text-gray-600">
+                        Av. Buccino y Piquillines<br />
+                        Playas Doradas - Sierra Grande<br />
+                        Río Negro, Argentina
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Lun - Dom: 09:00 - 13:30 | 17:00 - 23:00
+                      </p>
+                    </div>
+                    <div className="pt-2 border-t border-gray-100">
+                      <h3 className="font-semibold text-gray-900 mb-1">Showroom</h3>
+                      <p className="text-sm text-gray-600">
+                        Palacios 254<br />
+                        Eduardo Castex<br />
+                        La Pampa, Argentina
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Horario: A convenir
+                      </p>
+                    </div>
                   </div>
                 </div>
               </CardContent>
