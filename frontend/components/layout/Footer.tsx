@@ -169,11 +169,20 @@ export function Footer() {
               </li>
               <li className="flex items-start space-x-3">
                 <MapPin className="h-4 w-4 mt-0.5 text-[#14b8a6] flex-shrink-0" />
-                <div className="text-sm text-gray-600">
-                  <p className="font-medium">Local Comercial:</p>
-                  <p>Av. Buccino y Piquillines</p>
-                  <p>Playas Doradas - Sierra Grande</p>
-                  <p className="mt-1 text-xs">Lun-Dom: 09:00-13:30 | 17:00-23:00</p>
+                <div className="text-sm text-gray-600 space-y-2">
+                  <div>
+                    <p className="font-medium">Local Comercial:</p>
+                    <p>Av. Buccino y Piquillines</p>
+                    <p>Playas Doradas - Sierra Grande</p>
+                    <p>Río Negro, Argentina</p>
+                    <p className="mt-1 text-xs text-gray-500">Lun-Dom: 09:00-13:30 | 17:00-23:00</p>
+                  </div>
+                  <div className="pt-2 border-t border-gray-200">
+                    <p className="font-medium">Showroom:</p>
+                    <p>Palacios 254</p>
+                    <p>Eduardo Castex, La Pampa</p>
+                    <p className="mt-1 text-xs text-gray-500">Horario: A convenir</p>
+                  </div>
                 </div>
               </li>
             </ul>
