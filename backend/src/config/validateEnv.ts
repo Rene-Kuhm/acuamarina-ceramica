@@ -57,6 +57,11 @@ const envSchema = z.object({
   VALKEY_DB: z.string().regex(/^\d+$/).transform(Number).default('0'),
 
   // Email (opcionales para formulario de contacto)
+  // Resend API (recomendado para Railway - sin problemas de puertos bloqueados)
+  RESEND_API_KEY: z.string().optional(),
+  RESEND_FROM_EMAIL: z.string().optional(),
+
+  // SMTP (alternativa - puede no funcionar en Railway)
   EMAIL_SERVICE: z.string().optional(),
   EMAIL_USER: z.string().optional(),
   EMAIL_PASSWORD: z.string().optional(),

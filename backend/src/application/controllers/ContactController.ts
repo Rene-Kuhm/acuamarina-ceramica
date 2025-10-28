@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { logger } from '../../shared/utils/logger';
-import { sendContactEmail, sendContactConfirmation } from '../../infrastructure/email/emailService';
+import { sendContactEmail, sendContactConfirmation } from '../../infrastructure/email/resendService';
 
 export class ContactController {
   /**
