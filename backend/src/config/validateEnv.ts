@@ -50,11 +50,11 @@ const envSchema = z.object({
   MAX_FILE_SIZE: z.string().regex(/^\d+$/).transform(Number).default('5242880'),
   ALLOWED_IMAGE_TYPES: z.string().default('image/jpeg,image/png,image/webp'),
 
-  // Redis (opcionales)
-  REDIS_HOST: z.string().default('localhost'),
-  REDIS_PORT: z.string().regex(/^\d+$/).transform(Number).default('6379'),
-  REDIS_PASSWORD: z.string().optional(),
-  REDIS_DB: z.string().regex(/^\d+$/).transform(Number).default('0'),
+  // Valkey (opcionales) - Fork open-source compatible con Redis
+  VALKEY_HOST: z.string().default('localhost'),
+  VALKEY_PORT: z.string().regex(/^\d+$/).transform(Number).default('6379'),
+  VALKEY_PASSWORD: z.string().optional(),
+  VALKEY_DB: z.string().regex(/^\d+$/).transform(Number).default('0'),
 });
 
 // Tipo inferido del schema
@@ -97,5 +97,5 @@ export const logEnvConfig = (config: EnvConfig): void => {
   logger.info(`  DB_NAME: ${config.DB_NAME}`);
   logger.info(`  DB_SSL: ${config.DB_SSL}`);
   logger.info(`  LOG_LEVEL: ${config.LOG_LEVEL}`);
-  logger.info(`  REDIS: ${config.REDIS_HOST}:${config.REDIS_PORT}`);
+  logger.info(`  VALKEY: ${config.VALKEY_HOST}:${config.VALKEY_PORT}`);
 };

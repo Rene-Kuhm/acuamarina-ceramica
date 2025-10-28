@@ -37,7 +37,7 @@
 | Security | ✅ 95% | Helmet, CORS, Rate Limiting, JWT |
 | Graceful Shutdown | ✅ 100% | Cierre ordenado de conexiones |
 | Health Checks | ✅ 100% | 4 endpoints (basic, ready, live, detailed) |
-| Caching | ✅ 100% | Redis con graceful degradation |
+| Caching | ✅ 100% | Valkey con graceful degradation |
 | Environment Validation | ✅ 100% | Zod schemas |
 | Observability | ✅ 100% | Winston + Metrics + Correlation ID |
 | DTOs | ✅ 100% | Validación exhaustiva con Zod |
@@ -64,7 +64,7 @@
 - **Environment Validation** - Variables de entorno validadas al inicio
 
 ### ⚡ Performance
-- **Redis Caching** - Cache inteligente con invalidación automática
+- **Valkey Caching** - Cache inteligente con invalidación automática (fork open-source de Redis)
 - **Connection Pooling** - PostgreSQL optimizado (20 conexiones)
 - **Compression** - Gzip habilitado
 - **Lazy Initialization** - Para entornos serverless
@@ -79,7 +79,7 @@
 
 ### 🐳 DevOps
 - **Docker** - Multi-stage builds optimizados
-- **Docker Compose** - PostgreSQL + Redis + Backend
+- **Docker Compose** - PostgreSQL + Valkey + Backend
 - **CI/CD** - GitHub Actions con 5 jobs paralelos
 - **Testing** - Jest con cobertura automática
 - **Linting** - ESLint + Prettier
@@ -100,7 +100,7 @@
 - **Node.js** >= 18.0.0
 - **npm** >= 9.0.0
 - **PostgreSQL** >= 14.0 (o Docker)
-- **Redis** (opcional, mejora el performance)
+- **Valkey** (opcional, mejora el performance - fork open-source de Redis)
 
 ### Instalación Local
 
@@ -179,7 +179,7 @@ Rol: admin
 │  │  • CORS                                                 │  │
 │  │  • Rate Limiting                                        │  │
 │  │  • Compression                                          │  │
-│  │  • Cache (Redis)                                        │  │
+│  │  • Cache (Valkey)                                       │  │
 │  │  • Authentication (JWT)                                 │  │
 │  │  • Validation (Zod + DTOs)                              │  │
 │  │  • Error Handler                                        │  │
@@ -190,7 +190,7 @@ Rol: admin
          │             │             │
          ▼             ▼             ▼
 ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-│  PostgreSQL │ │    Redis    │ │  Cloudinary │
+│  PostgreSQL │ │    Valkey   │ │  Cloudinary │
 │  Database   │ │    Cache    │ │   Storage   │
 └─────────────┘ └─────────────┘ └─────────────┘
 ```

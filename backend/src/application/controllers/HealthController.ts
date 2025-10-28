@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { pool } from '../../infrastructure/database/connection';
-import { isRedisConnected } from '../../infrastructure/cache/redis';
+import { isValkeyConnected } from '../../infrastructure/cache/valkey';
 import { cacheService } from '../../infrastructure/cache/CacheService';
 import os from 'os';
 
@@ -22,7 +22,7 @@ export class HealthController {
   static async ready(req: Request, res: Response) {
     const checks = await HealthController.performHealthChecks();
 
-    const isHealthy = checks.database.status === 'up' && checks.redis.status === 'up';
+    const isHealthy = checks.database.status === 'up' && checks.valkey.status === 'up';
 
     const statusCode = isHealthy ? 200 : 503;
 
@@ -66,14 +66,14 @@ export class HealthController {
    * Realizar todos los health checks
    */
   private static async performHealthChecks() {
-    const [databaseCheck, redisCheck] = await Promise.all([
+    const [databaseCheck, valkeyCheck] = await Promise.all([
       HealthController.checkDatabase(),
-      HealthController.checkRedis(),
+      HealthController.checkValkey(),
     ]);
 
     return {
       database: databaseCheck,
-      redis: redisCheck,
+      valkey: valkeyCheck,
     };
   }
 
@@ -106,14 +106,14 @@ export class HealthController {
   }
 
   /**
-   * Verificar conexión a Redis
+   * Verificar conexión a Valkey
    */
-  private static async checkRedis() {
+  private static async checkValkey() {
     try {
-      if (!isRedisConnected()) {
+      if (!isValkeyConnected()) {
         return {
           status: 'down',
-          message: 'Redis is not connected',
+          message: 'Valkey is not connected',
         };
       }
 
@@ -124,7 +124,7 @@ export class HealthController {
       return {
         status: 'up',
         responseTime: `${responseTime}ms`,
-        message: 'Redis connection is healthy',
+        message: 'Valkey connection is healthy',
         details: {
           dbSize: stats.dbSize,
         },
@@ -132,7 +132,7 @@ export class HealthController {
     } catch (error: any) {
       return {
         status: 'down',
-        message: 'Redis connection failed',
+        message: 'Valkey connection failed',
         error: error.message,
       };
     }

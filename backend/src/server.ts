@@ -9,7 +9,7 @@ import { validateEnv } from './config/validateEnv';
 import { config } from './config/environment';
 import { swaggerOptions } from './config/swagger';
 import { connectDatabase } from './infrastructure/database/connection';
-import { connectRedis, disconnectRedis } from './infrastructure/cache/redis';
+import { connectValkey, disconnectValkey } from './infrastructure/cache/valkey';
 import { requestIdMiddleware } from './application/middleware/requestId';
 import { errorHandler } from './application/middleware/errorHandler';
 import { logger } from './shared/utils/logger';
@@ -96,7 +96,7 @@ app.get('/health', HealthController.basic);
  * @swagger
  * /health/ready:
  *   get:
- *     summary: Readiness check (con DB y Redis)
+ *     summary: Readiness check (con DB y Valkey)
  *     tags: [Health]
  *     security: []
  *     responses:
@@ -229,12 +229,12 @@ const startServer = async () => {
       logger.warn('   The server will start but database-dependent features will fail');
     }
 
-    // Conectar a Redis (opcional - no bloquea el inicio)
+    // Conectar a Valkey (opcional - no bloquea el inicio)
     try {
-      await connectRedis();
-      logger.info('✅ Redis connected successfully');
+      await connectValkey();
+      logger.info('✅ Valkey connected successfully');
     } catch (error) {
-      logger.warn('⚠️ Redis not available, continuing without cache');
+      logger.warn('⚠️ Valkey not available, continuing without cache');
     }
 
     // Iniciar servidor
@@ -283,8 +283,8 @@ const gracefulShutdown = async (signal: string) => {
         await pool.end();
         logger.info('✓ Conexiones de base de datos cerradas');
 
-        // Cerrar conexión de Redis
-        await disconnectRedis();
+        // Cerrar conexión de Valkey
+        await disconnectValkey();
 
         logger.info('✓ Cierre graceful completado');
         process.exit(0);

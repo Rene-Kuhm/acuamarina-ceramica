@@ -1,4 +1,4 @@
-import { redis, isRedisConnected } from './redis';
+import { valkey, isValkeyConnected } from './valkey';
 import { logger } from '../../shared/utils/logger';
 
 export class CacheService {
@@ -18,15 +18,15 @@ export class CacheService {
    * Guardar en cache
    */
   async set(key: string, value: any, ttl?: number): Promise<void> {
-    if (!isRedisConnected()) {
-      logger.warn('Redis not connected, skipping cache set');
+    if (!isValkeyConnected()) {
+      logger.warn('Valkey not connected, skipping cache set');
       return;
     }
 
     try {
       const serialized = JSON.stringify(value);
       const expiry = ttl || this.defaultTTL;
-      await redis.setex(key, expiry, serialized);
+      await valkey.setex(key, expiry, serialized);
       logger.debug(`Cache set: ${key} (TTL: ${expiry}s)`);
     } catch (error) {
       logger.error('Error setting cache:', error);
@@ -37,13 +37,13 @@ export class CacheService {
    * Obtener de cache
    */
   async get<T>(key: string): Promise<T | null> {
-    if (!isRedisConnected()) {
-      logger.warn('Redis not connected, skipping cache get');
+    if (!isValkeyConnected()) {
+      logger.warn('Valkey not connected, skipping cache get');
       return null;
     }
 
     try {
-      const cached = await redis.get(key);
+      const cached = await valkey.get(key);
       if (!cached) {
         logger.debug(`Cache miss: ${key}`);
         return null;
@@ -61,12 +61,12 @@ export class CacheService {
    * Eliminar de cache
    */
   async del(key: string): Promise<void> {
-    if (!isRedisConnected()) {
+    if (!isValkeyConnected()) {
       return;
     }
 
     try {
-      await redis.del(key);
+      await valkey.del(key);
       logger.debug(`Cache deleted: ${key}`);
     } catch (error) {
       logger.error('Error deleting cache:', error);
@@ -77,14 +77,14 @@ export class CacheService {
    * Eliminar por patrón
    */
   async delPattern(pattern: string): Promise<void> {
-    if (!isRedisConnected()) {
+    if (!isValkeyConnected()) {
       return;
     }
 
     try {
-      const keys = await redis.keys(pattern);
+      const keys = await valkey.keys(pattern);
       if (keys.length > 0) {
-        await redis.del(...keys);
+        await valkey.del(...keys);
         logger.debug(`Cache deleted by pattern: ${pattern} (${keys.length} keys)`);
       }
     } catch (error) {
@@ -96,12 +96,12 @@ export class CacheService {
    * Verificar si existe
    */
   async exists(key: string): Promise<boolean> {
-    if (!isRedisConnected()) {
+    if (!isValkeyConnected()) {
       return false;
     }
 
     try {
-      const result = await redis.exists(key);
+      const result = await valkey.exists(key);
       return result === 1;
     } catch (error) {
       logger.error('Error checking cache existence:', error);
@@ -113,12 +113,12 @@ export class CacheService {
    * Obtener TTL restante
    */
   async ttl(key: string): Promise<number> {
-    if (!isRedisConnected()) {
+    if (!isValkeyConnected()) {
       return -1;
     }
 
     try {
-      return await redis.ttl(key);
+      return await valkey.ttl(key);
     } catch (error) {
       logger.error('Error getting TTL:', error);
       return -1;
@@ -152,12 +152,12 @@ export class CacheService {
    * Limpiar toda la cache
    */
   async flush(): Promise<void> {
-    if (!isRedisConnected()) {
+    if (!isValkeyConnected()) {
       return;
     }
 
     try {
-      await redis.flushdb();
+      await valkey.flushdb();
       logger.info('✓ Cache flushed');
     } catch (error) {
       logger.error('Error flushing cache:', error);
@@ -168,13 +168,13 @@ export class CacheService {
    * Obtener estadísticas
    */
   async stats(): Promise<any> {
-    if (!isRedisConnected()) {
+    if (!isValkeyConnected()) {
       return { connected: false };
     }
 
     try {
-      const info = await redis.info('stats');
-      const dbSize = await redis.dbsize();
+      const info = await valkey.info('stats');
+      const dbSize = await valkey.dbsize();
 
       return {
         connected: true,
