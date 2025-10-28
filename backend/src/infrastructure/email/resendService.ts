@@ -9,6 +9,7 @@ export interface SendEmailOptions {
   subject: string;
   html: string;
   from?: string;
+  replyTo?: string;
 }
 
 /**
@@ -35,6 +36,7 @@ export const sendEmail = async (options: SendEmailOptions): Promise<void> => {
     const data = await resend.emails.send({
       from: options.from || `Aguamarina Mosaicos <${process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev'}>`,
       to: options.to,
+      replyTo: options.replyTo || 'contacto@aguamarinamosaicos.com',
       subject: options.subject,
       html: options.html,
     });
@@ -176,6 +178,7 @@ export const sendContactEmail = async (data: {
     to: 'contacto@aguamarinamosaicos.com',
     subject: `Nuevo mensaje de contacto: ${data.subject}`,
     html,
+    replyTo: data.email, // Responder directamente al usuario
   });
 };
 
