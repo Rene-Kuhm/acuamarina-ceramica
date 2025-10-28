@@ -42,28 +42,26 @@ const getValkeyConfig = () => {
 // Si recibimos un objeto config, lo usará directamente
 const valkeyConfig = getValkeyConfig();
 
-// Opciones comunes para ambos casos
-const commonOptions = {
-  retryStrategy: (times: number) => {
-    if (times > 3) {
-      logger.warn('⚠️ Valkey no disponible - continuando sin cache');
-      return null;
-    }
-    return Math.min(times * 1000, 3000);
-  },
-  maxRetriesPerRequest: 3,
-  enableReadyCheck: true,
-  lazyConnect: true,
-  connectTimeout: 10000,
-  keepAlive: 30000,
-};
-
-export const valkey = new Redis(
+// Crear cliente según el tipo de configuración
+export const valkey =
   typeof valkeyConfig === 'string'
-    ? valkeyConfig // ioredis acepta URL directamente
-    : valkeyConfig, // O un objeto de configuración
-  typeof valkeyConfig === 'string' ? commonOptions : undefined // Opciones adicionales si es URL
-);
+    ? // Si es string (REDIS_URL), pasar la URL y opciones separadas
+      new Redis(valkeyConfig, {
+        retryStrategy: (times: number) => {
+          if (times > 3) {
+            logger.warn('⚠️ Valkey no disponible - continuando sin cache');
+            return null;
+          }
+          return Math.min(times * 1000, 3000);
+        },
+        maxRetriesPerRequest: 3,
+        enableReadyCheck: true,
+        lazyConnect: true,
+        connectTimeout: 10000,
+        keepAlive: 30000,
+      })
+    : // Si es objeto, ya tiene todas las opciones incluidas
+      new Redis(valkeyConfig);
 
 // Eventos de conexión
 valkey.on('connect', () => {
