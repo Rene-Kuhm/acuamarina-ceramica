@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { logger } from '../../shared/utils/logger';
-// Si tienes nodemailer configurado, importa aquí
-// import { sendEmail } from '../../infrastructure/email/emailService';
+import { sendContactEmail, sendContactConfirmation } from '../../infrastructure/email/emailService';
 
 export class ContactController {
   /**
@@ -36,29 +35,33 @@ export class ContactController {
         hasPhone: !!phone,
       });
 
-      // TODO: Implementar envío de email
-      // Opción 1: Enviar email usando nodemailer
-      // await sendEmail({
-      //   to: 'contacto@aguamarinamosaicos.com',
-      //   subject: `Nuevo mensaje de contacto: ${subject}`,
-      //   html: `
-      //     <h2>Nuevo mensaje de contacto</h2>
-      //     <p><strong>Nombre:</strong> ${name}</p>
-      //     <p><strong>Email:</strong> ${email}</p>
-      //     <p><strong>Teléfono:</strong> ${phone || 'No proporcionado'}</p>
-      //     <p><strong>Asunto:</strong> ${subject}</p>
-      //     <p><strong>Mensaje:</strong></p>
-      //     <p>${message}</p>
-      //   `,
-      // });
+      // Enviar email a la empresa
+      try {
+        await sendContactEmail({
+          name,
+          email,
+          phone,
+          subject,
+          message,
+        });
+        logger.info('✅ Email enviado a contacto@aguamarinamosaicos.com');
+      } catch (emailError) {
+        // Si falla el email a la empresa, logueamos pero no fallamos la request
+        logger.error('❌ Error al enviar email a la empresa:', emailError);
+      }
 
-      // Opción 2: Guardar en base de datos (opcional)
-      // await pool.query(
-      //   'INSERT INTO contact_messages (name, email, phone, subject, message, created_at) VALUES ($1, $2, $3, $4, $5, NOW())',
-      //   [name, email, phone, subject, message]
-      // );
+      // Enviar email de confirmación al usuario
+      try {
+        await sendContactConfirmation({
+          name,
+          email,
+        });
+        logger.info('✅ Email de confirmación enviado al usuario');
+      } catch (confirmError) {
+        // Si falla el email de confirmación, solo logueamos
+        logger.error('❌ Error al enviar email de confirmación:', confirmError);
+      }
 
-      // Por ahora, solo registramos el mensaje
       logger.info('📧 Mensaje de contacto procesado correctamente', {
         name,
         email,

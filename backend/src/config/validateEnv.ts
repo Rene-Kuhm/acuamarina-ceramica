@@ -55,6 +55,14 @@ const envSchema = z.object({
   VALKEY_PORT: z.string().regex(/^\d+$/).transform(Number).default('6379'),
   VALKEY_PASSWORD: z.string().optional(),
   VALKEY_DB: z.string().regex(/^\d+$/).transform(Number).default('0'),
+
+  // Email (opcionales para formulario de contacto)
+  EMAIL_SERVICE: z.string().optional(),
+  EMAIL_USER: z.string().optional(),
+  EMAIL_PASSWORD: z.string().optional(),
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.string().optional(),
+  SMTP_SECURE: z.string().optional(),
 });
 
 // Tipo inferido del schema
