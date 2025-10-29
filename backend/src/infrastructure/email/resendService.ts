@@ -1,8 +1,23 @@
 import { Resend } from 'resend';
 import { logger } from '../../shared/utils/logger';
 
-// Inicializar Resend
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Inicializar Resend de forma lazy (cuando se use)
+let resendInstance: Resend | null = null;
+
+const getResendInstance = (): Resend => {
+  if (!resendInstance) {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      throw new Error('RESEND_API_KEY no está configurada');
+    }
+    logger.info('🔧 Inicializando Resend con API key:', {
+      apiKeyPrefix: apiKey.substring(0, 10),
+      apiKeyLength: apiKey.length,
+    });
+    resendInstance = new Resend(apiKey);
+  }
+  return resendInstance;
+};
 
 export interface SendEmailOptions {
   to: string;
@@ -38,6 +53,7 @@ export const sendEmail = async (options: SendEmailOptions): Promise<void> => {
     });
 
     // Enviar email con Resend
+    const resend = getResendInstance();
     const data = await resend.emails.send({
       from: fromEmail,
       to: options.to,
