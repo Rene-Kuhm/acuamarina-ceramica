@@ -19,27 +19,99 @@ export default async function AppleIcon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
+          background: '#ffffff',
           position: 'relative',
         }}
       >
-        {/* Professional monogram AM (Aguamarina Mosaicos) */}
+        {/* Expert design: Stylized wave + geometric mosaic tiles (scaled for 180x180) */}
+
+        {/* Background circle with gradient */}
         <div style={{
+          position: 'absolute',
+          width: '160px',
+          height: '160px',
+          background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
+          borderRadius: '50%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          position: 'relative',
+          boxShadow: '0 4px 12px rgba(20, 184, 166, 0.3)',
         }}>
-          <span style={{
-            fontSize: '110px',
-            fontWeight: 900,
-            color: 'white',
-            letterSpacing: '-4px',
-            fontFamily: 'system-ui, -apple-system, sans-serif',
-            textShadow: '0 2px 4px rgba(0,0,0,0.15)',
+          {/* First wave layer */}
+          <div style={{
+            position: 'absolute',
+            top: '40px',
+            left: '30px',
+            width: '100px',
+            height: '30px',
+            background: 'rgba(255,255,255,0.95)',
+            borderRadius: '0 0 50px 50px',
+            display: 'flex',
+          }} />
+
+          {/* Second wave layer */}
+          <div style={{
+            position: 'absolute',
+            top: '60px',
+            left: '20px',
+            width: '120px',
+            height: '30px',
+            background: 'rgba(255,255,255,0.85)',
+            borderRadius: '0 0 60px 60px',
+            display: 'flex',
+          }} />
+
+          {/* Third wave layer (subtle) */}
+          <div style={{
+            position: 'absolute',
+            top: '80px',
+            left: '25px',
+            width: '110px',
+            height: '20px',
+            background: 'rgba(255,255,255,0.6)',
+            borderRadius: '0 0 55px 55px',
+            display: 'flex',
+          }} />
+
+          {/* Geometric mosaic tiles at bottom - row of 5 tiles */}
+          <div style={{
+            position: 'absolute',
+            bottom: '30px',
+            left: '35px',
+            display: 'flex',
+            gap: '6px',
           }}>
-            AM
-          </span>
+            <div style={{
+              width: '16px',
+              height: '16px',
+              background: '#5eead4',
+              borderRadius: '3px',
+            }} />
+            <div style={{
+              width: '16px',
+              height: '16px',
+              background: 'rgba(255,255,255,0.95)',
+              borderRadius: '3px',
+            }} />
+            <div style={{
+              width: '16px',
+              height: '16px',
+              background: '#2dd4bf',
+              borderRadius: '3px',
+            }} />
+            <div style={{
+              width: '16px',
+              height: '16px',
+              background: 'rgba(255,255,255,0.95)',
+              borderRadius: '3px',
+            }} />
+            <div style={{
+              width: '16px',
+              height: '16px',
+              background: '#5eead4',
+              borderRadius: '3px',
+            }} />
+          </div>
         </div>
       </div>
     ),

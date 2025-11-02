@@ -19,27 +19,75 @@ export default async function Icon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
+          background: '#ffffff',
           position: 'relative',
         }}
       >
-        {/* Professional monogram AM (Aguamarina Mosaicos) */}
+        {/* Expert design: Stylized wave + geometric mosaic tiles */}
+
+        {/* Background circle with gradient */}
         <div style={{
+          position: 'absolute',
+          width: '32px',
+          height: '32px',
+          background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
+          borderRadius: '50%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          position: 'relative',
         }}>
-          <span style={{
-            fontSize: '20px',
-            fontWeight: 900,
-            color: 'white',
-            letterSpacing: '-1px',
-            fontFamily: 'system-ui, -apple-system, sans-serif',
-            textShadow: '0 1px 2px rgba(0,0,0,0.1)',
+          {/* Stylized wave pattern (top part) */}
+          <div style={{
+            position: 'absolute',
+            top: '8px',
+            left: '6px',
+            width: '20px',
+            height: '6px',
+            background: 'rgba(255,255,255,0.95)',
+            borderRadius: '0 0 10px 10px',
+            display: 'flex',
+          }} />
+
+          {/* Second wave layer */}
+          <div style={{
+            position: 'absolute',
+            top: '12px',
+            left: '4px',
+            width: '24px',
+            height: '6px',
+            background: 'rgba(255,255,255,0.8)',
+            borderRadius: '0 0 12px 12px',
+            display: 'flex',
+          }} />
+
+          {/* Geometric mosaic tiles at bottom */}
+          <div style={{
+            position: 'absolute',
+            bottom: '6px',
+            left: '8px',
+            display: 'flex',
+            gap: '2px',
           }}>
-            AM
-          </span>
+            {/* Three small tiles */}
+            <div style={{
+              width: '4px',
+              height: '4px',
+              background: '#5eead4',
+              borderRadius: '1px',
+            }} />
+            <div style={{
+              width: '4px',
+              height: '4px',
+              background: 'rgba(255,255,255,0.9)',
+              borderRadius: '1px',
+            }} />
+            <div style={{
+              width: '4px',
+              height: '4px',
+              background: '#5eead4',
+              borderRadius: '1px',
+            }} />
+          </div>
         </div>
       </div>
     ),
