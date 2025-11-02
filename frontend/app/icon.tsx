@@ -14,19 +14,55 @@ export default async function Icon() {
     (
       <div
         style={{
-          fontSize: 24,
-          background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
           width: '100%',
           height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: 'white',
-          fontWeight: 'bold',
-          borderRadius: '20%',
+          background: '#ffffff',
+          position: 'relative',
         }}
       >
-        A
+        {/* Mosaic tile pattern - 2x2 grid with aquamarine colors */}
+        <div style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          width: '28px',
+          height: '28px',
+          gap: '2px',
+        }}>
+          {/* Top-left tile - Dark teal */}
+          <div style={{
+            width: '13px',
+            height: '13px',
+            background: '#0d9488',
+            borderRadius: '2px',
+          }} />
+
+          {/* Top-right tile - Light aquamarine */}
+          <div style={{
+            width: '13px',
+            height: '13px',
+            background: '#5eead4',
+            borderRadius: '2px',
+          }} />
+
+          {/* Bottom-left tile - Medium aquamarine */}
+          <div style={{
+            width: '13px',
+            height: '13px',
+            background: '#2dd4bf',
+            borderRadius: '2px',
+          }} />
+
+          {/* Bottom-right tile - Primary teal */}
+          <div style={{
+            width: '13px',
+            height: '13px',
+            background: '#14b8a6',
+            borderRadius: '2px',
+          }} />
+        </div>
       </div>
     ),
     {

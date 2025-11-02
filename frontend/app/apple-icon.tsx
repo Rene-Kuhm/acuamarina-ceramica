@@ -14,19 +14,84 @@ export default async function AppleIcon() {
     (
       <div
         style={{
-          fontSize: 120,
-          background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
           width: '100%',
           height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: 'white',
-          fontWeight: 'bold',
+          background: '#ffffff',
+          position: 'relative',
           borderRadius: '22.5%',
         }}
       >
-        A
+        {/* Mosaic tile pattern - 3x3 grid with aquamarine colors */}
+        <div style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          width: '150px',
+          height: '150px',
+          gap: '6px',
+        }}>
+          {/* Row 1 */}
+          <div style={{
+            width: '46px',
+            height: '46px',
+            background: '#0d9488',
+            borderRadius: '6px',
+          }} />
+          <div style={{
+            width: '46px',
+            height: '46px',
+            background: '#5eead4',
+            borderRadius: '6px',
+          }} />
+          <div style={{
+            width: '46px',
+            height: '46px',
+            background: '#14b8a6',
+            borderRadius: '6px',
+          }} />
+
+          {/* Row 2 */}
+          <div style={{
+            width: '46px',
+            height: '46px',
+            background: '#2dd4bf',
+            borderRadius: '6px',
+          }} />
+          <div style={{
+            width: '46px',
+            height: '46px',
+            background: '#14b8a6',
+            borderRadius: '6px',
+          }} />
+          <div style={{
+            width: '46px',
+            height: '46px',
+            background: '#0d9488',
+            borderRadius: '6px',
+          }} />
+
+          {/* Row 3 */}
+          <div style={{
+            width: '46px',
+            height: '46px',
+            background: '#14b8a6',
+            borderRadius: '6px',
+          }} />
+          <div style={{
+            width: '46px',
+            height: '46px',
+            background: '#0d9488',
+            borderRadius: '6px',
+          }} />
+          <div style={{
+            width: '46px',
+            height: '46px',
+            background: '#2dd4bf',
+            borderRadius: '6px',
+          }} />
+        </div>
       </div>
     ),
     {
