@@ -99,9 +99,9 @@ export default function HomePage() {
                 </span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-800 max-w-3xl mx-auto leading-relaxed font-medium">
-                Descubre nuestra colección premium de mosaicos cerámicos.
+                Somos mosaicos. Pedazos de luz, amor, historia, estrellas…
                 <br />
-                <span className="text-gray-700">Calidad excepcional para proyectos extraordinarios.</span>
+                <span className="text-gray-700">pegados con magia, música y palabras.</span>
               </p>
             </motion.div>
 

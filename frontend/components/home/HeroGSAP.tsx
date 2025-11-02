@@ -123,9 +123,9 @@ export function HeroGSAP() {
           ref={subtitleRef}
           className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-12 leading-relaxed"
         >
-          Descubre nuestra colección premium de mosaicos cerámicos.
+          Somos mosaicos. Pedazos de luz, amor, historia, estrellas…
           <br />
-          Calidad excepcional para proyectos extraordinarios.
+          pegados con magia, música y palabras.
         </p>
 
         <div
