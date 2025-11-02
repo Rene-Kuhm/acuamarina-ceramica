@@ -30,11 +30,8 @@ export const metadata: Metadata = {
     "cerámicos, azulejos, pisos, revestimientos, construcción, decoración, mosaicos, porcelanato",
   manifest: "/manifest.webmanifest",
   icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/logo.png", type: "image/png", sizes: "512x512" },
-    ],
-    apple: "/logo.png",
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
     shortcut: "/favicon.ico",
   },
   alternates: {
