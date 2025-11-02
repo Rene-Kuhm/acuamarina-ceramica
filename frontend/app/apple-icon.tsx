@@ -19,78 +19,27 @@ export default async function AppleIcon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#ffffff',
+          background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
           position: 'relative',
-          borderRadius: '22.5%',
         }}
       >
-        {/* Mosaic tile pattern - 3x3 grid with aquamarine colors */}
+        {/* Professional monogram AM (Aguamarina Mosaicos) */}
         <div style={{
           display: 'flex',
-          flexWrap: 'wrap',
-          width: '150px',
-          height: '150px',
-          gap: '6px',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
         }}>
-          {/* Row 1 */}
-          <div style={{
-            width: '46px',
-            height: '46px',
-            background: '#0d9488',
-            borderRadius: '6px',
-          }} />
-          <div style={{
-            width: '46px',
-            height: '46px',
-            background: '#5eead4',
-            borderRadius: '6px',
-          }} />
-          <div style={{
-            width: '46px',
-            height: '46px',
-            background: '#14b8a6',
-            borderRadius: '6px',
-          }} />
-
-          {/* Row 2 */}
-          <div style={{
-            width: '46px',
-            height: '46px',
-            background: '#2dd4bf',
-            borderRadius: '6px',
-          }} />
-          <div style={{
-            width: '46px',
-            height: '46px',
-            background: '#14b8a6',
-            borderRadius: '6px',
-          }} />
-          <div style={{
-            width: '46px',
-            height: '46px',
-            background: '#0d9488',
-            borderRadius: '6px',
-          }} />
-
-          {/* Row 3 */}
-          <div style={{
-            width: '46px',
-            height: '46px',
-            background: '#14b8a6',
-            borderRadius: '6px',
-          }} />
-          <div style={{
-            width: '46px',
-            height: '46px',
-            background: '#0d9488',
-            borderRadius: '6px',
-          }} />
-          <div style={{
-            width: '46px',
-            height: '46px',
-            background: '#2dd4bf',
-            borderRadius: '6px',
-          }} />
+          <span style={{
+            fontSize: '110px',
+            fontWeight: 900,
+            color: 'white',
+            letterSpacing: '-4px',
+            fontFamily: 'system-ui, -apple-system, sans-serif',
+            textShadow: '0 2px 4px rgba(0,0,0,0.15)',
+          }}>
+            AM
+          </span>
         </div>
       </div>
     ),
