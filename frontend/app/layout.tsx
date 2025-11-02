@@ -19,7 +19,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://aguamarina-mosaicos.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://aguamarinamosaicos.com"),
   title: {
     default: "Aguamarina Mosaicos - Tu tienda de cerámicos de calidad",
     template: "%s | Aguamarina Mosaicos",
@@ -30,8 +30,51 @@ export const metadata: Metadata = {
     "cerámicos, azulejos, pisos, revestimientos, construcción, decoración, mosaicos, porcelanato",
   manifest: "/manifest.webmanifest",
   icons: {
-    icon: "/logo.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/logo.png", type: "image/png", sizes: "512x512" },
+    ],
     apple: "/logo.png",
+    shortcut: "/favicon.ico",
+  },
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "es_AR",
+    url: process.env.NEXT_PUBLIC_BASE_URL || "https://aguamarinamosaicos.com",
+    siteName: "Aguamarina Mosaicos",
+    title: "Aguamarina Mosaicos - Tu tienda de cerámicos de calidad",
+    description: "Descubre la mejor selección de cerámicos para tu hogar. Calidad, diseño y precios accesibles.",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Aguamarina Mosaicos",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Aguamarina Mosaicos - Tu tienda de cerámicos de calidad",
+    description: "Descubre la mejor selección de cerámicos para tu hogar",
+    images: ["/logo.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION,
   },
 };
 

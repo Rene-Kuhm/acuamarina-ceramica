@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://aguamarina-mosaicos.com";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://aguamarinamosaicos.com";
 
   return {
     rules: [
@@ -17,7 +17,6 @@ export default function robots(): MetadataRoute.Robots {
           "/pedidos/",
           "/auth/forgot-password",
           "/auth/reset-password",
-          "/*?*", // Block query parameters from being indexed
         ],
         crawlDelay: 1,
       },
@@ -34,6 +33,5 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
-    host: baseUrl,
   };
 }

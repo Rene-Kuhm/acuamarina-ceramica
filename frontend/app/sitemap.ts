@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://aguamarina-mosaicos.com";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://aguamarinamosaicos.com";
   const now = new Date();
 
   // All static pages with optimized priorities
@@ -81,38 +81,66 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Dynamic pages can be added here when backend is connected
-  // Example for production:
-  /*
+  // Fetch dynamic content from API
   try {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+    if (!API_URL) {
+      console.warn('NEXT_PUBLIC_API_URL not configured, returning static sitemap');
+      return staticPages;
+    }
+
+    const dynamicPages: MetadataRoute.Sitemap = [];
+
     // Fetch products
-    const productsRes = await fetch(`${API_URL}/products?limit=1000`);
-    const products = await productsRes.json();
-    const productPages = products.data.map((product: any) => ({
-      url: `${baseUrl}/productos/${product.slug}`,
-      lastModified: new Date(product.updatedAt),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    }));
+    try {
+      const productsRes = await fetch(`${API_URL}/products?limit=1000`, {
+        next: { revalidate: 3600 }, // Cache for 1 hour
+      });
+
+      if (productsRes.ok) {
+        const productsData = await productsRes.json();
+        const products = productsData.data || [];
+
+        const productPages = products.map((product: any) => ({
+          url: `${baseUrl}/productos/${product.slug}`,
+          lastModified: product.updated_at ? new Date(product.updated_at) : now,
+          changeFrequency: 'weekly' as const,
+          priority: 0.7,
+        }));
+
+        dynamicPages.push(...productPages);
+      }
+    } catch (error) {
+      console.error('Error fetching products for sitemap:', error);
+    }
 
     // Fetch categories
-    const categoriesRes = await fetch(`${API_URL}/categories`);
-    const categories = await categoriesRes.json();
-    const categoryPages = categories.map((category: any) => ({
-      url: `${baseUrl}/categorias/${category.slug}`,
-      lastModified: new Date(category.updatedAt),
-      changeFrequency: 'weekly' as const,
-      priority: 0.75,
-    }));
+    try {
+      const categoriesRes = await fetch(`${API_URL}/categories`, {
+        next: { revalidate: 3600 }, // Cache for 1 hour
+      });
 
-    return [...staticPages, ...productPages, ...categoryPages];
+      if (categoriesRes.ok) {
+        const categoriesData = await categoriesRes.json();
+        const categories = Array.isArray(categoriesData) ? categoriesData : categoriesData.data || [];
+
+        const categoryPages = categories.map((category: any) => ({
+          url: `${baseUrl}/categorias/${category.slug}`,
+          lastModified: category.updated_at ? new Date(category.updated_at) : now,
+          changeFrequency: 'weekly' as const,
+          priority: 0.75,
+        }));
+
+        dynamicPages.push(...categoryPages);
+      }
+    } catch (error) {
+      console.error('Error fetching categories for sitemap:', error);
+    }
+
+    return [...staticPages, ...dynamicPages];
   } catch (error) {
-    console.error('Error fetching dynamic sitemap data:', error);
+    console.error('Error generating dynamic sitemap:', error);
     return staticPages;
   }
-  */
-
-  return staticPages;
 }
