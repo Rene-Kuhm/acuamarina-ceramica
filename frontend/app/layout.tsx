@@ -18,8 +18,10 @@ const inter = Inter({
   weight: ["300", "400", "500", "600", "700"],
 });
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://aguamarinamosaicos.com";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://aguamarinamosaicos.com"),
+  metadataBase: new URL(baseUrl),
   title: {
     default: "Aguamarina Mosaicos - Tu tienda de cerámicos de calidad",
     template: "%s | Aguamarina Mosaicos",
@@ -29,6 +31,23 @@ export const metadata: Metadata = {
   keywords:
     "cerámicos, azulejos, pisos, revestimientos, construcción, decoración, mosaicos, porcelanato",
   manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: `${baseUrl}/icon`, type: 'image/png', sizes: '32x32' },
+      { url: `${baseUrl}/favicon.ico`, sizes: 'any' },
+    ],
+    apple: [
+      { url: `${baseUrl}/apple-icon`, sizes: '180x180', type: 'image/png' },
+    ],
+    other: [
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        url: `${baseUrl}/icon`,
+      },
+    ],
+  },
   alternates: {
     canonical: "/",
   },

@@ -29,6 +29,46 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      // Force no cache for favicon files
+      {
+        source: "/favicon.ico",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, must-revalidate",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+        ],
+      },
+      {
+        source: "/icon",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, must-revalidate",
+          },
+          {
+            key: "Content-Type",
+            value: "image/png",
+          },
+        ],
+      },
+      {
+        source: "/apple-icon",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, must-revalidate",
+          },
+          {
+            key: "Content-Type",
+            value: "image/png",
+          },
+        ],
+      },
       {
         source: "/:path*",
         headers: [
