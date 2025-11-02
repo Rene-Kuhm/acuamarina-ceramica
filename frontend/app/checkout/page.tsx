@@ -26,7 +26,7 @@ import { mercadopagoApi } from "@/lib/api/mercadopago";
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, getTotalItems, getTotalPrice, clearCart } = useCartStore();
+  const { items, getTotalItems, getTotalPrice } = useCartStore();
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState("");
   const [currentStep, setCurrentStep] = useState<"address" | "payment" | "confirm">("address");

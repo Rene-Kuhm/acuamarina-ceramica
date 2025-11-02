@@ -35,7 +35,7 @@ function VerifyNewsletterContent() {
           setStatus("error");
           setMessage(data.message || "Error al verificar el email");
         }
-      } catch (error) {
+      } catch {
         setStatus("error");
         setMessage("Error al conectar con el servidor");
       }

@@ -1,5 +1,15 @@
 import { MetadataRoute } from "next";
 
+interface Product {
+  slug: string;
+  updated_at?: string;
+}
+
+interface Category {
+  slug: string;
+  updated_at?: string;
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://aguamarinamosaicos.com";
   const now = new Date();
@@ -102,7 +112,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         const productsData = await productsRes.json();
         const products = productsData.data || [];
 
-        const productPages = products.map((product: any) => ({
+        const productPages = products.map((product: Product) => ({
           url: `${baseUrl}/productos/${product.slug}`,
           lastModified: product.updated_at ? new Date(product.updated_at) : now,
           changeFrequency: 'weekly' as const,
@@ -125,7 +135,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         const categoriesData = await categoriesRes.json();
         const categories = Array.isArray(categoriesData) ? categoriesData : categoriesData.data || [];
 
-        const categoryPages = categories.map((category: any) => ({
+        const categoryPages = categories.map((category: Category) => ({
           url: `${baseUrl}/categorias/${category.slug}`,
           lastModified: category.updated_at ? new Date(category.updated_at) : now,
           changeFrequency: 'weekly' as const,
