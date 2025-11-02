@@ -23,71 +23,91 @@ export default async function Icon() {
           position: 'relative',
         }}
       >
-        {/* Expert design: Stylized wave + geometric mosaic tiles */}
+        {/* Aguamarina Mosaicos Logo - Optimized for favicon */}
 
-        {/* Background circle with gradient */}
+        {/* Outer circle border - enhanced teal color */}
         <div style={{
           position: 'absolute',
-          width: '32px',
-          height: '32px',
-          background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
+          width: '31px',
+          height: '31px',
           borderRadius: '50%',
+          border: '2px solid #0d7f73',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          background: '#ffffff',
         }}>
-          {/* Stylized wave pattern (top part) */}
+          {/* Dog silhouette - simplified for small size */}
           <div style={{
             position: 'absolute',
             top: '8px',
-            left: '6px',
-            width: '20px',
-            height: '6px',
-            background: 'rgba(255,255,255,0.95)',
-            borderRadius: '0 0 10px 10px',
             display: 'flex',
-          }} />
-
-          {/* Second wave layer */}
-          <div style={{
-            position: 'absolute',
-            top: '12px',
-            left: '4px',
-            width: '24px',
-            height: '6px',
-            background: 'rgba(255,255,255,0.8)',
-            borderRadius: '0 0 12px 12px',
-            display: 'flex',
-          }} />
-
-          {/* Geometric mosaic tiles at bottom */}
-          <div style={{
-            position: 'absolute',
-            bottom: '6px',
-            left: '8px',
-            display: 'flex',
-            gap: '2px',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}>
-            {/* Three small tiles */}
+            {/* Dog head/ears */}
             <div style={{
-              width: '4px',
-              height: '4px',
-              background: '#5eead4',
-              borderRadius: '1px',
+              width: '12px',
+              height: '8px',
+              background: '#ffffff',
+              border: '1.5px solid #2d3748',
+              borderRadius: '6px 6px 2px 2px',
             }} />
+            {/* Dog body */}
             <div style={{
-              width: '4px',
-              height: '4px',
-              background: 'rgba(255,255,255,0.9)',
-              borderRadius: '1px',
-            }} />
-            <div style={{
-              width: '4px',
-              height: '4px',
-              background: '#5eead4',
-              borderRadius: '1px',
+              width: '10px',
+              height: '6px',
+              background: '#ffffff',
+              border: '1.5px solid #2d3748',
+              borderRadius: '2px',
+              marginTop: '-2px',
             }} />
           </div>
+
+          {/* Decorative mosaic dots - enhanced colors */}
+          {/* Top left - aquamarine */}
+          <div style={{
+            position: 'absolute',
+            top: '6px',
+            left: '4px',
+            width: '3px',
+            height: '3px',
+            background: '#14b8a6',
+            borderRadius: '50%',
+          }} />
+
+          {/* Top right - beige/tan */}
+          <div style={{
+            position: 'absolute',
+            top: '8px',
+            right: '5px',
+            width: '2.5px',
+            height: '2.5px',
+            background: '#d4a574',
+            borderRadius: '50%',
+          }} />
+
+          {/* Bottom left - dark teal */}
+          <div style={{
+            position: 'absolute',
+            bottom: '7px',
+            left: '5px',
+            width: '3px',
+            height: '3px',
+            background: '#0d7f73',
+            borderRadius: '50%',
+          }} />
+
+          {/* Bottom right - light aqua */}
+          <div style={{
+            position: 'absolute',
+            bottom: '9px',
+            right: '6px',
+            width: '2.5px',
+            height: '2.5px',
+            background: '#7dd3c0',
+            borderRadius: '50%',
+          }} />
         </div>
       </div>
     ),
