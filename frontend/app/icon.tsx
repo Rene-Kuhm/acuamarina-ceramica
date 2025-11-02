@@ -19,95 +19,131 @@ export default async function Icon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#ffffff',
+          background: '#f8f9fa',
           position: 'relative',
         }}
       >
-        {/* Aguamarina Mosaicos Logo - Optimized for favicon */}
+        {/* Aguamarina Mosaicos Logo - Exact reproduction */}
 
-        {/* Outer circle border - enhanced teal color */}
+        {/* Outer circle border - dark teal/forest green */}
         <div style={{
           position: 'absolute',
-          width: '31px',
-          height: '31px',
+          width: '30px',
+          height: '30px',
           borderRadius: '50%',
-          border: '2px solid #0d7f73',
+          border: '2px solid #2d5651',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           background: '#ffffff',
         }}>
-          {/* Dog silhouette - simplified for small size */}
+          {/* Samoyed dog - center */}
           <div style={{
             position: 'absolute',
-            top: '8px',
+            top: '7px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}>
-            {/* Dog head/ears */}
+            {/* Dog head with fluffy outline */}
             <div style={{
-              width: '12px',
-              height: '8px',
+              width: '11px',
+              height: '10px',
               background: '#ffffff',
-              border: '1.5px solid #2d3748',
-              borderRadius: '6px 6px 2px 2px',
-            }} />
-            {/* Dog body */}
-            <div style={{
-              width: '10px',
-              height: '6px',
-              background: '#ffffff',
-              border: '1.5px solid #2d3748',
-              borderRadius: '2px',
-              marginTop: '-2px',
-            }} />
+              border: '1.5px solid #1a1a1a',
+              borderRadius: '5px 5px 3px 3px',
+              position: 'relative',
+            }}>
+              {/* Eyes */}
+              <div style={{
+                display: 'flex',
+                gap: '3px',
+                position: 'absolute',
+                top: '2px',
+                left: '2px',
+              }}>
+                <div style={{
+                  width: '1.5px',
+                  height: '1.5px',
+                  background: '#1a1a1a',
+                  borderRadius: '50%',
+                }} />
+                <div style={{
+                  width: '1.5px',
+                  height: '1.5px',
+                  background: '#1a1a1a',
+                  borderRadius: '50%',
+                }} />
+              </div>
+              {/* Green nose */}
+              <div style={{
+                position: 'absolute',
+                bottom: '1px',
+                left: '4px',
+                width: '2px',
+                height: '2px',
+                background: '#2d8b6f',
+                borderRadius: '50%',
+              }} />
+            </div>
           </div>
 
-          {/* Decorative mosaic dots - enhanced colors */}
-          {/* Top left - aquamarine */}
+          {/* Decorative elements matching exact positions */}
+          {/* Top left - light aquamarine organic shape */}
           <div style={{
             position: 'absolute',
-            top: '6px',
-            left: '4px',
+            top: '5px',
+            left: '3px',
+            width: '4px',
+            height: '5px',
+            background: '#a0d9cc',
+            borderRadius: '40%',
+          }} />
+
+          {/* Center right - beige organic shape */}
+          <div style={{
+            position: 'absolute',
+            top: '9px',
+            right: '3px',
             width: '3px',
-            height: '3px',
-            background: '#14b8a6',
-            borderRadius: '50%',
+            height: '4px',
+            background: '#d4b896',
+            borderRadius: '40%',
           }} />
 
-          {/* Top right - beige/tan */}
+          {/* Bottom left - dark forest green organic shape */}
           <div style={{
             position: 'absolute',
-            top: '8px',
-            right: '5px',
-            width: '2.5px',
-            height: '2.5px',
-            background: '#d4a574',
-            borderRadius: '50%',
+            bottom: '6px',
+            left: '3px',
+            width: '4px',
+            height: '4px',
+            background: '#2d5651',
+            borderRadius: '40%',
           }} />
 
-          {/* Bottom left - dark teal */}
+          {/* Bottom right - aquamarine tiles */}
           <div style={{
             position: 'absolute',
-            bottom: '7px',
-            left: '5px',
-            width: '3px',
-            height: '3px',
-            background: '#0d7f73',
-            borderRadius: '50%',
-          }} />
-
-          {/* Bottom right - light aqua */}
-          <div style={{
-            position: 'absolute',
-            bottom: '9px',
-            right: '6px',
-            width: '2.5px',
-            height: '2.5px',
-            background: '#7dd3c0',
-            borderRadius: '50%',
-          }} />
+            bottom: '5px',
+            right: '4px',
+            display: 'flex',
+            gap: '1px',
+            transform: 'rotate(15deg)',
+          }}>
+            <div style={{
+              width: '2px',
+              height: '2px',
+              background: '#7fc7b8',
+              borderRadius: '1px',
+            }} />
+            <div style={{
+              width: '2px',
+              height: '2px',
+              background: '#a0d9cc',
+              borderRadius: '1px',
+            }} />
+          </div>
         </div>
       </div>
     ),
