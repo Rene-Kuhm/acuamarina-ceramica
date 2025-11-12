@@ -31,11 +31,15 @@ const nextConfig: NextConfig = {
     return [
       // Cache control for favicon and icon files
       {
-        source: "/:path(favicon|apple-icon|android-icon|ms-icon)*.:ext(ico|png)",
+        source: "/:path(favicon|apple-icon|android-icon|ms-icon|icon-)*.:ext(ico|png)",
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
+            value: "public, max-age=0, must-revalidate",
+          },
+          {
+            key: "Pragma",
+            value: "no-cache",
           },
           {
             key: "X-Content-Type-Options",
