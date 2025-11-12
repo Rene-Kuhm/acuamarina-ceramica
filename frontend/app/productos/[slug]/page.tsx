@@ -6,9 +6,9 @@ import type { Producto } from "@/lib/api/productos";
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1";
 
-interface ProductPageParams {
-  params: { slug: string };
-}
+type ProductPageProps = {
+  params: Promise<{ slug: string }>;
+};
 
 async function fetchProduct(slug: string): Promise<Producto | null> {
   try {
@@ -41,9 +41,10 @@ function buildDescription(description?: string) {
 }
 
 export async function generateMetadata(
-  { params }: ProductPageParams
+  { params }: ProductPageProps
 ): Promise<Metadata> {
-  const product = await fetchProduct(params.slug);
+  const { slug } = await params;
+  const product = await fetchProduct(slug);
 
   if (!product || product.isActive === false) {
     return {
@@ -84,12 +85,13 @@ export async function generateMetadata(
   };
 }
 
-export default async function ProductDetailPage({ params }: ProductPageParams) {
-  const product = await fetchProduct(params.slug);
+export default async function ProductDetailPage({ params }: ProductPageProps) {
+  const { slug } = await params;
+  const product = await fetchProduct(slug);
 
   if (!product || product.isActive === false) {
     notFound();
   }
 
-  return <ProductDetailClient slug={params.slug} initialProduct={product} />;
+  return <ProductDetailClient slug={slug} initialProduct={product} />;
 }
