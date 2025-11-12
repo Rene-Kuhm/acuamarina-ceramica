@@ -28,12 +28,17 @@ export function useProducts(params?: ProductosParams) {
 /**
  * Hook to fetch a single product by slug
  */
-export function useProduct(slug: string) {
+interface UseProductOptions {
+  initialData?: Producto;
+}
+
+export function useProduct(slug: string, options?: UseProductOptions) {
   return useQuery<Producto, Error>({
     queryKey: ["productos", slug],
     queryFn: () => productosApi.getBySlug(slug),
     enabled: !!slug,
     staleTime: 1000 * 60 * 5, // 5 minutes
+    initialData: options?.initialData,
   });
 }
 

@@ -3,6 +3,7 @@ import { MetadataRoute } from "next";
 interface Product {
   slug: string;
   updated_at?: string;
+  isActive?: boolean;
 }
 
 interface Category {
@@ -110,9 +111,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
       if (productsRes.ok) {
         const productsData = await productsRes.json();
-        const products = productsData.data || [];
+        const products = (productsData.data || []) as Product[];
+        const activeProducts = products.filter(
+          (product) => product.slug && product.isActive !== false
+        );
 
-        const productPages = products.map((product: Product) => ({
+        const productPages = activeProducts.map((product: Product) => ({
           url: `${baseUrl}/productos/${product.slug}`,
           lastModified: product.updated_at ? new Date(product.updated_at) : now,
           changeFrequency: 'weekly' as const,

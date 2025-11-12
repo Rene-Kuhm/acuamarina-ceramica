@@ -58,9 +58,6 @@ export const metadata: Metadata = {
       },
     ],
   },
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     type: "website",
     locale: "es_AR",
