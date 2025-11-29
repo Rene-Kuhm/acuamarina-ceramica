@@ -177,7 +177,7 @@ export class OrdersController {
       const result = await getPool().query(
         `SELECT o.*,
           u.email as customer_email,
-          u.first_name || ' ' || u.last_name as customer_name,
+          u.name as customer_name,
           (SELECT COUNT(*) FROM order_items WHERE order_id = o.id) as items_count
          FROM orders o
          LEFT JOIN users u ON o.user_id = u.id
@@ -220,7 +220,7 @@ export class OrdersController {
       const result = await getPool().query(
         `SELECT o.*,
           u.email as customer_email,
-          u.first_name || ' ' || u.last_name as customer_name,
+          u.name as customer_name,
           u.phone as customer_phone
          FROM orders o
          LEFT JOIN users u ON o.user_id = u.id

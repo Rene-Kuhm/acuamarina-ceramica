@@ -26,7 +26,7 @@ export class CustomersController {
       let paramCount = 1;
 
       if (query.search) {
-        conditions.push(`(u.email ILIKE $${paramCount} OR u.first_name ILIKE $${paramCount} OR u.last_name ILIKE $${paramCount})`);
+        conditions.push(`(u.email ILIKE $${paramCount} OR u.name ILIKE $${paramCount})`);
         params.push(`%${query.search}%`);
         paramCount++;
       }
@@ -45,8 +45,7 @@ export class CustomersController {
       const result = await getPool().query(
         `SELECT c.*,
           u.email,
-          u.first_name,
-          u.last_name,
+          u.name,
           u.phone,
           (SELECT COUNT(*) FROM orders WHERE user_id = c.user_id) as total_orders,
           (SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE user_id = c.user_id) as total_spent
@@ -91,8 +90,7 @@ export class CustomersController {
       const result = await getPool().query(
         `SELECT c.*,
           u.email,
-          u.first_name,
-          u.last_name,
+          u.name,
           u.phone,
           u.created_at as user_created_at
          FROM customers c
