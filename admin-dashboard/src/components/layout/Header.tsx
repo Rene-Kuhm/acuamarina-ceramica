@@ -78,11 +78,11 @@ export function Header() {
                   className="gap-2 h-10 px-2 sm:px-3 text-slate-700 hover:bg-slate-100 flex-shrink-0"
                 >
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#14b8a6] to-[#0d9488] flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
-                    {user?.firstName?.[0] || 'A'}{user?.lastName?.[0] || 'A'}
+                    {user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'AD'}
                   </div>
                   <div className="text-left hidden sm:block">
                     <p className="text-sm font-semibold text-slate-900 leading-tight">
-                      {user?.firstName || 'Admin'}
+                      {user?.name || 'Admin'}
                     </p>
                     <p className="text-xs text-slate-500 leading-tight capitalize">
                       {user?.role || 'admin'}
@@ -95,7 +95,7 @@ export function Header() {
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-semibold text-slate-900">
-                      {user?.firstName} {user?.lastName}
+                      {user?.name || 'Admin'}
                     </p>
                     <p className="text-xs text-slate-500">{user?.email}</p>
                   </div>
