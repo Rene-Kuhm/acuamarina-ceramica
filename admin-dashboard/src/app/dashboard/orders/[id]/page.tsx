@@ -162,27 +162,9 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
             <CardTitle className="text-sm font-medium">Resumen del Pedido</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Subtotal</span>
-              <span className="font-medium">{formatCurrency(order.subtotal)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Impuestos</span>
-              <span className="font-medium">{formatCurrency(order.tax_amount)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Envío</span>
-              <span className="font-medium">{formatCurrency(order.shipping_cost)}</span>
-            </div>
-            {order.discount_amount > 0 && (
-              <div className="flex justify-between text-green-600">
-                <span>Descuento</span>
-                <span className="font-medium">-{formatCurrency(order.discount_amount)}</span>
-              </div>
-            )}
             <div className="flex justify-between pt-2 border-t font-bold text-lg">
               <span>Total</span>
-              <span>{formatCurrency(order.total_amount)}</span>
+              <span>{formatCurrency(order.total_amount ?? order.total ?? 0)}</span>
             </div>
           </CardContent>
         </Card>
@@ -194,13 +176,11 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
             <CardTitle>Dirección de Envío</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="whitespace-pre-line">{order.shipping_address}</p>
-            {order.tracking_number && (
-              <div className="mt-4 p-3 bg-blue-50 rounded-md">
-                <p className="text-sm text-muted-foreground">Número de rastreo</p>
-                <p className="font-mono font-medium">{order.tracking_number}</p>
-              </div>
-            )}
+            <p className="whitespace-pre-line">
+              {typeof order.shipping_address === 'string'
+                ? order.shipping_address
+                : JSON.stringify(order.shipping_address, null, 2)}
+            </p>
           </CardContent>
         </Card>
 
@@ -231,30 +211,28 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
               <thead>
                 <tr className="border-b">
                   <th className="text-left py-3 px-4 font-medium">Producto</th>
-                  <th className="text-left py-3 px-4 font-medium">SKU</th>
                   <th className="text-right py-3 px-4 font-medium">Cantidad</th>
                   <th className="text-right py-3 px-4 font-medium">Precio Unitario</th>
-                  <th className="text-right py-3 px-4 font-medium">Total</th>
+                  <th className="text-right py-3 px-4 font-medium">Subtotal</th>
                 </tr>
               </thead>
               <tbody>
                 {order.items && order.items.length > 0 ? (
-                  order.items.map((item) => (
+                  order.items.map((item: any) => (
                     <tr key={item.id} className="border-b">
                       <td className="py-3 px-4">{item.product_name}</td>
-                      <td className="py-3 px-4">
-                        <span className="font-mono text-sm">{item.sku}</span>
-                      </td>
                       <td className="py-3 px-4 text-right">{item.quantity}</td>
-                      <td className="py-3 px-4 text-right">{formatCurrency(item.unit_price)}</td>
+                      <td className="py-3 px-4 text-right">
+                        {formatCurrency(item.price ?? item.product_price ?? 0)}
+                      </td>
                       <td className="py-3 px-4 text-right font-medium">
-                        {formatCurrency(item.total_amount)}
+                        {formatCurrency(item.subtotal ?? 0)}
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={5} className="text-center py-8 text-muted-foreground">
+                    <td colSpan={4} className="text-center py-8 text-muted-foreground">
                       No hay productos en este pedido
                     </td>
                   </tr>
