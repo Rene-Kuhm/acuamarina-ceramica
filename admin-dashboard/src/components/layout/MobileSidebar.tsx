@@ -106,11 +106,11 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
             <div className="mb-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
               <div className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#14b8a6] to-[#0d9488] flex items-center justify-center text-xs font-bold text-white">
-                  {user?.firstName?.[0]}{user?.lastName?.[0]}
+                  {user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'AD'}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold truncate text-gray-900">
-                    {user?.firstName} {user?.lastName}
+                    {user?.name || 'Admin'}
                   </p>
                   <p className="text-xs text-gray-500 truncate">{user?.email}</p>
                 </div>
