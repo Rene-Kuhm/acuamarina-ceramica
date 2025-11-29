@@ -131,11 +131,11 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           <div className="mb-3 p-3 bg-slate-50 rounded-lg border border-slate-200 hover:border-slate-300 transition-colors">
             <div className="flex items-center gap-3">
               <div className="flex-shrink-0 w-9 h-9 rounded-full bg-gradient-to-br from-[#14b8a6] to-[#0d9488] flex items-center justify-center text-xs font-bold text-white">
-                {user?.firstName?.[0]}{user?.lastName?.[0]}
+                {user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'AD'}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-semibold text-slate-900 truncate">
-                  {user?.firstName} {user?.lastName}
+                  {user?.name || 'Admin'}
                 </p>
                 <p className="text-xs text-slate-500 truncate">{user?.email}</p>
               </div>
@@ -144,7 +144,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         ) : (
           <div className="flex justify-center mb-3">
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#14b8a6] to-[#0d9488] flex items-center justify-center text-xs font-bold text-white">
-              {user?.firstName?.[0]}{user?.lastName?.[0]}
+              {user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'AD'}
             </div>
           </div>
         )}
