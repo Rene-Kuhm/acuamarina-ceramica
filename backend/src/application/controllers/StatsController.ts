@@ -69,14 +69,30 @@ export class StatsController {
         `)
       ]);
 
+      // Asegurar que stats tenga valores por defecto si no hay datos
+      const stats = statsQuery.rows[0] || {
+        total_products: 0,
+        monthly_orders: 0,
+        monthly_revenue: 0,
+        total_customers: 0,
+      };
+
+      // Convertir strings numéricos a números
+      const normalizedStats = {
+        total_products: parseInt(stats.total_products) || 0,
+        monthly_orders: parseInt(stats.monthly_orders) || 0,
+        monthly_revenue: parseFloat(stats.monthly_revenue) || 0,
+        total_customers: parseInt(stats.total_customers) || 0,
+      };
+
       res.json({
         success: true,
         data: {
-          stats: statsQuery.rows[0],
-          lowStockProducts: lowStockQuery.rows,
-          recentOrders: recentOrdersQuery.rows,
-          salesByMonth: salesByMonthQuery.rows,
-          topProducts: topProductsQuery.rows,
+          stats: normalizedStats,
+          lowStockProducts: lowStockQuery.rows || [],
+          recentOrders: recentOrdersQuery.rows || [],
+          salesByMonth: salesByMonthQuery.rows || [],
+          topProducts: topProductsQuery.rows || [],
         },
       });
     } catch (error) {
