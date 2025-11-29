@@ -8,6 +8,7 @@ import { ArrowLeft, Package, Truck, CheckCircle, XCircle } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import Link from 'next/link';
 import { useState } from 'react';
+import type { ShippingAddress } from '@/services/orders.service';
 
 export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -180,12 +181,12 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
               <p className="whitespace-pre-line">{order.shipping_address}</p>
             ) : order.shipping_address && typeof order.shipping_address === 'object' ? (
               <div className="space-y-1">
-                {order.shipping_address.street && <p>{order.shipping_address.street}</p>}
-                {order.shipping_address.city && order.shipping_address.state && (
-                  <p>{order.shipping_address.city}, {order.shipping_address.state}</p>
+                {(order.shipping_address as ShippingAddress).street && <p>{(order.shipping_address as ShippingAddress).street}</p>}
+                {(order.shipping_address as ShippingAddress).city && (order.shipping_address as ShippingAddress).state && (
+                  <p>{(order.shipping_address as ShippingAddress).city}, {(order.shipping_address as ShippingAddress).state}</p>
                 )}
-                {order.shipping_address.zipCode && <p>{order.shipping_address.zipCode}</p>}
-                {order.shipping_address.country && <p>{order.shipping_address.country}</p>}
+                {(order.shipping_address as ShippingAddress).zipCode && <p>{(order.shipping_address as ShippingAddress).zipCode}</p>}
+                {(order.shipping_address as ShippingAddress).country && <p>{(order.shipping_address as ShippingAddress).country}</p>}
               </div>
             ) : (
               <p className="text-muted-foreground">No hay dirección de envío</p>

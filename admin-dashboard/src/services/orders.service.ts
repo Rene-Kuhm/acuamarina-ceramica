@@ -1,5 +1,13 @@
 import { apiClient } from '@/lib/api/client';
 
+export interface ShippingAddress {
+  street?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  country?: string;
+}
+
 export interface Order {
   id: string;
   order_number: string;
@@ -7,15 +15,10 @@ export interface Order {
   status: 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   payment_status: 'pending' | 'completed' | 'failed' | 'refunded';
   payment_method: string;
-  shipping_address: string;
-  billing_address: string;
-  subtotal: number;
-  tax_amount: number;
-  shipping_cost: number;
-  discount_amount: number;
+  shipping_address: string | ShippingAddress;
+  billing_address?: string;
   total_amount: number;
   notes?: string;
-  tracking_number?: string;
   shipped_at?: string;
   delivered_at?: string;
   created_at: string;
@@ -31,13 +34,10 @@ export interface OrderItem {
   order_id: string;
   product_id: string;
   product_name: string;
-  sku: string;
+  product_price: number;
   quantity: number;
-  unit_price: number;
+  price: number;
   subtotal: number;
-  tax_amount: number;
-  total_amount: number;
-  product_name_current?: string;
   created_at: string;
 }
 
