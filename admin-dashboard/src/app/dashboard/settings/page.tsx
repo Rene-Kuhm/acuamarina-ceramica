@@ -1,14 +1,90 @@
 'use client';
 
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuthStore } from '@/store/authStore';
-import { User, Lock, Bell, Palette } from 'lucide-react';
+import { User, Lock, Bell, Palette, Save, AlertCircle } from 'lucide-react';
+import { userService } from '@/services/user.service';
+import { toast } from 'sonner';
 
 export default function SettingsPage() {
   const user = useAuthStore((state) => state.user);
+  const updateUser = useAuthStore((state) => state.updateUser);
+
+  // Estado para cambio de contraseña
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+  // Estado para perfil
+  const [profileForm, setProfileForm] = useState({
+    name: user?.name || '',
+    phone: user?.phone || '',
+  });
+  const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      toast.error('Las contraseñas no coinciden');
+      return;
+    }
+
+    if (passwordForm.newPassword.length < 6) {
+      toast.error('La contraseña debe tener al menos 6 caracteres');
+      return;
+    }
+
+    setIsChangingPassword(true);
+    try {
+      await userService.updatePassword({
+        currentPassword: passwordForm.currentPassword,
+        newPassword: passwordForm.newPassword,
+      });
+
+      toast.success('Contraseña actualizada exitosamente');
+      setPasswordForm({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      });
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Error al cambiar la contraseña');
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
+  const handleProfileUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!profileForm.name.trim()) {
+      toast.error('El nombre es requerido');
+      return;
+    }
+
+    setIsUpdatingProfile(true);
+    try {
+      const response = await userService.updateProfile({
+        name: profileForm.name,
+        phone: profileForm.phone || undefined,
+      });
+
+      updateUser(response.data);
+      toast.success('Perfil actualizado exitosamente');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Error al actualizar el perfil');
+    } finally {
+      setIsUpdatingProfile(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -25,36 +101,59 @@ export default function SettingsPage() {
               <User className="h-5 w-5" />
               Información Personal
             </CardTitle>
-            <CardDescription>Detalles de tu cuenta</CardDescription>
+            <CardDescription>Actualiza los detalles de tu cuenta</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label>Nombre</Label>
-              <Input
-                value={`${user?.firstName || ''} ${user?.lastName || ''}`}
-                disabled
-                className="mt-1"
-              />
-            </div>
-            <div>
-              <Label>Email</Label>
-              <Input
-                value={user?.email || ''}
-                disabled
-                className="mt-1"
-              />
-            </div>
-            <div>
-              <Label>Rol</Label>
-              <Input
-                value={user?.role || ''}
-                disabled
-                className="mt-1 capitalize"
-              />
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Para actualizar tu información personal, contacta al administrador del sistema.
-            </p>
+          <CardContent>
+            <form onSubmit={handleProfileUpdate} className="space-y-4">
+              <div>
+                <Label htmlFor="name">Nombre Completo</Label>
+                <Input
+                  id="name"
+                  value={profileForm.name}
+                  onChange={(e) => setProfileForm({ ...profileForm, name: e.target.value })}
+                  className="mt-1"
+                  placeholder="Tu nombre completo"
+                />
+              </div>
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  value={user?.email || ''}
+                  disabled
+                  className="mt-1 bg-gray-50"
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  El email no se puede modificar
+                </p>
+              </div>
+              <div>
+                <Label htmlFor="phone">Teléfono (opcional)</Label>
+                <Input
+                  id="phone"
+                  value={profileForm.phone}
+                  onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
+                  className="mt-1"
+                  placeholder="+54 11 1234-5678"
+                />
+              </div>
+              <div>
+                <Label>Rol</Label>
+                <Input
+                  value={user?.role || ''}
+                  disabled
+                  className="mt-1 capitalize bg-gray-50"
+                />
+              </div>
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={isUpdatingProfile}
+              >
+                <Save className="h-4 w-4 mr-2" />
+                {isUpdatingProfile ? 'Guardando...' : 'Guardar Cambios'}
+              </Button>
+            </form>
           </CardContent>
         </Card>
 
@@ -68,15 +167,17 @@ export default function SettingsPage() {
             <CardDescription>Actualiza tu contraseña de acceso</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <form onSubmit={handlePasswordChange} className="space-y-4">
               <div>
                 <Label htmlFor="currentPassword">Contraseña Actual</Label>
                 <Input
                   id="currentPassword"
                   type="password"
-                  disabled
+                  value={passwordForm.currentPassword}
+                  onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
                   placeholder="••••••••"
                   className="mt-1"
+                  required
                 />
               </div>
               <div>
@@ -84,28 +185,48 @@ export default function SettingsPage() {
                 <Input
                   id="newPassword"
                   type="password"
-                  disabled
+                  value={passwordForm.newPassword}
+                  onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
                   placeholder="••••••••"
                   className="mt-1"
+                  required
+                  minLength={6}
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Mínimo 6 caracteres
+                </p>
               </div>
               <div>
                 <Label htmlFor="confirmPassword">Confirmar Nueva Contraseña</Label>
                 <Input
                   id="confirmPassword"
                   type="password"
-                  disabled
+                  value={passwordForm.confirmPassword}
+                  onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
                   placeholder="••••••••"
                   className="mt-1"
+                  required
                 />
               </div>
-              <Button type="button" disabled className="w-full">
-                Próximamente
+              {passwordForm.newPassword && passwordForm.confirmPassword &&
+               passwordForm.newPassword !== passwordForm.confirmPassword && (
+                <div className="flex items-center gap-2 text-sm text-red-600">
+                  <AlertCircle className="h-4 w-4" />
+                  Las contraseñas no coinciden
+                </div>
+              )}
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={isChangingPassword ||
+                         !passwordForm.currentPassword ||
+                         !passwordForm.newPassword ||
+                         passwordForm.newPassword !== passwordForm.confirmPassword}
+              >
+                <Lock className="h-4 w-4 mr-2" />
+                {isChangingPassword ? 'Cambiando...' : 'Cambiar Contraseña'}
               </Button>
-              <p className="text-xs text-muted-foreground text-center">
-                Esta funcionalidad estará disponible próximamente
-              </p>
-            </div>
+            </form>
           </CardContent>
         </Card>
 
@@ -225,15 +346,15 @@ export default function SettingsPage() {
             </div>
             <div>
               <p className="text-muted-foreground">Entorno</p>
-              <p className="font-medium">Desarrollo</p>
+              <p className="font-medium">Producción</p>
             </div>
             <div>
               <p className="text-muted-foreground">Backend</p>
-              <p className="font-medium">Conectado</p>
+              <p className="font-medium text-green-600">● Conectado</p>
             </div>
             <div>
               <p className="text-muted-foreground">Base de Datos</p>
-              <p className="font-medium">PostgreSQL</p>
+              <p className="font-medium">PostgreSQL (Neon)</p>
             </div>
           </div>
         </CardContent>

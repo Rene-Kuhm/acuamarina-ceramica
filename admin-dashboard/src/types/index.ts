@@ -9,8 +9,7 @@ export interface User {
   id: string;
   email: string;
   role: UserRole;
-  firstName: string;
-  lastName: string;
+  name: string;
   phone?: string;
   isActive: boolean;
   emailVerified: boolean;
