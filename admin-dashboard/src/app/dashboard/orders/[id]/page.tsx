@@ -176,11 +176,20 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
             <CardTitle>Dirección de Envío</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="whitespace-pre-line">
-              {typeof order.shipping_address === 'string'
-                ? order.shipping_address
-                : JSON.stringify(order.shipping_address, null, 2)}
-            </p>
+            {typeof order.shipping_address === 'string' ? (
+              <p className="whitespace-pre-line">{order.shipping_address}</p>
+            ) : order.shipping_address && typeof order.shipping_address === 'object' ? (
+              <div className="space-y-1">
+                {order.shipping_address.street && <p>{order.shipping_address.street}</p>}
+                {order.shipping_address.city && order.shipping_address.state && (
+                  <p>{order.shipping_address.city}, {order.shipping_address.state}</p>
+                )}
+                {order.shipping_address.zipCode && <p>{order.shipping_address.zipCode}</p>}
+                {order.shipping_address.country && <p>{order.shipping_address.country}</p>}
+              </div>
+            ) : (
+              <p className="text-muted-foreground">No hay dirección de envío</p>
+            )}
           </CardContent>
         </Card>
 
