@@ -164,7 +164,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           <CardContent className="space-y-2">
             <div className="flex justify-between pt-2 border-t font-bold text-lg">
               <span>Total</span>
-              <span>{formatCurrency(order.total_amount ?? order.total ?? 0)}</span>
+              <span>{formatCurrency(order.total_amount ?? 0)}</span>
             </div>
           </CardContent>
         </Card>
