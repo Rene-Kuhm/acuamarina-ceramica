@@ -59,6 +59,8 @@ export class AuthController {
    */
   static async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      logger.info(`🔐 Intento de login: ${req.body.email}`);
+
       // Validar datos de entrada
       const { email, password } = loginSchema.parse(req.body);
 
@@ -70,7 +72,10 @@ export class AuthController {
         [email]
       );
 
+      logger.info(`👤 Usuario encontrado: ${result.rows.length > 0 ? 'Sí' : 'No'}`);
+
       if (result.rows.length === 0) {
+        logger.warn(`❌ Usuario no encontrado: ${email}`);
         res.status(401).json({
           success: false,
           message: 'Credenciales inválidas',
@@ -81,8 +86,12 @@ export class AuthController {
       const user = result.rows[0];
 
       // Verificar contraseña
+      logger.info(`🔑 Verificando contraseña para: ${email}`);
       const isValidPassword = await bcrypt.compare(password, user.password);
+      logger.info(`🔓 Contraseña válida: ${isValidPassword ? 'Sí' : 'No'}`);
+
       if (!isValidPassword) {
+        logger.warn(`❌ Contraseña incorrecta para: ${email}`);
         res.status(401).json({
           success: false,
           message: 'Credenciales inválidas',
