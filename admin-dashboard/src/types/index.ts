@@ -71,6 +71,9 @@ export interface CreateProductDTO {
   keywords?: string;
   stockQuantity?: number;
   lowStockThreshold?: number;
+  isActive?: boolean;
+  isFeatured?: boolean;
+  images?: string[];
 }
 
 // Categoría
