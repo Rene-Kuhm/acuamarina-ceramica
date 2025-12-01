@@ -276,13 +276,24 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         </CardContent>
       </Card>
 
-      {order.notes && (
+      {(order.customerNotes || order.adminNotes) && (
         <Card>
           <CardHeader>
             <CardTitle>Notas del Pedido</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="whitespace-pre-line">{order.notes}</p>
+          <CardContent className="space-y-3">
+            {order.customerNotes && (
+              <div>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Notas del Cliente:</p>
+                <p className="whitespace-pre-line">{order.customerNotes}</p>
+              </div>
+            )}
+            {order.adminNotes && (
+              <div>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Notas del Administrador:</p>
+                <p className="whitespace-pre-line">{order.adminNotes}</p>
+              </div>
+            )}
           </CardContent>
         </Card>
       )}

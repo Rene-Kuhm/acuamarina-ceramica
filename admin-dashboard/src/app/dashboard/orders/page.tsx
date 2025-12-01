@@ -212,16 +212,20 @@ export default function OrdersPage() {
                 {data.data.map((order) => (
                   <TableRow key={order.id} className="group">
                     <TableCell className="font-mono font-semibold text-[#14b8a6]">
-                      #{order.order_number}
+                      #{order.orderNumber}
                     </TableCell>
                     <TableCell>
                       <div>
-                        <p className="font-medium text-slate-900">{order.customer_name || 'N/A'}</p>
-                        <p className="text-sm text-muted-foreground">{order.customer_email}</p>
+                        <p className="font-medium text-slate-900">
+                          {order.shippingFirstName && order.shippingLastName
+                            ? `${order.shippingFirstName} ${order.shippingLastName}`
+                            : 'N/A'}
+                        </p>
+                        <p className="text-sm text-muted-foreground">{order.userId || 'N/A'}</p>
                       </div>
                     </TableCell>
                     <TableCell className="text-right font-semibold">
-                      {formatCurrency(order.total_amount)}
+                      {formatCurrency(order.totalAmount)}
                     </TableCell>
                     <TableCell>
                       <Badge className={getStatusBadgeColor(order.status)}>
@@ -229,12 +233,12 @@ export default function OrdersPage() {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline" className={getPaymentStatusBadgeColor(order.payment_status)}>
-                        {getPaymentStatusLabel(order.payment_status)}
+                      <Badge variant="outline" className={getPaymentStatusBadgeColor(order.paymentStatus)}>
+                        {getPaymentStatusLabel(order.paymentStatus)}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
-                      {new Date(order.created_at).toLocaleDateString('es-ES', {
+                      {new Date(order.createdAt).toLocaleDateString('es-ES', {
                         day: '2-digit',
                         month: 'short',
                         year: 'numeric'
