@@ -445,12 +445,16 @@ export class ProductsController {
       const { id } = req.params;
 
       logger.info(`📝 Actualizando producto ${id}`);
-      logger.info('📦 Datos recibidos:', JSON.stringify(req.body, null, 2));
+      logger.info('📦 Body recibido:', JSON.stringify(req.body));
 
       const data = updateProductSchema.parse(req.body);
       const userId = (req as any).user?.userId;
 
-      logger.info('✅ Validación exitosa, userId:', userId);
+      // Extraer images para manejar por separado (NO debe ir al UPDATE de products)
+      const { images, ...productData } = data;
+
+      logger.info('✅ Validación OK. Campos a actualizar:', Object.keys(productData).join(', '));
+      logger.info('📸 Imágenes recibidas:', images?.length || 0);
 
       // Check if product exists
       const existingProduct = await getPool().query(
@@ -465,16 +469,13 @@ export class ProductsController {
         });
       }
 
-      // Extraer images para manejar por separado
-      const { images, ...productData } = data;
-
-      // Build UPDATE query dynamically (excluyendo campos especiales)
+      // Build UPDATE query dynamically (excluyendo images que ya extrajimos)
       const updates: string[] = [];
       const values: any[] = [];
       let paramCount = 1;
 
       Object.entries(productData).forEach(([key, value]) => {
-        if (value !== undefined && !EXCLUDED_FROM_UPDATE.includes(key)) {
+        if (value !== undefined) {
           const snakeKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
           updates.push(`${snakeKey} = $${paramCount}`);
           values.push(value);
@@ -482,7 +483,10 @@ export class ProductsController {
         }
       });
 
-      if (updates.length === 0 && !images) {
+      logger.info('🔧 Updates:', updates.join(', '));
+      logger.info('📊 Values:', JSON.stringify(values));
+
+      if (updates.length === 0 && (!images || images.length === 0)) {
         return res.status(400).json({
           success: false,
           message: 'No hay datos para actualizar',
@@ -494,13 +498,10 @@ export class ProductsController {
       // Solo hacer UPDATE si hay campos para actualizar
       if (updates.length > 0) {
         values.push(id);
-        result = await getPool().query(
-          `UPDATE products
-           SET ${updates.join(', ')}
-           WHERE id = $${paramCount}
-           RETURNING *`,
-          values
-        );
+        const query = `UPDATE products SET ${updates.join(', ')} WHERE id = $${paramCount} RETURNING *`;
+        logger.info('📝 Query:', query);
+
+        result = await getPool().query(query, values);
       }
 
       // Actualizar imágenes si se proporcionaron
