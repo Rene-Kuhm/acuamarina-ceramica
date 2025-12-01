@@ -445,7 +445,8 @@ export class ProductsController {
       const { id } = req.params;
 
       logger.info(`📝 Actualizando producto ${id}`);
-      logger.info('📦 Body recibido:', JSON.stringify(req.body));
+      logger.info(`📦 Body recibido: ${JSON.stringify(req.body)}`);
+      logger.info(`📦 Body keys: ${Object.keys(req.body || {}).join(', ') || 'VACÍO'}`);
 
       const data = updateProductSchema.parse(req.body);
       const userId = (req as any).user?.userId;
@@ -453,8 +454,8 @@ export class ProductsController {
       // Extraer images para manejar por separado (NO debe ir al UPDATE de products)
       const { images, ...productData } = data;
 
-      logger.info('✅ Validación OK. Campos a actualizar:', Object.keys(productData).join(', '));
-      logger.info('📸 Imágenes recibidas:', images?.length || 0);
+      logger.info(`✅ Validación OK. Campos a actualizar: ${Object.keys(productData).join(', ') || 'NINGUNO'}`);
+      logger.info(`📸 Imágenes recibidas: ${images?.length || 0}`);
 
       logger.info('🔍 Buscando producto existente...');
 
@@ -487,8 +488,8 @@ export class ProductsController {
         }
       });
 
-      logger.info('🔧 Updates:', updates.length > 0 ? updates.join(', ') : 'NINGUNO');
-      logger.info('📊 Values count:', values.length);
+      logger.info(`🔧 Updates (${updates.length}): ${updates.length > 0 ? updates.join(', ') : 'NINGUNO'}`);
+      logger.info(`📊 Values (${values.length}): ${JSON.stringify(values)}`);
 
       // Si no hay nada que actualizar, retornar el producto existente
       if (updates.length === 0 && (!images || images.length === 0)) {
