@@ -79,15 +79,18 @@ export const useUpdateCategory = () => {
       // Construir DTO solo con campos que tienen valor definido
       const dto: Partial<CreateCategoryDTO> = {};
 
-      if (data.name !== undefined) dto.name = data.name;
-      if (data.slug !== undefined) dto.slug = data.slug;
-      if (data.description !== undefined) dto.description = data.description;
+      if (data.name !== undefined && data.name) dto.name = data.name;
+      if (data.slug !== undefined && data.slug) dto.slug = data.slug;
+      if (data.description !== undefined) dto.description = data.description || undefined;
       if (data.parentId !== undefined) dto.parentId = data.parentId || null;
       if (data.imageUrl !== undefined) dto.imageUrl = data.imageUrl || null;
       if (data.displayOrder !== undefined) dto.displayOrder = data.displayOrder;
       if (data.isActive !== undefined) dto.isActive = data.isActive;
-      if (data.metaTitle !== undefined) dto.metaTitle = data.metaTitle;
-      if (data.metaDescription !== undefined) dto.metaDescription = data.metaDescription;
+      if (data.metaTitle !== undefined) dto.metaTitle = data.metaTitle || undefined;
+      if (data.metaDescription !== undefined) dto.metaDescription = data.metaDescription || undefined;
+
+      console.log('🔍 Updating category:', id);
+      console.log('📦 DTO to send:', JSON.stringify(dto, null, 2));
 
       return categoriesService.update(id, dto);
     },
