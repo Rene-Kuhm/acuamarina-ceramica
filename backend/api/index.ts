@@ -1,46 +1,199 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import compression from 'compression';
+import rateLimit from 'express-rate-limit';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
+import { validateEnv } from '../src/config/validateEnv';
+import { config } from '../src/config/environment';
+import { swaggerOptions } from '../src/config/swagger';
+import { connectDatabase } from '../src/infrastructure/database/connection';
+import { connectValkey } from '../src/infrastructure/cache/valkey';
+import { requestIdMiddleware } from '../src/application/middleware/requestId';
+import { errorHandler } from '../src/application/middleware/errorHandler';
+import { logger } from '../src/shared/utils/logger';
+import { HealthController } from '../src/application/controllers/HealthController';
+import authRoutes from '../src/application/routes/auth.routes';
+import productsRoutes from '../src/application/routes/products.routes';
+import categoriesRoutes from '../src/application/routes/categories.routes';
+import statsRoutes from '../src/application/routes/stats.routes';
+import ordersRoutes from '../src/application/routes/orders.routes';
+import customersRoutes from '../src/application/routes/customers.routes';
+import uploadRoutes from '../src/application/routes/upload.routes';
+import exportRoutes from '../src/application/routes/export.routes';
+import mercadopagoRoutes from '../src/application/routes/mercadopago.routes';
+import addressesRoutes from '../src/application/routes/addresses.routes';
+import newsletterRoutes from '../src/application/routes/newsletter.routes';
+import reviewRoutes from '../src/application/routes/review.routes';
+import contactRoutes from '../src/application/routes/contact.routes';
+import testEmailRoutes from '../src/application/routes/test-email.routes';
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+// Validar variables de entorno al inicio
+validateEnv();
 
-  // Handle OPTIONS
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+const app = express();
 
-  const url = req.url || '/';
-  const path = url.replace(/^\/api/, '');
+// Trust proxy - Vercel usa proxies reversos
+app.set('trust proxy', 1);
 
-  // Health
-  if (path === '/health') {
-    return res.json({ status: 'ok', timestamp: new Date().toISOString() });
-  }
+// Swagger Documentation
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
-  // API v1
-  if (path === '/' || path === '/v1' || path === '/v1/') {
-    return res.json({
-      message: 'API Aguamarina Mosaicos CORS Fixed',
-      version: 'v1',
-      status: 'online',
-      timestamp: new Date().toISOString(),
-      endpoints: {
-        health: '/api/health',
-        auth: '/api/v1/auth/login',
-        products: '/api/v1/products',
-        categories: '/api/v1/categories',
+// Request ID / Correlation ID (debe ser lo primero)
+app.use(requestIdMiddleware);
+
+// Seguridad
+app.use(helmet());
+app.use(cors(config.cors));
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: config.rateLimit.windowMs,
+  max: config.rateLimit.maxRequests,
+  message: 'Demasiadas peticiones desde esta IP, por favor intenta más tarde',
+});
+app.use(`/api`, limiter);
+
+// Parseo de body
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Compresión
+app.use(compression());
+
+// Logging de requests
+app.use((req, res, next) => {
+  logger.http(`${req.method} ${req.path}`);
+  next();
+});
+
+// Swagger UI - Documentación de API
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'API Aguamarina - Documentación',
+}));
+
+// Swagger JSON
+app.get('/api-docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
+
+// Health checks
+app.get('/health', HealthController.basic);
+app.get('/health/ready', HealthController.ready);
+app.get('/health/live', HealthController.live);
+app.get('/health/detailed', HealthController.detailed);
+
+// Rutas API
+const apiRouter = express.Router();
+
+// Auth routes
+apiRouter.use('/auth', authRoutes);
+apiRouter.use('/products', productsRoutes);
+apiRouter.use('/categories', categoriesRoutes);
+apiRouter.use('/stats', statsRoutes);
+apiRouter.use('/orders', ordersRoutes);
+apiRouter.use('/customers', customersRoutes);
+apiRouter.use('/upload', uploadRoutes);
+apiRouter.use('/export', exportRoutes);
+apiRouter.use('/mercadopago', mercadopagoRoutes);
+apiRouter.use('/addresses', addressesRoutes);
+apiRouter.use('/newsletter', newsletterRoutes);
+apiRouter.use('/reviews', reviewRoutes);
+apiRouter.use('/contact', contactRoutes);
+apiRouter.use('/test-email', testEmailRoutes);
+
+// API info endpoint
+apiRouter.get('/', (req, res) => {
+  res.json({
+    message: 'API Aguamarina Mosaicos',
+    version: config.apiVersion,
+    endpoints: {
+      auth: '/auth',
+      products: '/products',
+      categories: '/categories',
+      orders: '/orders',
+      customers: '/customers',
+      users: '/users',
+      stats: '/stats',
+      mercadopago: '/mercadopago',
+      addresses: '/addresses',
+      newsletter: '/newsletter',
+      reviews: '/reviews',
+      contact: '/contact',
+    },
+  });
+});
+
+app.use(`/api/${config.apiVersion}`, apiRouter);
+
+// Ruta raíz - Información del servidor
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'API Aguamarina Mosaicos - Servidor activo en Vercel',
+    version: config.apiVersion,
+    environment: config.nodeEnv,
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      api: `/api/${config.apiVersion}`,
+      documentation: '/api-docs',
+      health: {
+        basic: '/health',
+        ready: '/health/ready',
+        live: '/health/live',
+        detailed: '/health/detailed',
       },
-    });
-  }
+    },
+  });
+});
 
-  // Default 404
-  return res.status(404).json({
+// Manejo de errores
+app.use(errorHandler);
+
+// Ruta no encontrada
+app.use('*', (req, res) => {
+  res.status(404).json({
     success: false,
     message: 'Ruta no encontrada',
-    path,
-    method: req.method,
+    availableEndpoints: {
+      api: `/api/${config.apiVersion}`,
+      documentation: '/api-docs',
+      health: '/health',
+    },
   });
-}
+});
+
+// Inicializar conexiones (para serverless)
+let isInitialized = false;
+
+const initializeConnections = async () => {
+  if (isInitialized) return;
+
+  try {
+    // Conectar a la base de datos
+    await connectDatabase();
+    logger.info('✅ Database connected successfully');
+  } catch (error) {
+    logger.warn('⚠️ Database not available');
+  }
+
+  try {
+    // Conectar a Valkey
+    await connectValkey();
+    logger.info('✅ Valkey connected successfully');
+  } catch (error) {
+    logger.warn('⚠️ Valkey not available');
+  }
+
+  isInitialized = true;
+};
+
+// Export para Vercel Serverless
+export default async (req: VercelRequest, res: VercelResponse) => {
+  await initializeConnections();
+  return app(req as any, res as any);
+};
