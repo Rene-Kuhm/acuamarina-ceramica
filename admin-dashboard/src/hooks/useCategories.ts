@@ -58,7 +58,8 @@ export const useCreateCategory = () => {
         description: params.description,
         parentId: params.parentId || null,
         imageUrl: params.imageUrl || null,
-        isActive: true,
+        displayOrder: params.displayOrder ?? 0,
+        isActive: params.isActive ?? true,
       };
       return categoriesService.create(dto);
     },

@@ -77,6 +77,8 @@ export default function NewCategoryPage() {
         description: formData.description,
         parentId: formData.parentId || undefined,
         imageUrl: imageUrl || undefined,
+        displayOrder: parseInt(formData.displayOrder),
+        isActive: formData.isActive,
       });
 
       toast.success('Categoría creada exitosamente');
