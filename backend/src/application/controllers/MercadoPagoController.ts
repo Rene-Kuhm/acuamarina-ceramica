@@ -41,22 +41,25 @@ export class MercadoPagoController {
 
       // Obtener orden de la base de datos
       const orderResult = await getPool().query(
-        `SELECT o.*,
-          json_agg(
-            json_build_object(
-              'id', oi.id,
-              'product_id', oi.product_id,
-              'product_name', p.name,
-              'quantity', oi.quantity,
-              'price', oi.price,
-              'subtotal', oi.subtotal
+        `SELECT o.id, o.order_number, o.customer_name, o.customer_email, o.customer_phone,
+                o.total, o.status,
+          (
+            SELECT json_agg(
+              json_build_object(
+                'id', oi.id,
+                'product_id', oi.product_id,
+                'product_name', p.name,
+                'quantity', oi.quantity,
+                'price', oi.price,
+                'subtotal', oi.subtotal
+              )
             )
+            FROM order_items oi
+            LEFT JOIN products p ON oi.product_id = p.id
+            WHERE oi.order_id = o.id
           ) as items
          FROM orders o
-         LEFT JOIN order_items oi ON o.id = oi.order_id
-         LEFT JOIN products p ON oi.product_id = p.id
-         WHERE o.id = $1
-         GROUP BY o.id`,
+         WHERE o.id = $1`,
         [orderId]
       );
 
