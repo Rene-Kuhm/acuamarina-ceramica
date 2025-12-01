@@ -8,7 +8,6 @@ import { ArrowLeft, Package, Truck, CheckCircle, XCircle } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import Link from 'next/link';
 import { useState } from 'react';
-import type { ShippingAddress } from '@/services/orders.service';
 
 export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -96,9 +95,9 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold">Pedido {order.order_number}</h1>
+            <h1 className="text-3xl font-bold">Pedido {order.orderNumber}</h1>
             <p className="text-muted-foreground">
-              Creado el {new Date(order.created_at).toLocaleDateString('es-ES')}
+              Creado el {new Date(order.createdAt).toLocaleDateString('es-ES')}
             </p>
           </div>
         </div>
@@ -143,16 +142,20 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           <CardContent className="space-y-2">
             <div>
               <p className="text-sm text-muted-foreground">Nombre</p>
-              <p className="font-medium">{order.customer_name || 'N/A'}</p>
+              <p className="font-medium">
+                {order.shippingFirstName && order.shippingLastName
+                  ? `${order.shippingFirstName} ${order.shippingLastName}`
+                  : 'N/A'}
+              </p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Email</p>
-              <p className="font-medium">{order.customer_email || 'N/A'}</p>
+              <p className="font-medium">{order.userId || 'N/A'}</p>
             </div>
-            {order.customer_phone && (
+            {order.shippingPhone && (
               <div>
                 <p className="text-sm text-muted-foreground">Teléfono</p>
-                <p className="font-medium">{order.customer_phone}</p>
+                <p className="font-medium">{order.shippingPhone}</p>
               </div>
             )}
           </CardContent>
@@ -163,9 +166,21 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
             <CardTitle className="text-sm font-medium">Resumen del Pedido</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
+            <div className="flex justify-between">
+              <span className="text-sm text-muted-foreground">Subtotal</span>
+              <span>{formatCurrency(order.subtotal ?? 0)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-muted-foreground">Envío</span>
+              <span>{formatCurrency(order.shippingCost ?? 0)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-muted-foreground">Impuestos</span>
+              <span>{formatCurrency(order.taxAmount ?? 0)}</span>
+            </div>
             <div className="flex justify-between pt-2 border-t font-bold text-lg">
               <span>Total</span>
-              <span>{formatCurrency(order.total_amount ?? 0)}</span>
+              <span>{formatCurrency(order.totalAmount ?? 0)}</span>
             </div>
           </CardContent>
         </Card>
@@ -177,16 +192,24 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
             <CardTitle>Dirección de Envío</CardTitle>
           </CardHeader>
           <CardContent>
-            {typeof order.shipping_address === 'string' ? (
-              <p className="whitespace-pre-line">{order.shipping_address}</p>
-            ) : order.shipping_address && typeof order.shipping_address === 'object' ? (
+            {order.shippingStreetAddress || order.shippingCity ? (
               <div className="space-y-1">
-                {(order.shipping_address as ShippingAddress).street && <p>{(order.shipping_address as ShippingAddress).street}</p>}
-                {(order.shipping_address as ShippingAddress).city && (order.shipping_address as ShippingAddress).state && (
-                  <p>{(order.shipping_address as ShippingAddress).city}, {(order.shipping_address as ShippingAddress).state}</p>
+                {order.shippingStreetAddress && (
+                  <p>
+                    {order.shippingStreetAddress}
+                    {order.shippingStreetNumber && ` ${order.shippingStreetNumber}`}
+                    {order.shippingApartment && `, Apt. ${order.shippingApartment}`}
+                  </p>
                 )}
-                {(order.shipping_address as ShippingAddress).zipCode && <p>{(order.shipping_address as ShippingAddress).zipCode}</p>}
-                {(order.shipping_address as ShippingAddress).country && <p>{(order.shipping_address as ShippingAddress).country}</p>}
+                {(order.shippingCity || order.shippingState) && (
+                  <p>
+                    {order.shippingCity}
+                    {order.shippingCity && order.shippingState && ', '}
+                    {order.shippingState}
+                  </p>
+                )}
+                {order.shippingPostalCode && <p>CP: {order.shippingPostalCode}</p>}
+                {order.shippingCountry && <p>{order.shippingCountry}</p>}
               </div>
             ) : (
               <p className="text-muted-foreground">No hay dirección de envío</p>
@@ -201,11 +224,11 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           <CardContent className="space-y-2">
             <div>
               <p className="text-sm text-muted-foreground">Método de pago</p>
-              <p className="font-medium">{order.payment_method}</p>
+              <p className="font-medium">{order.paymentMethod || 'N/A'}</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Estado del pago</p>
-              <p className="font-medium">{getPaymentStatusLabel(order.payment_status)}</p>
+              <p className="font-medium">{getPaymentStatusLabel(order.paymentStatus)}</p>
             </div>
           </CardContent>
         </Card>
@@ -230,13 +253,13 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                 {order.items && order.items.length > 0 ? (
                   order.items.map((item: any) => (
                     <tr key={item.id} className="border-b">
-                      <td className="py-3 px-4">{item.product_name}</td>
+                      <td className="py-3 px-4">{item.productName}</td>
                       <td className="py-3 px-4 text-right">{item.quantity}</td>
                       <td className="py-3 px-4 text-right">
-                        {formatCurrency(item.price ?? item.product_price ?? 0)}
+                        {formatCurrency(item.unitPrice ?? 0)}
                       </td>
                       <td className="py-3 px-4 text-right font-medium">
-                        {formatCurrency(item.subtotal ?? 0)}
+                        {formatCurrency(item.totalPrice ?? 0)}
                       </td>
                     </tr>
                   ))
