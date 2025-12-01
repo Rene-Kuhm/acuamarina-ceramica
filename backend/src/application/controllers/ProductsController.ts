@@ -485,12 +485,19 @@ export class ProductsController {
         values
       );
 
-      // Audit log
-//       await getPool().query(
-//         `INSERT INTO audit_logs (user_id, action, entity_type, entity_id, old_values, new_values)
-//          VALUES ($1, 'UPDATE', 'PRODUCT', $2, $3, $4)`,
-//         [userId, id, JSON.stringify(existingProduct.rows[0]), JSON.stringify(data)]
-//       );
+      // Audit log - with error handling
+      try {
+        const sanitizedData = Object.fromEntries(
+          Object.entries(data).filter(([_, v]) => v !== undefined)
+        );
+        await getPool().query(
+          `INSERT INTO audit_logs (user_id, action, entity_type, entity_id, old_values, new_values)
+           VALUES ($1, 'UPDATE', 'PRODUCT', $2, $3::jsonb, $4::jsonb)`,
+          [userId, id, JSON.stringify(existingProduct.rows[0]), JSON.stringify(sanitizedData)]
+        );
+      } catch (auditError) {
+        logger.warn(`No se pudo crear audit log: ${auditError}`);
+      }
 
       logger.info(`Producto actualizado: ${id} por usuario ${userId}`);
 
