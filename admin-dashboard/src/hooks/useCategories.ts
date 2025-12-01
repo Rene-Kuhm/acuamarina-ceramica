@@ -52,6 +52,8 @@ export const useCreateCategory = () => {
   const queryClient = useQueryClient();
   return useMutation<Category, Error, CreateCategoryParams>({
     mutationFn: async (params) => {
+      console.log('🔍 useCreateCategory - Params recibidos:', params);
+
       // Construir DTO solo con campos definidos
       const dto: any = {
         name: params.name,
@@ -66,6 +68,8 @@ export const useCreateCategory = () => {
       if (params.imageUrl) dto.imageUrl = params.imageUrl;
       if (params.metaTitle) dto.metaTitle = params.metaTitle;
       if (params.metaDescription) dto.metaDescription = params.metaDescription;
+
+      console.log('📦 DTO final a enviar:', JSON.stringify(dto, null, 2));
 
       return categoriesService.create(dto);
     },

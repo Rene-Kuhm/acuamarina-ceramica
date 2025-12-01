@@ -1,0 +1,7 @@
+{
+  "name": "Test Subcategoria",
+  "slug": "test-subcategoria",
+  "displayOrder": 0,
+  "isActive": true,
+  "parentId": "REPLACE_WITH_REAL_UUID"
+}

@@ -83,6 +83,9 @@ export default function NewCategoryPage() {
       if (formData.parentId) categoryData.parentId = formData.parentId;
       if (imageUrl) categoryData.imageUrl = imageUrl;
 
+      console.log('📝 FormData original:', formData);
+      console.log('🎯 CategoryData preparado:', categoryData);
+
       await createCategory.mutateAsync(categoryData);
 
       toast.success('Categoría creada exitosamente');
