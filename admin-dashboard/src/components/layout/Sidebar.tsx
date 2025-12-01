@@ -45,18 +45,18 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'flex flex-col h-screen bg-zinc-900 border-r border-zinc-800 transition-all duration-300 ease-out',
+        'flex flex-col h-screen bg-white border-r border-slate-200 transition-all duration-300 ease-out shadow-sm',
         collapsed ? 'w-[72px]' : 'w-64'
       )}
     >
       {/* Logo Section */}
       <div className={cn(
-        'flex items-center h-16 border-b border-zinc-800',
+        'flex items-center h-16 border-b border-slate-200',
         collapsed ? 'justify-center px-3' : 'justify-between px-4'
       )}>
         <Link href="/dashboard" className="flex items-center gap-3 group">
           <div className="relative flex-shrink-0">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center shadow-lg shadow-teal-500/20 group-hover:shadow-teal-500/30 transition-shadow duration-300 overflow-hidden">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow duration-300 overflow-hidden">
               <Image
                 src="/logo/logo.png"
                 alt="Aguamarina"
@@ -66,14 +66,14 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                 priority
               />
             </div>
-            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-zinc-900" />
+            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white" />
           </div>
           {!collapsed && (
             <div className="overflow-hidden">
-              <h1 className="text-base font-bold text-white tracking-tight">
+              <h1 className="text-base font-bold text-slate-900 tracking-tight">
                 Aguamarina
               </h1>
-              <p className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider">
+              <p className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">
                 Admin Panel
               </p>
             </div>
@@ -85,7 +85,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             variant="ghost"
             size="icon"
             onClick={onToggle}
-            className="h-8 w-8 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800"
+            className="h-8 w-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -99,7 +99,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             variant="ghost"
             size="icon"
             onClick={onToggle}
-            className="h-8 w-8 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800"
+            className="h-8 w-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
@@ -110,7 +110,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       <nav className="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto scrollbar-hide">
         {!collapsed && (
           <div className="px-3 mb-3">
-            <p className="text-[10px] font-semibold text-zinc-600 uppercase tracking-wider">
+            <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
               Menu Principal
             </p>
           </div>
@@ -128,8 +128,8 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               className={cn(
                 'group relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
                 isActive
-                  ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/20'
-                  : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200',
+                  ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-md shadow-teal-500/20'
+                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
                 collapsed && 'justify-center px-2',
                 'animate-fade-in'
               )}
@@ -160,26 +160,26 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       </nav>
 
       {/* Divider */}
-      <div className="mx-3 border-t border-zinc-800" />
+      <div className="mx-3 border-t border-slate-200" />
 
       {/* User Section */}
       <div className="p-3">
         {!collapsed ? (
           <>
             {/* User Card */}
-            <div className="mb-3 p-3 bg-zinc-800/50 rounded-xl border border-zinc-800">
+            <div className="mb-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
               <div className="flex items-center gap-3">
                 <div className="relative flex-shrink-0">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-sm font-bold text-white shadow-md">
                     {user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'AD'}
                   </div>
-                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-zinc-900" />
+                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-white truncate">
+                  <p className="text-sm font-semibold text-slate-900 truncate">
                     {user?.name || 'Administrador'}
                   </p>
-                  <p className="text-xs text-zinc-500 truncate">
+                  <p className="text-xs text-slate-500 truncate">
                     {user?.email || 'admin@aguamarina.com'}
                   </p>
                 </div>
@@ -190,7 +190,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             <Button
               variant="ghost"
               onClick={handleLogout}
-              className="w-full justify-start gap-2 h-10 px-3 text-sm font-medium text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-colors"
+              className="w-full justify-start gap-2 h-10 px-3 text-sm font-medium text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
             >
               <LogOut className="h-4 w-4" />
               <span>Cerrar Sesion</span>
@@ -203,7 +203,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-sm font-bold text-white shadow-md">
                 {user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'AD'}
               </div>
-              <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-zinc-900" />
+              <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white" />
             </div>
 
             {/* Collapsed Logout Button */}
@@ -211,7 +211,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               variant="ghost"
               size="icon"
               onClick={handleLogout}
-              className="h-10 w-10 rounded-xl text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+              className="h-10 w-10 rounded-xl text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors"
               title="Cerrar Sesion"
             >
               <LogOut className="h-4 w-4" />

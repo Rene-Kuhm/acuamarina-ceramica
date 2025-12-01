@@ -12,7 +12,6 @@ import {
   Users,
   Settings,
   LogOut,
-  X,
   Sparkles,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
@@ -53,14 +52,14 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="left" className="w-72 p-0 bg-zinc-900 border-zinc-800">
+      <SheetContent side="left" className="w-72 p-0 bg-white border-slate-200">
         <div className="flex h-full flex-col">
           {/* Logo Section */}
-          <SheetHeader className="p-4 border-b border-zinc-800">
+          <SheetHeader className="p-4 border-b border-slate-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center shadow-lg shadow-teal-500/20 overflow-hidden">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center shadow-md overflow-hidden">
                     <Image
                       src="/logo/logo.png"
                       alt="Aguamarina"
@@ -70,13 +69,13 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
                       priority
                     />
                   </div>
-                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-zinc-900" />
+                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white" />
                 </div>
                 <div>
-                  <SheetTitle className="text-base font-bold text-white">
+                  <SheetTitle className="text-base font-bold text-slate-900">
                     Aguamarina
                   </SheetTitle>
-                  <p className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider">
+                  <p className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">
                     Admin Panel
                   </p>
                 </div>
@@ -87,12 +86,12 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
           {/* Navigation */}
           <nav className="flex-1 p-3 space-y-1.5 overflow-y-auto">
             <div className="px-3 mb-3">
-              <p className="text-[10px] font-semibold text-zinc-600 uppercase tracking-wider">
+              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
                 Menu Principal
               </p>
             </div>
 
-            {navigation.map((item, index) => {
+            {navigation.map((item) => {
               const isActive = pathname === item.href ||
                 (item.href !== '/dashboard' && pathname.startsWith(item.href + '/'));
               const Icon = item.icon;
@@ -105,8 +104,8 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
                   className={cn(
                     'group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
                     isActive
-                      ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/20'
-                      : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+                      ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-md shadow-teal-500/20'
+                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                   )}
                 >
                   <Icon className={cn(
@@ -123,24 +122,24 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
           </nav>
 
           {/* Divider */}
-          <div className="mx-3 border-t border-zinc-800" />
+          <div className="mx-3 border-t border-slate-200" />
 
           {/* User Section */}
           <div className="p-3">
             {/* User Card */}
-            <div className="mb-3 p-3 bg-zinc-800/50 rounded-xl border border-zinc-800">
+            <div className="mb-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
               <div className="flex items-center gap-3">
                 <div className="relative flex-shrink-0">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-sm font-bold text-white shadow-md">
                     {user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'AD'}
                   </div>
-                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-zinc-900" />
+                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-white truncate">
+                  <p className="text-sm font-semibold text-slate-900 truncate">
                     {user?.name || 'Administrador'}
                   </p>
-                  <p className="text-xs text-zinc-500 truncate">
+                  <p className="text-xs text-slate-500 truncate">
                     {user?.email || 'admin@aguamarina.com'}
                   </p>
                 </div>
@@ -151,7 +150,7 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
             <Button
               variant="ghost"
               onClick={handleLogout}
-              className="w-full justify-start gap-2 h-10 px-3 text-sm font-medium text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-colors"
+              className="w-full justify-start gap-2 h-10 px-3 text-sm font-medium text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
             >
               <LogOut className="h-4 w-4" />
               <span>Cerrar Sesion</span>

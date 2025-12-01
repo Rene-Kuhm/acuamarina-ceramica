@@ -23,10 +23,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
   }, [mounted, isInitialized, isAuthenticated, router]);
 
-  // Loading State - Dark Theme
+  // Loading State
   if (!mounted || !isInitialized) {
     return (
-      <div className="flex h-screen items-center justify-center bg-zinc-950">
+      <div className="flex h-screen items-center justify-center bg-slate-50">
         <div className="text-center">
           {/* Animated Logo Loader */}
           <div className="relative w-16 h-16 mx-auto mb-6">
@@ -48,14 +48,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </svg>
             </div>
           </div>
-          <h2 className="text-lg font-semibold text-white mb-1">
+          <h2 className="text-lg font-semibold text-slate-900 mb-1">
             Aguamarina
           </h2>
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-slate-500">
             Cargando dashboard...
           </p>
           {/* Progress Bar */}
-          <div className="mt-6 w-48 h-1 bg-zinc-800 rounded-full overflow-hidden mx-auto">
+          <div className="mt-6 w-48 h-1 bg-slate-200 rounded-full overflow-hidden mx-auto">
             <div className="h-full bg-gradient-to-r from-teal-500 to-teal-400 rounded-full animate-shimmer" style={{ width: '60%' }} />
           </div>
         </div>
@@ -68,7 +68,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-zinc-950">
+    <div className="flex h-screen overflow-hidden bg-slate-50">
       {/* Sidebar - Desktop Only */}
       <aside className="hidden lg:block flex-shrink-0">
         <Sidebar
