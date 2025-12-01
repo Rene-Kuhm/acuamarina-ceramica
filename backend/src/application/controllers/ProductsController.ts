@@ -63,6 +63,26 @@ const createProductSchema = z.object({
 // Campos que NO deben ir al UPDATE de la tabla products (se manejan por separado)
 const EXCLUDED_FROM_UPDATE = ['images'];
 
+// Campos que son JSONB en la base de datos
+const JSONB_FIELDS = ['dimensions', 'specifications', 'tags'];
+
+// Convertir valor a JSONB válido
+const toJsonb = (value: any): any => {
+  if (value === null || value === undefined) return null;
+  if (value === '') return null; // String vacío -> null
+  if (typeof value === 'object') return JSON.stringify(value);
+  // Si es string, intentar parsearlo como JSON, si falla retornar como objeto
+  if (typeof value === 'string') {
+    try {
+      JSON.parse(value);
+      return value; // Ya es JSON válido
+    } catch {
+      return JSON.stringify({ value }); // Convertir a objeto JSON
+    }
+  }
+  return JSON.stringify(value);
+};
+
 const updateProductSchema = createProductSchema.partial();
 
 const querySchema = z.object({
@@ -482,9 +502,25 @@ export class ProductsController {
       Object.entries(productData).forEach(([key, value]) => {
         if (value !== undefined) {
           const snakeKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-          updates.push(`${snakeKey} = $${paramCount}`);
-          values.push(value);
-          paramCount++;
+
+          // Manejar campos JSONB especialmente
+          if (JSONB_FIELDS.includes(key)) {
+            const jsonValue = toJsonb(value);
+            if (jsonValue !== null) {
+              updates.push(`${snakeKey} = $${paramCount}::jsonb`);
+              values.push(jsonValue);
+              paramCount++;
+            }
+            // Si es null, no incluir en el UPDATE (mantener valor actual)
+          } else {
+            // Para strings vacíos en campos opcionales, convertir a null
+            const finalValue = (value === '' && ['material', 'finish', 'color', 'shortDescription', 'metaTitle', 'metaDescription', 'keywords'].includes(key))
+              ? null
+              : value;
+            updates.push(`${snakeKey} = $${paramCount}`);
+            values.push(finalValue);
+            paramCount++;
+          }
         }
       });
 
