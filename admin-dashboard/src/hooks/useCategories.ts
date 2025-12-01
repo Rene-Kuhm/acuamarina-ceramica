@@ -52,15 +52,21 @@ export const useCreateCategory = () => {
   const queryClient = useQueryClient();
   return useMutation<Category, Error, CreateCategoryParams>({
     mutationFn: async (params) => {
-      const dto: CreateCategoryDTO = {
+      // Construir DTO solo con campos definidos
+      const dto: any = {
         name: params.name,
         slug: params.slug || params.name.toLowerCase().replace(/\s+/g, '-'),
-        description: params.description,
-        parentId: params.parentId || null,
-        imageUrl: params.imageUrl || null,
         displayOrder: params.displayOrder ?? 0,
         isActive: params.isActive ?? true,
       };
+
+      // Solo agregar campos opcionales si tienen valor
+      if (params.description) dto.description = params.description;
+      if (params.parentId) dto.parentId = params.parentId;
+      if (params.imageUrl) dto.imageUrl = params.imageUrl;
+      if (params.metaTitle) dto.metaTitle = params.metaTitle;
+      if (params.metaDescription) dto.metaDescription = params.metaDescription;
+
       return categoriesService.create(dto);
     },
     onSuccess: (data, variables) => {

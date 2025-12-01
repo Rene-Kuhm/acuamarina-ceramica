@@ -71,15 +71,19 @@ export default function NewCategoryPage() {
         imageUrl = uploadResponse.data.url;
       }
 
-      await createCategory.mutateAsync({
+      // Preparar datos solo con campos que tienen valor
+      const categoryData: any = {
         name: formData.name,
         slug: formData.slug,
-        description: formData.description,
-        parentId: formData.parentId || undefined,
-        imageUrl: imageUrl || undefined,
         displayOrder: parseInt(formData.displayOrder),
         isActive: formData.isActive,
-      });
+      };
+
+      if (formData.description) categoryData.description = formData.description;
+      if (formData.parentId) categoryData.parentId = formData.parentId;
+      if (imageUrl) categoryData.imageUrl = imageUrl;
+
+      await createCategory.mutateAsync(categoryData);
 
       toast.success('Categoría creada exitosamente');
 
