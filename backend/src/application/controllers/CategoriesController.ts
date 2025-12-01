@@ -7,8 +7,15 @@ const categorySchema = z.object({
   name: z.string().min(2, 'Nombre debe tener al menos 2 caracteres'),
   slug: z.string().optional(),
   description: z.string().optional(),
-  parentId: z.string().uuid().optional().nullable(),
-  imageUrl: z.string().url().optional().nullable(),
+  parentId: z.union([
+    z.string().uuid(),
+    z.number().transform(String),
+    z.string().regex(/^\d+$/).transform(String)
+  ]).optional().nullable(),
+  imageUrl: z.union([
+    z.string().url(),
+    z.literal('')
+  ]).optional().nullable().transform(val => val === '' ? null : val),
   displayOrder: z.number().int().min(0).default(0),
   isActive: z.boolean().default(true),
   metaTitle: z.string().optional(),
