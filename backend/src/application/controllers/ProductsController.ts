@@ -56,7 +56,12 @@ const createProductSchema = z.object({
   metaTitle: z.string().optional().nullable(),
   metaDescription: z.string().optional().nullable(),
   keywords: z.string().optional().nullable(),
+  // images se maneja por separado en product_images table
+  images: z.array(z.string()).optional(),
 });
+
+// Campos que NO deben ir al UPDATE de la tabla products (se manejan por separado)
+const EXCLUDED_FROM_UPDATE = ['images'];
 
 const updateProductSchema = createProductSchema.partial();
 
@@ -460,13 +465,16 @@ export class ProductsController {
         });
       }
 
-      // Build UPDATE query dynamically
+      // Extraer images para manejar por separado
+      const { images, ...productData } = data;
+
+      // Build UPDATE query dynamically (excluyendo campos especiales)
       const updates: string[] = [];
       const values: any[] = [];
       let paramCount = 1;
 
-      Object.entries(data).forEach(([key, value]) => {
-        if (value !== undefined) {
+      Object.entries(productData).forEach(([key, value]) => {
+        if (value !== undefined && !EXCLUDED_FROM_UPDATE.includes(key)) {
           const snakeKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
           updates.push(`${snakeKey} = $${paramCount}`);
           values.push(value);
@@ -474,22 +482,42 @@ export class ProductsController {
         }
       });
 
-      if (updates.length === 0) {
+      if (updates.length === 0 && !images) {
         return res.status(400).json({
           success: false,
           message: 'No hay datos para actualizar',
         });
       }
 
-      values.push(id);
+      let result = existingProduct;
 
-      const result = await getPool().query(
-        `UPDATE products
-         SET ${updates.join(', ')}
-         WHERE id = $${paramCount}
-         RETURNING *`,
-        values
-      );
+      // Solo hacer UPDATE si hay campos para actualizar
+      if (updates.length > 0) {
+        values.push(id);
+        result = await getPool().query(
+          `UPDATE products
+           SET ${updates.join(', ')}
+           WHERE id = $${paramCount}
+           RETURNING *`,
+          values
+        );
+      }
+
+      // Actualizar imágenes si se proporcionaron
+      if (images && Array.isArray(images)) {
+        // Eliminar imágenes existentes
+        await getPool().query('DELETE FROM product_images WHERE product_id = $1', [id]);
+
+        // Insertar nuevas imágenes
+        for (let i = 0; i < images.length; i++) {
+          await getPool().query(
+            `INSERT INTO product_images (product_id, url, display_order, is_primary)
+             VALUES ($1, $2, $3, $4)`,
+            [id, images[i], i, i === 0]
+          );
+        }
+        logger.info(`📸 ${images.length} imágenes actualizadas para producto ${id}`);
+      }
 
       // Audit log - with error handling
       try {
