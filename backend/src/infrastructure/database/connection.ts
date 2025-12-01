@@ -1,10 +1,20 @@
-import { Pool, PoolConfig } from 'pg';
+import { Pool, PoolConfig, PoolClient, QueryResult } from 'pg';
 import dotenv from 'dotenv';
 import path from 'path';
 import { logger } from '../../shared/utils/logger';
 
 // Cargar variables de entorno
 dotenv.config({ path: path.join(__dirname, '../../../.env') });
+
+// Interfaz para el pool exportado con lazy initialization
+export interface LazyPool {
+  query: (text: string, params?: any[]) => Promise<QueryResult<any>>;
+  connect: () => Promise<PoolClient>;
+  end: () => Promise<void>;
+  readonly totalCount: number;
+  readonly idleCount: number;
+  readonly waitingCount: number;
+}
 
 // Función para crear la configuración del pool (lazy evaluation)
 const createPoolConfig = (): PoolConfig => {
@@ -92,7 +102,7 @@ export const disconnectDatabase = async (): Promise<void> => {
 };
 
 // Exportar getter del pool (NO crear pool al importar - importante para serverless)
-export const pool = {
+export const pool: LazyPool = {
   query: (text: string, params?: any[]) => getPool().query(text, params),
   connect: () => getPool().connect(),
   end: () => disconnectDatabase(),
