@@ -456,11 +456,15 @@ export class ProductsController {
       logger.info('✅ Validación OK. Campos a actualizar:', Object.keys(productData).join(', '));
       logger.info('📸 Imágenes recibidas:', images?.length || 0);
 
+      logger.info('🔍 Buscando producto existente...');
+
       // Check if product exists
       const existingProduct = await getPool().query(
-        'SELECT * FROM products WHERE id = $1',
+        'SELECT id, name, sku FROM products WHERE id = $1',
         [id]
       );
+
+      logger.info('✅ Producto encontrado:', existingProduct.rows[0]?.name || 'NO');
 
       if (existingProduct.rows.length === 0) {
         return res.status(404).json({
@@ -483,25 +487,34 @@ export class ProductsController {
         }
       });
 
-      logger.info('🔧 Updates:', updates.join(', '));
-      logger.info('📊 Values:', JSON.stringify(values));
+      logger.info('🔧 Updates:', updates.length > 0 ? updates.join(', ') : 'NINGUNO');
+      logger.info('📊 Values count:', values.length);
 
+      // Si no hay nada que actualizar, retornar el producto existente
       if (updates.length === 0 && (!images || images.length === 0)) {
-        return res.status(400).json({
-          success: false,
-          message: 'No hay datos para actualizar',
+        logger.info('⚠️ No hay cambios, retornando producto existente');
+        const fullProduct = await getPool().query(
+          'SELECT * FROM products WHERE id = $1',
+          [id]
+        );
+        return res.json({
+          success: true,
+          data: fullProduct.rows[0],
+          message: 'No se detectaron cambios',
         });
       }
 
-      let result = existingProduct;
+      let updatedProduct = existingProduct.rows[0];
 
       // Solo hacer UPDATE si hay campos para actualizar
       if (updates.length > 0) {
         values.push(id);
         const query = `UPDATE products SET ${updates.join(', ')} WHERE id = $${paramCount} RETURNING *`;
-        logger.info('📝 Query:', query);
+        logger.info('📝 Ejecutando query UPDATE...');
 
-        result = await getPool().query(query, values);
+        const result = await getPool().query(query, values);
+        updatedProduct = result.rows[0];
+        logger.info('✅ UPDATE exitoso');
       }
 
       // Actualizar imágenes si se proporcionaron
@@ -521,7 +534,7 @@ export class ProductsController {
       }
 
       // Obtener producto actualizado con imágenes
-      const updatedProduct = await getPool().query(
+      const finalProduct = await getPool().query(
         `SELECT p.*, c.name as category_name, c.slug as category_slug
          FROM products p
          LEFT JOIN categories c ON p.category_id = c.id
@@ -540,7 +553,7 @@ export class ProductsController {
       res.json({
         success: true,
         data: {
-          ...updatedProduct.rows[0],
+          ...finalProduct.rows[0],
           images: productImages.rows.map(img => img.url),
         },
       });
