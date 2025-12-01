@@ -504,7 +504,7 @@ export class ProductsController {
       }
 
       // Actualizar imágenes si se proporcionaron
-      if (images && Array.isArray(images)) {
+      if (images && Array.isArray(images) && images.length > 0) {
         // Eliminar imágenes existentes
         await getPool().query('DELETE FROM product_images WHERE product_id = $1', [id]);
 
@@ -519,25 +519,29 @@ export class ProductsController {
         logger.info(`📸 ${images.length} imágenes actualizadas para producto ${id}`);
       }
 
-      // Audit log - with error handling
-      try {
-        const sanitizedData = Object.fromEntries(
-          Object.entries(data).filter(([_, v]) => v !== undefined)
-        );
-        await getPool().query(
-          `INSERT INTO audit_logs (user_id, action, entity_type, entity_id, old_values, new_values)
-           VALUES ($1, 'UPDATE', 'PRODUCT', $2, $3::jsonb, $4::jsonb)`,
-          [userId, id, JSON.stringify(existingProduct.rows[0]), JSON.stringify(sanitizedData)]
-        );
-      } catch (auditError) {
-        logger.warn(`No se pudo crear audit log: ${auditError}`);
-      }
+      // Obtener producto actualizado con imágenes
+      const updatedProduct = await getPool().query(
+        `SELECT p.*, c.name as category_name, c.slug as category_slug
+         FROM products p
+         LEFT JOIN categories c ON p.category_id = c.id
+         WHERE p.id = $1`,
+        [id]
+      );
 
-      logger.info(`Producto actualizado: ${id} por usuario ${userId}`);
+      // Obtener imágenes del producto
+      const productImages = await getPool().query(
+        `SELECT url FROM product_images WHERE product_id = $1 ORDER BY display_order`,
+        [id]
+      );
+
+      logger.info(`✅ Producto actualizado: ${id} por usuario ${userId}`);
 
       res.json({
         success: true,
-        data: result.rows[0],
+        data: {
+          ...updatedProduct.rows[0],
+          images: productImages.rows.map(img => img.url),
+        },
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
