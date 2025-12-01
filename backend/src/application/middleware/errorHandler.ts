@@ -8,6 +8,15 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
+  // Log completo del error siempre
+  logger.error('🔥 Error Handler:', {
+    message: err.message,
+    code: (err as any).code,
+    path: req.path,
+    method: req.method,
+    stack: err.stack,
+  });
+
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({
       success: false,
@@ -34,13 +43,33 @@ export const errorHandler = (
     });
   }
 
-  // Error no controlado
-  logger.error('Error no controlado:', err);
+  // Error de conexión a base de datos
+  if ((err as any).code === 'ECONNREFUSED' || (err as any).code === 'ETIMEDOUT') {
+    return res.status(503).json({
+      success: false,
+      message: 'Error de conexión a la base de datos',
+      code: (err as any).code,
+    });
+  }
 
+  // Error de PostgreSQL genérico
+  if ((err as any).code && (err as any).code.startsWith('2')) {
+    return res.status(400).json({
+      success: false,
+      message: 'Error en la operación de base de datos',
+      detail: (err as any).detail || err.message,
+      code: (err as any).code,
+    });
+  }
+
+  // Error no controlado - siempre incluir algo de info para debugging
   return res.status(500).json({
     success: false,
     message: 'Error interno del servidor',
-    ...(process.env.NODE_ENV === 'development' && {
+    // Incluir info básica del error incluso en producción para debugging
+    errorType: err.constructor.name,
+    errorCode: (err as any).code || 'UNKNOWN',
+    ...(process.env.NODE_ENV !== 'production' && {
       error: err.message,
       stack: err.stack,
     }),

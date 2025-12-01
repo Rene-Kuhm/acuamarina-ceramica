@@ -32,7 +32,10 @@ export const config = {
   // CORS
   cors: {
     origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-      const allowedOrigins = process.env.CORS_ORIGINS?.split(',') || [];
+      // Leer de CORS_ORIGINS o CORS_ORIGIN (ambas variantes)
+      const corsEnv = process.env.CORS_ORIGINS || process.env.CORS_ORIGIN || '';
+      const allowedOrigins = corsEnv.split(',').map(o => o.trim()).filter(Boolean);
+
       const allowedPatterns = [
         /^https:\/\/.*\.vercel\.app$/,              // Any Vercel deployment
         /^https:\/\/acuamarina.*\.vercel\.app$/,    // Specific Aguamarina deployments
@@ -42,34 +45,25 @@ export const config = {
 
       // Allow requests with no origin (like mobile apps or curl)
       if (!origin) {
-        console.log('✅ CORS: Allowing request with no origin');
         return callback(null, true);
       }
 
-      // Log all origin requests for debugging
-      console.log(`🔍 CORS: Checking origin: ${origin}`);
-
       // Check if origin is in allowed list
       if (allowedOrigins.includes(origin)) {
-        console.log(`✅ CORS: Origin allowed from env list: ${origin}`);
+        console.log(`✅ CORS: Origin allowed: ${origin}`);
         return callback(null, true);
       }
 
       // Check if origin matches any pattern
-      const isAllowed = allowedPatterns.some(pattern => {
-        const matches = pattern.test(origin);
-        if (matches) {
-          console.log(`✅ CORS: Origin matches pattern: ${origin} -> ${pattern}`);
-        }
-        return matches;
-      });
+      const isAllowed = allowedPatterns.some(pattern => pattern.test(origin));
 
       if (isAllowed) {
+        console.log(`✅ CORS: Origin matches pattern: ${origin}`);
         return callback(null, true);
       }
 
       // Log blocked origin for debugging
-      console.warn(`⚠️  CORS blocked origin: ${origin}`);
+      console.warn(`⚠️ CORS blocked: ${origin} | Allowed: ${allowedOrigins.join(', ') || 'patterns only'}`);
       callback(new Error('Not allowed by CORS'));
     },
     credentials: true,

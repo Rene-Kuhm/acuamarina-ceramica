@@ -30,8 +30,13 @@ import reviewRoutes from '../src/application/routes/review.routes';
 import contactRoutes from '../src/application/routes/contact.routes';
 import testEmailRoutes from '../src/application/routes/test-email.routes';
 
-// Validar variables de entorno al inicio
-validateEnv();
+// Validar variables de entorno al inicio (con manejo de errores para serverless)
+try {
+  validateEnv();
+} catch (error) {
+  console.error('⚠️ Environment validation warning:', error);
+  // No hacer exit en serverless, continuar con defaults
+}
 
 const app = express();
 

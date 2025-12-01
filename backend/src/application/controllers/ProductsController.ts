@@ -438,8 +438,14 @@ export class ProductsController {
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
+
+      logger.info(`📝 Actualizando producto ${id}`);
+      logger.info('📦 Datos recibidos:', JSON.stringify(req.body, null, 2));
+
       const data = updateProductSchema.parse(req.body);
       const userId = (req as any).user?.userId;
+
+      logger.info('✅ Validación exitosa, userId:', userId);
 
       // Check if product exists
       const existingProduct = await getPool().query(
@@ -520,6 +526,13 @@ export class ProductsController {
           message: 'El SKU o slug ya existe',
         });
       }
+
+      // Log detallado del error para debugging
+      logger.error('❌ Error al actualizar producto:', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+        code: (error as any).code,
+      });
 
       next(error);
     }

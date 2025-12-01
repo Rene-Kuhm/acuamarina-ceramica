@@ -6,41 +6,57 @@ import { logger } from '../../shared/utils/logger';
 // Cargar variables de entorno
 dotenv.config({ path: path.join(__dirname, '../../../.env') });
 
-// Usar DATABASE_URL si está disponible (preferido en Railway/Vercel)
-// Si no, usar variables individuales
-const poolConfig: PoolConfig = process.env.DATABASE_URL
-  ? {
-      connectionString: process.env.DATABASE_URL,
-      max: parseInt(process.env.DB_MAX_CONNECTIONS || '10'),
-      idleTimeoutMillis: 30000,
+// Función para crear la configuración del pool (lazy evaluation)
+const createPoolConfig = (): PoolConfig => {
+  const databaseUrl = process.env.DATABASE_URL;
+
+  if (databaseUrl) {
+    // Para Neon/Vercel: agregar opciones de serverless
+    const url = new URL(databaseUrl);
+
+    // Agregar sslmode si no existe
+    if (!url.searchParams.has('sslmode')) {
+      url.searchParams.set('sslmode', 'require');
+    }
+
+    return {
+      connectionString: url.toString(),
+      max: parseInt(process.env.DB_MAX_CONNECTIONS || '5'), // Menos conexiones para serverless
+      idleTimeoutMillis: 10000, // Cerrar conexiones idle más rápido
       connectionTimeoutMillis: 10000,
       ssl: { rejectUnauthorized: false },
-    }
-  : {
-      host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT || '5432'),
-      database: process.env.DB_NAME || 'aguamarina_mosaicos',
-      user: process.env.DB_USER || 'postgres',
-      password: String(process.env.DB_PASSWORD || ''),
-      max: parseInt(process.env.DB_MAX_CONNECTIONS || '20'),
-      idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 10000,
-      ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
     };
+  }
+
+  return {
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '5432'),
+    database: process.env.DB_NAME || 'aguamarina_mosaicos',
+    user: process.env.DB_USER || 'postgres',
+    password: String(process.env.DB_PASSWORD || ''),
+    max: parseInt(process.env.DB_MAX_CONNECTIONS || '20'),
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000,
+    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
+  };
+};
 
 let poolInstance: Pool | null = null;
 
 export const getPool = (): Pool => {
   if (!poolInstance) {
+    const poolConfig = createPoolConfig();
     poolInstance = new Pool(poolConfig);
 
     poolInstance.on('connect', () => {
       logger.info('Nueva conexión establecida al pool de PostgreSQL');
     });
 
+    // En serverless NO hacer process.exit, solo loguear
     poolInstance.on('error', (err) => {
       logger.error('Error inesperado en el pool de PostgreSQL:', err);
-      process.exit(-1);
+      // Resetear el pool para que se reconecte en la próxima request
+      poolInstance = null;
     });
   }
 
@@ -75,8 +91,11 @@ export const disconnectDatabase = async (): Promise<void> => {
   }
 };
 
-// Exportar el pool directamente para server.ts
-export const pool = getPool();
+// Exportar getter del pool (NO crear pool al importar - importante para serverless)
+export const pool = {
+  query: (text: string, params?: any[]) => getPool().query(text, params),
+  connect: () => getPool().connect(),
+};
 
 export const query = async (text: string, params?: any[]) => {
   const start = Date.now();

@@ -79,6 +79,9 @@ export default function EditProductPage() {
     e.preventDefault();
 
     try {
+      // Preparar datos incluyendo imágenes
+      const imageUrls = images.map(img => img.url);
+
       await updateProduct.mutateAsync({
         id,
         data: {
@@ -87,12 +90,21 @@ export default function EditProductPage() {
           comparePrice: formData.comparePrice ? parseFloat(formData.comparePrice) : undefined,
           stockQuantity: parseInt(formData.stockQuantity),
           lowStockThreshold: parseInt(formData.lowStockThreshold),
+          images: imageUrls.length > 0 ? imageUrls : undefined,
         },
       });
 
       router.push('/dashboard/products');
-    } catch (error) {
-      alert('Error al actualizar el producto');
+    } catch (error: any) {
+      console.error('Error al actualizar producto:', error);
+
+      // Extraer mensaje de error del backend
+      const errorMessage = error?.response?.data?.message
+        || error?.response?.data?.detail
+        || error?.message
+        || 'Error desconocido al actualizar el producto';
+
+      alert(`Error: ${errorMessage}`);
     }
   };
 
