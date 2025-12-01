@@ -41,7 +41,7 @@ export default function DashboardPage() {
     {
       title: 'Ventas del Mes',
       subtitle: 'Ingresos totales',
-      value: formatCurrency(dashboardData?.stats?.monthly_revenue ?? 0),
+      value: formatCurrency(dashboardData?.stats?.monthlyRevenue ?? 0),
       icon: DollarSign,
       bgColor: 'bg-gradient-to-br from-[#4dd0e1]/10 via-[#4dd0e1]/5 to-transparent',
       iconColor: 'text-[#4dd0e1]',
@@ -51,7 +51,7 @@ export default function DashboardPage() {
     {
       title: 'Stock Actual',
       subtitle: 'Productos en inventario',
-      value: dashboardData?.stats?.total_products ?? 0,
+      value: dashboardData?.stats?.totalProducts ?? 0,
       icon: Package,
       bgColor: 'bg-gradient-to-br from-[#a3b18a]/10 via-[#a3b18a]/5 to-transparent',
       iconColor: 'text-[#a3b18a]',
@@ -61,7 +61,7 @@ export default function DashboardPage() {
     {
       title: 'Pedidos Activos',
       subtitle: 'Este mes',
-      value: dashboardData?.stats?.monthly_orders ?? 0,
+      value: dashboardData?.stats?.monthlyOrders ?? 0,
       icon: ShoppingCart,
       bgColor: 'bg-gradient-to-br from-[#7a7a7a]/10 via-[#7a7a7a]/5 to-transparent',
       iconColor: 'text-[#7a7a7a]',
@@ -71,7 +71,7 @@ export default function DashboardPage() {
     {
       title: 'Total Clientes',
       subtitle: 'Registrados',
-      value: dashboardData?.stats?.total_customers ?? 0,
+      value: dashboardData?.stats?.totalCustomers ?? 0,
       icon: Users,
       bgColor: 'bg-gradient-to-br from-[#4dd0e1]/10 via-[#4dd0e1]/5 to-transparent',
       iconColor: 'text-[#4dd0e1]',
@@ -214,7 +214,7 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-medium text-[#7a7a7a] mb-1">Total Clientes</p>
-                    <p className="text-3xl font-bold text-[#333333]">{dashboardData?.stats?.total_customers ?? 0}</p>
+                    <p className="text-3xl font-bold text-[#333333]">{dashboardData?.stats?.totalCustomers ?? 0}</p>
                   </div>
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#4dd0e1] to-[#4dd0e1]/70 flex items-center justify-center shadow-lg">
                     <Users className="w-7 h-7 text-white" />
@@ -245,7 +245,7 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-medium text-[#7a7a7a] mb-1">Total Productos</p>
-                    <p className="text-3xl font-bold text-[#333333]">{dashboardData?.stats?.total_products ?? 0}</p>
+                    <p className="text-3xl font-bold text-[#333333]">{dashboardData?.stats?.totalProducts ?? 0}</p>
                     <p className="text-xs text-[#a3b18a] mt-1">En inventario</p>
                   </div>
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#a3b18a] to-[#a3b18a]/70 flex items-center justify-center shadow-lg">

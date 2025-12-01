@@ -88,7 +88,7 @@ export default function CustomersPage() {
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <span className="text-lg">
-                    {customer.first_name} {customer.last_name}
+                    {customer.firstName} {customer.lastName}
                   </span>
                   <Link href={`/dashboard/customers/${customer.id}`}>
                     <Button variant="outline" size="sm">
@@ -110,24 +110,24 @@ export default function CustomersPage() {
                     <span>{customer.phone}</span>
                   </div>
                 )}
-                {customer.company_name && (
+                {customer.companyName && (
                   <div className="text-sm">
                     <span className="text-muted-foreground">Empresa: </span>
-                    <span className="font-medium">{customer.company_name}</span>
+                    <span className="font-medium">{customer.companyName}</span>
                   </div>
                 )}
                 <div className="pt-3 border-t grid grid-cols-2 gap-2">
                   <div>
                     <p className="text-xs text-muted-foreground">Total Pedidos</p>
-                    <p className="text-lg font-bold">{customer.total_orders || 0}</p>
+                    <p className="text-lg font-bold">{customer.totalOrders || 0}</p>
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">Total Gastado</p>
-                    <p className="text-lg font-bold">{formatCurrency(customer.total_spent || 0)}</p>
+                    <p className="text-lg font-bold">{formatCurrency(customer.totalSpent || 0)}</p>
                   </div>
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  Cliente desde {new Date(customer.created_at).toLocaleDateString('es-ES')}
+                  Cliente desde {new Date(customer.createdAt).toLocaleDateString('es-ES')}
                 </div>
               </CardContent>
             </Card>

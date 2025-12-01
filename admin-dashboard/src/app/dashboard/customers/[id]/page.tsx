@@ -78,10 +78,10 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
         </Link>
         <div>
           <h1 className="text-3xl font-bold">
-            {customer.first_name} {customer.last_name}
+            {customer.firstName} {customer.lastName}
           </h1>
           <p className="text-muted-foreground">
-            Cliente desde {new Date(customer.created_at).toLocaleDateString('es-ES')}
+            Cliente desde {new Date(customer.createdAt).toLocaleDateString('es-ES')}
           </p>
         </div>
       </div>
@@ -110,19 +110,19 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                 </div>
               </div>
             )}
-            {customer.company_name && (
+            {customer.companyName && (
               <div className="flex items-start gap-2">
                 <Building className="h-4 w-4 text-muted-foreground mt-0.5" />
                 <div>
                   <p className="text-xs text-muted-foreground">Empresa</p>
-                  <p className="font-medium">{customer.company_name}</p>
+                  <p className="font-medium">{customer.companyName}</p>
                 </div>
               </div>
             )}
-            {customer.tax_id && (
+            {customer.taxId && (
               <div>
                 <p className="text-xs text-muted-foreground">RUC/NIT</p>
-                <p className="font-medium">{customer.tax_id}</p>
+                <p className="font-medium">{customer.taxId}</p>
               </div>
             )}
           </CardContent>
@@ -135,17 +135,17 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
           <CardContent className="space-y-4">
             <div>
               <p className="text-xs text-muted-foreground">Total de Pedidos</p>
-              <p className="text-2xl font-bold">{customer.total_orders || 0}</p>
+              <p className="text-2xl font-bold">{customer.totalOrders || 0}</p>
             </div>
             <div>
               <p className="text-xs text-muted-foreground">Total Gastado</p>
-              <p className="text-2xl font-bold">{formatCurrency(customer.total_spent || 0)}</p>
+              <p className="text-2xl font-bold">{formatCurrency(customer.totalSpent || 0)}</p>
             </div>
             <div>
               <p className="text-xs text-muted-foreground">Promedio por Pedido</p>
               <p className="text-2xl font-bold">
-                {customer.total_orders && customer.total_orders > 0
-                  ? formatCurrency((customer.total_spent || 0) / customer.total_orders)
+                {customer.totalOrders && customer.totalOrders > 0
+                  ? formatCurrency((customer.totalSpent || 0) / customer.totalOrders)
                   : formatCurrency(0)}
               </p>
             </div>
@@ -165,12 +165,12 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                       <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
                       <div className="flex-1">
                         <p className="text-xs font-medium text-muted-foreground mb-1">
-                          {address.address_type === 'shipping' ? 'Envío' : 'Facturación'}
-                          {address.is_default && ' (Principal)'}
+                          {address.addressType === 'shipping' ? 'Envío' : 'Facturación'}
+                          {address.isDefault && ' (Principal)'}
                         </p>
-                        <p className="text-sm">{address.street_address}</p>
+                        <p className="text-sm">{address.streetAddress}</p>
                         <p className="text-sm">
-                          {address.city}, {address.state_province} {address.postal_code}
+                          {address.city}, {address.stateProvince} {address.postalCode}
                         </p>
                         <p className="text-sm">{address.country}</p>
                       </div>
@@ -215,10 +215,10 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                   ordersData.data.map((order) => (
                     <tr key={order.id} className="border-b hover:bg-gray-50">
                       <td className="py-3 px-4">
-                        <span className="font-mono font-medium">{order.order_number}</span>
+                        <span className="font-mono font-medium">{order.orderNumber}</span>
                       </td>
                       <td className="py-3 px-4">
-                        {new Date(order.created_at).toLocaleDateString('es-ES')}
+                        {new Date(order.createdAt).toLocaleDateString('es-ES')}
                       </td>
                       <td className="py-3 px-4">
                         <span className={`px-2 py-1 rounded-full text-xs ${getStatusBadgeColor(order.status)}`}>
@@ -226,7 +226,7 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                         </span>
                       </td>
                       <td className="py-3 px-4 text-right font-medium">
-                        {formatCurrency(order.total_amount)}
+                        {formatCurrency(order.totalAmount)}
                       </td>
                       <td className="py-3 px-4">
                         <Link href={`/dashboard/orders/${order.id}`}>
