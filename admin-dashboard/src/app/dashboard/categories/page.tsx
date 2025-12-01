@@ -89,7 +89,7 @@ export default function CategoriesPage() {
             </p>
           </div>
           <Button
-            variant={showInactive ? "default" : "outline"}
+            variant={showInactive ? "secondary" : "outline"}
             onClick={() => setShowInactive(!showInactive)}
             className="flex items-center gap-2"
           >
@@ -196,7 +196,7 @@ export default function CategoriesPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <Badge variant={parent.isActive ? 'default' : 'secondary'} className="bg-green-100 text-green-800 hover:bg-green-200">
+                    <Badge variant={parent.isActive ? 'secondary' : 'outline'} className="bg-green-100 text-green-800 hover:bg-green-200">
                       {parent.isActive ? '✓ Activa' : '✗ Inactiva'}
                     </Badge>
                     <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
@@ -230,7 +230,7 @@ export default function CategoriesPage() {
                           <span className="text-base font-medium text-slate-900">{child.name}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Badge variant={child.isActive ? 'default' : 'secondary'} className={child.isActive ? 'bg-green-100 text-green-800' : ''}>
+                          <Badge variant={child.isActive ? 'secondary' : 'outline'} className={child.isActive ? 'bg-green-100 text-green-800' : ''}>
                             {child.isActive ? '✓ Activa' : '✗ Inactiva'}
                           </Badge>
                           <Link href={`/dashboard/categories/${child.id}/edit`}>
