@@ -70,10 +70,10 @@ export const connectDatabase = async (): Promise<void> => {
 
     // Mostrar información de conexión según el tipo de configuración
     if (process.env.DATABASE_URL) {
-      logger.info('  Conexión: Supabase Pooler (DATABASE_URL)');
+      logger.info('  Conexión: DATABASE_URL (Neon/Railway)');
     } else {
-      logger.info(`  Base de datos: ${poolConfig.database}`);
-      logger.info(`  Host: ${poolConfig.host}:${poolConfig.port}`);
+      logger.info(`  Base de datos: ${process.env.DB_NAME || 'aguamarina_mosaicos'}`);
+      logger.info(`  Host: ${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || '5432'}`);
     }
 
     client.release();
@@ -95,6 +95,10 @@ export const disconnectDatabase = async (): Promise<void> => {
 export const pool = {
   query: (text: string, params?: any[]) => getPool().query(text, params),
   connect: () => getPool().connect(),
+  end: () => disconnectDatabase(),
+  get totalCount() { return getPool().totalCount; },
+  get idleCount() { return getPool().idleCount; },
+  get waitingCount() { return getPool().waitingCount; },
 };
 
 export const query = async (text: string, params?: any[]) => {
