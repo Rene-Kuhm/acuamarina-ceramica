@@ -42,6 +42,8 @@ interface CreateCategoryParams {
   description?: string;
   parentId?: string;
   imageUrl?: string;
+  displayOrder?: number;
+  isActive?: boolean;
 }
 
 export const useCreateCategory = () => {
@@ -78,6 +80,8 @@ export const useUpdateCategory = () => {
         description: data.description,
         parentId: data.parentId || null,
         imageUrl: data.imageUrl || null,
+        displayOrder: data.displayOrder,
+        isActive: data.isActive,
       };
       return categoriesService.update(id, dto);
     },

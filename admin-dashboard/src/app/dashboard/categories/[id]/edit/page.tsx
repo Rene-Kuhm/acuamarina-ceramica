@@ -102,6 +102,8 @@ export default function EditCategoryPage() {
           description: formData.description,
           parentId: formData.parentId || undefined,
           imageUrl: imageUrl || undefined,
+          displayOrder: parseInt(formData.displayOrder),
+          isActive: formData.isActive,
         }
       });
 
