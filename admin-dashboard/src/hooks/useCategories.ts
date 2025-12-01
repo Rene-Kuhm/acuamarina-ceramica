@@ -79,10 +79,23 @@ export const useUpdateCategory = () => {
       // Construir DTO solo con campos que tienen valor definido
       const dto: Partial<CreateCategoryDTO> = {};
 
+      // Regex para validar UUID v4
+      const isUUID = (str: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
+
       if (data.name !== undefined && data.name) dto.name = data.name;
       if (data.slug !== undefined && data.slug) dto.slug = data.slug;
       if (data.description !== undefined) dto.description = data.description || undefined;
-      if (data.parentId !== undefined) dto.parentId = data.parentId || null;
+
+      // Solo incluir parentId si es un UUID válido o null/vacío
+      if (data.parentId !== undefined) {
+        if (!data.parentId || data.parentId === '') {
+          dto.parentId = null;
+        } else if (isUUID(data.parentId)) {
+          dto.parentId = data.parentId;
+        }
+        // Si no es UUID válido, no incluirlo en el DTO
+      }
+
       if (data.imageUrl !== undefined) dto.imageUrl = data.imageUrl || null;
       if (data.displayOrder !== undefined) dto.displayOrder = data.displayOrder;
       if (data.isActive !== undefined) dto.isActive = data.isActive;
