@@ -44,6 +44,8 @@ interface CreateCategoryParams {
   imageUrl?: string;
   displayOrder?: number;
   isActive?: boolean;
+  metaTitle?: string;
+  metaDescription?: string;
 }
 
 export const useCreateCategory = () => {
@@ -74,15 +76,19 @@ export const useUpdateCategory = () => {
   const queryClient = useQueryClient();
   return useMutation<Category, Error, { id: string; data: Partial<CreateCategoryParams> }>({
     mutationFn: async ({ id, data }) => {
-      const dto: Partial<CreateCategoryDTO> = {
-        name: data.name,
-        slug: data.slug,
-        description: data.description,
-        parentId: data.parentId || null,
-        imageUrl: data.imageUrl || null,
-        displayOrder: data.displayOrder,
-        isActive: data.isActive,
-      };
+      // Construir DTO solo con campos que tienen valor definido
+      const dto: Partial<CreateCategoryDTO> = {};
+
+      if (data.name !== undefined) dto.name = data.name;
+      if (data.slug !== undefined) dto.slug = data.slug;
+      if (data.description !== undefined) dto.description = data.description;
+      if (data.parentId !== undefined) dto.parentId = data.parentId || null;
+      if (data.imageUrl !== undefined) dto.imageUrl = data.imageUrl || null;
+      if (data.displayOrder !== undefined) dto.displayOrder = data.displayOrder;
+      if (data.isActive !== undefined) dto.isActive = data.isActive;
+      if (data.metaTitle !== undefined) dto.metaTitle = data.metaTitle;
+      if (data.metaDescription !== undefined) dto.metaDescription = data.metaDescription;
+
       return categoriesService.update(id, dto);
     },
     onSuccess: (data) => {
