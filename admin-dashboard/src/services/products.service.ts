@@ -1,7 +1,7 @@
 import { apiClient } from '@/lib/api/client';
 import { Product, CreateProductDTO, PaginatedResponse } from '@/types';
 
-// Backend Product interface (snake_case)
+// Backend Product interface (snake_case) - solo para RESPONSES
 interface BackendProduct {
   id: string;
   sku: string;
@@ -67,33 +67,6 @@ const transformProduct = (backend: BackendProduct): Product => ({
   updatedAt: backend.updated_at,
 });
 
-// Transform frontend DTO (camelCase) to backend (snake_case)
-const transformToBackend = (dto: Partial<CreateProductDTO>): any => {
-  const backendData: any = {};
-
-  if (dto.sku !== undefined) backendData.sku = dto.sku;
-  if (dto.name !== undefined) backendData.name = dto.name;
-  if (dto.slug !== undefined) backendData.slug = dto.slug;
-  if (dto.description !== undefined) backendData.description = dto.description;
-  if (dto.shortDescription !== undefined) backendData.short_description = dto.shortDescription;
-  if (dto.categoryId !== undefined) backendData.category_id = dto.categoryId;
-  if (dto.price !== undefined) backendData.price = dto.price;
-  if (dto.comparePrice !== undefined) backendData.compare_price = dto.comparePrice;
-  if (dto.costPrice !== undefined) backendData.cost_price = dto.costPrice;
-  if (dto.dimensions !== undefined) backendData.dimensions = dto.dimensions;
-  if (dto.weight !== undefined) backendData.weight = dto.weight;
-  if (dto.material !== undefined) backendData.material = dto.material;
-  if (dto.finish !== undefined) backendData.finish = dto.finish;
-  if (dto.color !== undefined) backendData.color = dto.color;
-  if (dto.metaTitle !== undefined) backendData.meta_title = dto.metaTitle;
-  if (dto.metaDescription !== undefined) backendData.meta_description = dto.metaDescription;
-  if (dto.keywords !== undefined) backendData.keywords = dto.keywords;
-  if (dto.stockQuantity !== undefined) backendData.stock_quantity = dto.stockQuantity;
-  if (dto.lowStockThreshold !== undefined) backendData.low_stock_threshold = dto.lowStockThreshold;
-
-  return backendData;
-};
-
 export const productsService = {
   getAll: async (params?: {
     page?: number;
@@ -132,14 +105,14 @@ export const productsService = {
   },
 
   create: async (data: CreateProductDTO): Promise<Product> => {
-    const backendData = transformToBackend(data);
-    const response = await apiClient.post<{ success: boolean; data: BackendProduct }>('/products', backendData);
+    // Backend espera camelCase, NO transformar a snake_case
+    const response = await apiClient.post<{ success: boolean; data: BackendProduct }>('/products', data);
     return transformProduct(response.data);
   },
 
   update: async (id: string, data: Partial<CreateProductDTO>): Promise<Product> => {
-    const backendData = transformToBackend(data);
-    const response = await apiClient.patch<{ success: boolean; data: BackendProduct }>(`/products/${id}`, backendData);
+    // Backend espera camelCase, NO transformar a snake_case
+    const response = await apiClient.patch<{ success: boolean; data: BackendProduct }>(`/products/${id}`, data);
     return transformProduct(response.data);
   },
 
