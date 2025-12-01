@@ -23,16 +23,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
   }, [mounted, isInitialized, isAuthenticated, router]);
 
-  // Loading State
+  // Loading State - Dark Theme
   if (!mounted || !isInitialized) {
     return (
-      <div className="flex h-screen items-center justify-center bg-slate-50">
+      <div className="flex h-screen items-center justify-center bg-zinc-950">
         <div className="text-center">
           {/* Animated Logo Loader */}
           <div className="relative w-16 h-16 mx-auto mb-6">
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-teal-500 to-teal-600 opacity-20 animate-pulse" />
             <div className="absolute inset-2 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 opacity-40 animate-pulse animation-delay-150" />
-            <div className="absolute inset-4 rounded-lg bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center">
+            <div className="absolute inset-4 rounded-lg bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center shadow-lg shadow-teal-500/20">
               <svg
                 className="w-6 h-6 text-white animate-pulse"
                 fill="none"
@@ -48,15 +48,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </svg>
             </div>
           </div>
-          <h2 className="text-lg font-semibold text-slate-900 mb-1">
+          <h2 className="text-lg font-semibold text-white mb-1">
             Aguamarina
           </h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-zinc-500">
             Cargando dashboard...
           </p>
           {/* Progress Bar */}
-          <div className="mt-6 w-48 h-1 bg-slate-200 rounded-full overflow-hidden mx-auto">
-            <div className="h-full bg-gradient-to-r from-teal-500 to-teal-600 rounded-full animate-shimmer" style={{ width: '60%' }} />
+          <div className="mt-6 w-48 h-1 bg-zinc-800 rounded-full overflow-hidden mx-auto">
+            <div className="h-full bg-gradient-to-r from-teal-500 to-teal-400 rounded-full animate-shimmer" style={{ width: '60%' }} />
           </div>
         </div>
       </div>
@@ -68,7 +68,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50">
+    <div className="flex h-screen overflow-hidden bg-zinc-950">
       {/* Sidebar - Desktop Only */}
       <aside className="hidden lg:block flex-shrink-0">
         <Sidebar
