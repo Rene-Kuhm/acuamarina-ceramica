@@ -54,23 +54,6 @@ const transformCategory = (backendCategory: BackendCategory): Category => ({
   updatedAt: backendCategory.updated_at,
 });
 
-// Transform frontend DTO (camelCase) to backend format (snake_case)
-const transformToBackend = (dto: Partial<CreateCategoryDTO>): any => {
-  const backendData: any = {};
-
-  if (dto.name !== undefined) backendData.name = dto.name;
-  if (dto.slug !== undefined) backendData.slug = dto.slug;
-  if (dto.description !== undefined) backendData.description = dto.description;
-  if (dto.parentId !== undefined) backendData.parent_id = dto.parentId;
-  if (dto.imageUrl !== undefined) backendData.image = dto.imageUrl;
-  if (dto.displayOrder !== undefined) backendData.display_order = dto.displayOrder;
-  if (dto.isActive !== undefined) backendData.is_active = dto.isActive;
-  if (dto.metaTitle !== undefined) backendData.meta_title = dto.metaTitle;
-  if (dto.metaDescription !== undefined) backendData.meta_description = dto.metaDescription;
-
-  return backendData;
-};
-
 export const categoriesService = {
   getAll: async (activeOnly: boolean = false): Promise<Category[]> => {
     const params = activeOnly ? '?activeOnly=true' : '';
@@ -84,14 +67,14 @@ export const categoriesService = {
   },
 
   create: async (data: CreateCategoryDTO): Promise<Category> => {
-    const backendData = transformToBackend(data);
-    const response = await apiClient.post<ApiResponse<BackendCategory>>('/categories', backendData);
+    // Backend espera camelCase y convierte automáticamente a snake_case
+    const response = await apiClient.post<ApiResponse<BackendCategory>>('/categories', data);
     return transformCategory(response.data);
   },
 
   update: async (id: string, data: Partial<CreateCategoryDTO>): Promise<Category> => {
-    const backendData = transformToBackend(data);
-    const response = await apiClient.patch<ApiResponse<BackendCategory>>(`/categories/${id}`, backendData);
+    // Backend espera camelCase y convierte automáticamente a snake_case
+    const response = await apiClient.patch<ApiResponse<BackendCategory>>(`/categories/${id}`, data);
     return transformCategory(response.data);
   },
 
