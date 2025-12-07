@@ -55,9 +55,8 @@ export default function CheckoutPage() {
 
   const totalItems = getTotalItems();
   const subtotal = getTotalPrice();
-  const shipping = subtotal > 50000 ? 0 : 5000;
-  const tax = subtotal * 0.21;
-  const total = subtotal + shipping + tax;
+  const shipping = subtotal > 200000 ? 0 : 5000;
+  const total = subtotal + shipping;
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("es-AR", {
@@ -459,10 +458,6 @@ export default function CheckoutPage() {
                     <span className={shipping === 0 ? "text-green-600 font-medium" : "font-medium"}>
                       {shipping === 0 ? "¡Gratis!" : formatPrice(shipping)}
                     </span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">IVA (21%)</span>
-                    <span className="font-medium">{formatPrice(tax)}</span>
                   </div>
                 </div>
                 <Separator />

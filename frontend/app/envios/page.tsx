@@ -75,7 +75,7 @@ export default function EnviosPage() {
             <CardContent className="space-y-4">
               <div>
                 <h3 className="font-semibold mb-2">Ciudad Autónoma de Buenos Aires (CABA)</h3>
-                <p className="text-gray-600">Envío gratis en compras superiores a $50.000</p>
+                <p className="text-gray-600">Envío gratis en compras superiores a $200.000</p>
               </div>
               <div>
                 <h3 className="font-semibold mb-2">Gran Buenos Aires (GBA)</h3>

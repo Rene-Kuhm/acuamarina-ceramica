@@ -57,9 +57,8 @@ export default function CarritoPage() {
 
   const totalItems = getTotalItems();
   const subtotal = getTotalPrice();
-  const shipping = subtotal > 50000 ? 0 : 5000;
-  const tax = subtotal * 0.21; // 21% IVA
-  const total = subtotal + shipping + tax;
+  const shipping = subtotal > 200000 ? 0 : 5000;
+  const total = subtotal + shipping;
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("es-AR", {
@@ -141,11 +140,11 @@ export default function CarritoPage() {
         </div>
 
         {/* Free Shipping Alert */}
-        {subtotal < 50000 && (
+        {subtotal < 200000 && (
           <Alert className="mb-6 border-[#14b8a6] bg-[#f0fdfa]">
             <AlertCircle className="h-4 w-4 text-[#14b8a6]" />
             <AlertDescription className="text-gray-900">
-              Agrega {formatPrice(50000 - subtotal)} más para obtener{" "}
+              Agrega {formatPrice(200000 - subtotal)} más para obtener{" "}
               <strong>envío gratis</strong>
             </AlertDescription>
           </Alert>
@@ -272,10 +271,6 @@ export default function CarritoPage() {
                     <span className={shipping === 0 ? "text-green-600 font-bold" : "font-semibold text-gray-900"}>
                       {shipping === 0 ? "¡GRATIS!" : formatPrice(shipping)}
                     </span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-500">IVA incluido (21%)</span>
-                    <span className="text-gray-500">{formatPrice(tax)}</span>
                   </div>
                 </div>
 
