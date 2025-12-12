@@ -332,7 +332,7 @@ function ProductDetailContent({ slug, initialProduct }: ProductDetailClientProps
                   <Truck className="w-5 h-5 text-primary mt-0.5" />
                   <div>
                     <h4 className="font-medium">Envío Gratis</h4>
-                    <p className="text-sm text-gray-600">En compras mayores a $50.000</p>
+                    <p className="text-sm text-gray-600">A partir de $200.000</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">

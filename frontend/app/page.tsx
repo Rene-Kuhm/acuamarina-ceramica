@@ -155,7 +155,7 @@ export default function HomePage() {
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-white/50 backdrop-blur-sm rounded-full">
                 <Truck className="w-5 h-5" style={{ color: '#e15540' }} />
-                <span className="text-gray-800">Envío Gratis +$50k</span>
+                <span className="text-gray-800">Envío Gratis a partir de $200.000</span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-white/50 backdrop-blur-sm rounded-full">
                 <Headphones className="w-5 h-5" style={{ color: '#eab308' }} />
@@ -333,7 +333,7 @@ export default function HomePage() {
             <BenefitCardPremium
               icon={<Truck className="w-12 h-12" />}
               title="Envío Gratis"
-              description="En compras mayores a $50.000. Recibe tu pedido en la puerta de tu hogar."
+              description="A partir de $200.000. Recibe tu pedido en la puerta de tu hogar."
               iconColor="#14b8a6"
               gradient="from-[#f0fdfa] to-[#ccfbf1]"
             />

@@ -145,7 +145,7 @@ export default function CarritoPage() {
             <AlertCircle className="h-4 w-4 text-[#14b8a6]" />
             <AlertDescription className="text-gray-900">
               Agrega {formatPrice(200000 - subtotal)} más para obtener{" "}
-              <strong>envío gratis</strong>
+              <strong>envío gratis a partir de $200.000</strong>
             </AlertDescription>
           </Alert>
         )}
