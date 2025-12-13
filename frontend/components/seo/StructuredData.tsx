@@ -35,7 +35,7 @@ export function StructuredData() {
     ],
     sameAs: [
       "https://www.facebook.com/aguamarinamosaicos",
-      "https://www.instagram.com/aguamarinamosaicos",
+      "https://www.instagram.com/aguamarina_mosaicos1980/",
     ],
     potentialAction: {
       "@type": "SearchAction",

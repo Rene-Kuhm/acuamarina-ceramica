@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from "lucide-react";
+import { Facebook, Instagram, Mail, Phone, MapPin } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup";
 
@@ -20,21 +20,15 @@ const footerLinks = {
   socialMedia: [
     {
       name: "Facebook",
-      href: "https://facebook.com",
+      href: "https://www.facebook.com/aguamarinamosaicos",
       icon: Facebook,
       label: "Síguenos en Facebook",
     },
     {
       name: "Instagram",
-      href: "https://instagram.com",
+      href: "https://www.instagram.com/aguamarina_mosaicos1980/",
       icon: Instagram,
       label: "Síguenos en Instagram",
-    },
-    {
-      name: "Twitter",
-      href: "https://twitter.com",
-      icon: Twitter,
-      label: "Síguenos en Twitter",
     },
   ],
 };
