@@ -1,12 +1,22 @@
-# 🏺 Aguamarina Cerámicos - Sistema Empresarial Completo
+# 🏺 Aguamarina Mosaicos - Sistema E-commerce Empresarial
 
-> Sistema de gestión empresarial de nivel enterprise para comercio de cerámicos con backend profesional, panel de administración y tienda e-commerce.
+> Sistema completo de gestión empresarial y e-commerce para venta de mosaicos y cerámicos con arquitectura profesional, panel de administración completo y tienda online optimizada.
 
-[![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-15.5-black)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.1-blue)](https://react.dev/)
 [![Node.js](https://img.shields.io/badge/Node.js-20+-green)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue)](https://www.typescriptlang.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16+-blue)](https://www.postgresql.org/)
+[![Railway](https://img.shields.io/badge/Deploy-Railway-purple)](https://railway.app/)
+[![Vercel](https://img.shields.io/badge/Deploy-Vercel-black)](https://vercel.com/)
 [![License](https://img.shields.io/badge/license-Private-red)](LICENSE)
+
+## 🌐 Sitios en Producción
+
+- **🛒 Tienda Principal**: [aguamarinamosaicos.com](https://aguamarinamosaicos.com)
+- **⚙️ Panel Admin**: [admin.aguamarinamosaicos.com](https://admin.aguamarinamosaicos.com)
+- **🔌 API Backend**: [Railway API](https://diligent-upliftment-production-54de.up.railway.app/api/v1)
+- **📚 API Docs**: [Swagger UI](https://diligent-upliftment-production-54de.up.railway.app/api-docs)
 
 ---
 
@@ -202,33 +212,40 @@ npm run dev
 
 ## 🛠️ Stack Tecnológico
 
-### Backend
+### Backend API
 
 | Tecnología | Versión | Propósito |
 |------------|---------|-----------|
 | Node.js | 20+ | Runtime de JavaScript |
-| TypeScript | 5+ | Tipado estático |
-| Express | 4 | Framework web |
-| PostgreSQL | 16 | Base de datos |
-| Redis | 7 | Caché y sesiones |
-| JWT | - | Autenticación |
-| Zod | - | Validación de schemas |
-| Winston | - | Logging |
-| Jest | - | Testing |
-| Docker | - | Containerización |
+| TypeScript | 5.3+ | Tipado estático |
+| Express | 4.18 | Framework web |
+| PostgreSQL | 16 (Supabase) | Base de datos relacional |
+| Valkey (Redis) | 7+ | Caché y sesiones |
+| JWT | 9.0 | Autenticación y tokens |
+| Zod | 3.22 | Validación de schemas |
+| Winston | 3.11 | Sistema de logs |
+| Jest | 29.7 | Testing framework |
+| Cloudinary | 1.41 | Storage de imágenes |
+| MercadoPago | 2.9 | Pasarela de pagos |
+| Resend | 6.3 | Servicio de email |
 
-### Frontend (Admin Dashboard + E-commerce)
+### Frontend (Tienda + Admin Dashboard)
 
 | Tecnología | Versión | Propósito |
 |------------|---------|-----------|
-| React | 18+ | UI Framework |
-| Next.js | 15+ | Framework fullstack |
+| React | 19.1 | UI Framework |
+| Next.js | 15.5 | Framework fullstack con Turbopack |
 | TypeScript | 5+ | Tipado estático |
-| Tailwind CSS | 4 | Estilos |
-| shadcn/ui | - | Componentes UI |
-| React Query | - | Data fetching |
-| Zustand | - | Estado global |
-| Axios | - | Cliente HTTP |
+| Tailwind CSS | 4 | Framework de estilos |
+| Radix UI | - | Componentes headless accesibles |
+| Lucide React | 0.545 | Sistema de iconos |
+| TanStack Query | 5.90 | Data fetching y caché |
+| Zustand | 5.0 | Estado global |
+| React Hook Form | 7.65 | Gestión de formularios |
+| Framer Motion | 12.23 | Animaciones UI |
+| GSAP | 3.13 | Animaciones avanzadas |
+| Lenis | 1.3 | Smooth scrolling |
+| Axios | 1.12 | Cliente HTTP |
 
 ---
 
@@ -423,21 +440,31 @@ curl http://localhost:3000/health/detailed # Detallado con métricas
 
 ## 📚 Documentación
 
-### Backend
+### Documentación Principal
 
-- [Backend Completo 100/100](./backend/BACKEND-100-PERFECTO.md)
-- [Auditoría Profesional](./backend/AUDITORIA-PROFESIONAL.md)
-- [Verificación de Funcionalidades](./backend/VERIFICACION.md)
-- [API Docs (Swagger)](http://localhost:3000/api-docs)
+- **[📖 README.md](./README.md)** - Este archivo (guía principal del proyecto)
+- **[🏗️ ARQUITECTURA.md](./ARQUITECTURA.md)** - Documentación completa de arquitectura del sistema
+- **[🔌 API_REFERENCE.md](./API_REFERENCE.md)** - Referencia completa de API y eventos
+- **[🔧 TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Guía de resolución de problemas
+- **[⚙️ STACK_TECNOLOGICO.md](./STACK_TECNOLOGICO.md)** - Detalles técnicos del stack
 
-### Frontend
+### Documentación Específica
 
-- [Admin Dashboard Setup](./admin-dashboard/README.md)
-- [Frontend E-commerce](./frontend/README.md)
+- **[🚀 DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** - Guía de despliegue
+- **[💳 ARQUITECTURA_PAGOS.md](./ARQUITECTURA_PAGOS.md)** - Arquitectura del sistema de pagos
+- **[📊 PROJECT_STATUS_REPORT.md](./PROJECT_STATUS_REPORT.md)** - Estado del proyecto
+- **[👥 MANUAL_USUARIO_ADMIN.md](./MANUAL_USUARIO_ADMIN.md)** - Manual de usuario administrador
 
-### Deployment
+### API Documentation
 
-Ver archivos de documentación eliminados, información consolidada en esta sección.
+- **[Swagger UI (Producción)](https://diligent-upliftment-production-54de.up.railway.app/api-docs)** - Documentación interactiva de la API
+- **[Swagger UI (Local)](http://localhost:3000/api-docs)** - Documentación en desarrollo
+
+### Repositorios por Módulo
+
+- **[Backend API](./backend/README.md)** - Documentación específica del backend
+- **[Admin Dashboard](./admin-dashboard/README.md)** - Documentación del panel administrativo
+- **[Frontend E-commerce](./frontend/README.md)** - Documentación de la tienda
 
 ---
 
