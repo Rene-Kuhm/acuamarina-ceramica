@@ -130,15 +130,8 @@ export const productsService = {
   },
 
   update: async (id: string, data: Partial<CreateProductDTO>): Promise<Product> => {
-    console.log('🔄 [products.service] Enviando PATCH:', { id, data });
-    console.log('🔄 [products.service] categoryId en data:', data.categoryId);
-
     // Backend espera camelCase
     const response = await apiClient.patch<{ success: boolean; data: BackendProduct }>(`/products/${id}`, data);
-
-    console.log('✅ [products.service] Respuesta raw del backend:', response);
-    console.log('✅ [products.service] categoryId en respuesta:', response.data.categoryId, response.data.category_id);
-
     return transformProduct(response.data);
   },
 

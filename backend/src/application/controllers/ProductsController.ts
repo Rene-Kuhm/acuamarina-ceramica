@@ -12,12 +12,16 @@ const createProductSchema = z.object({
   description: z.string().optional().nullable(),
   shortDescription: z.string().optional().nullable(),
   categoryId: z.preprocess(
-    // Preprocesar: convertir valores vacíos/inválidos a null, UUIDs válidos se mantienen
+    // Preprocesar: convertir valores vacíos/inválidos a null, IDs válidos se mantienen
     (val) => {
       // Si es undefined, mantenerlo como undefined (no se incluirá en partial)
       if (val === undefined) return undefined;
       // Si es null, vacío o string inválido, retornar null
       if (val === null || val === '' || val === 'undefined' || val === 'null') return null;
+      // Si es un número, convertirlo a string
+      if (typeof val === 'number') return String(val);
+      // Si es un string numérico (como "28"), mantenerlo
+      if (typeof val === 'string' && /^\d+$/.test(val)) return val;
       // Si es un UUID válido, retornarlo
       if (typeof val === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val)) {
         return val;
@@ -25,7 +29,7 @@ const createProductSchema = z.object({
       // Cualquier otro caso, null
       return null;
     },
-    z.string().uuid().nullable()
+    z.string().nullable()
   ),
   price: z.union([z.number(), z.string()]).transform(val => typeof val === 'string' ? parseFloat(val) : val).refine(val => val >= 0, 'Precio no puede ser negativo'),
   comparePrice: z.union([z.number(), z.string()])
@@ -469,16 +473,12 @@ export class ProductsController {
       const { id } = req.params;
 
       logger.info(`📝 Actualizando producto ${id}`);
-      logger.info(`📦 Body categoryId: ${JSON.stringify(req.body?.categoryId)} (tipo: ${typeof req.body?.categoryId})`);
 
       const data = updateProductSchema.parse(req.body);
       const userId = (req as any).user?.userId;
 
       // Extraer images para manejar por separado (NO debe ir al UPDATE de products)
       const { images, ...productData } = data;
-
-      logger.info(`✅ Después de Zod - categoryId: ${JSON.stringify(productData.categoryId)} (tipo: ${typeof productData.categoryId})`);
-      logger.info(`✅ productData keys: ${Object.keys(productData).join(', ')}`);
 
       logger.info('🔍 Buscando producto existente...');
 
