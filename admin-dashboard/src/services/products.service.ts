@@ -107,8 +107,34 @@ export const productsService = {
       pagination: { page: number; limit: number; total: number; totalPages: number };
     }>(`/products?${queryParams.toString()}`);
 
+    // Log para depuración - ver qué devuelve el backend
+    if (response.data && response.data.length > 0) {
+      const firstWithCategory = response.data.find(p => p.categoryId || p.category_id);
+      if (firstWithCategory) {
+        console.log('🔍 Backend response - producto con categoría:', {
+          name: firstWithCategory.name,
+          categoryId: firstWithCategory.categoryId || firstWithCategory.category_id,
+          categoryName: firstWithCategory.categoryName || firstWithCategory.category_name,
+        });
+      } else {
+        console.log('⚠️ Ningún producto tiene categoría asignada');
+      }
+    }
+
+    const transformedData = response.data.map(transformProduct);
+
+    // Log después de transformar
+    const transformedWithCategory = transformedData.find(p => p.categoryId);
+    if (transformedWithCategory) {
+      console.log('✅ Después de transformar:', {
+        name: transformedWithCategory.name,
+        categoryId: transformedWithCategory.categoryId,
+        categoryName: transformedWithCategory.categoryName,
+      });
+    }
+
     return {
-      data: response.data.map(transformProduct),
+      data: transformedData,
       page: response.pagination.page,
       limit: response.pagination.limit,
       total: response.pagination.total,

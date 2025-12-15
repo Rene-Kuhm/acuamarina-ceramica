@@ -190,9 +190,19 @@ export class ProductsController {
       }
 
       // Transform products to match frontend expectations (camelCase)
-      const transformedProducts = result.rows.map(product =>
-        transformProductToAPI(product, imagesMap[product.id] || [])
-      );
+      const transformedProducts = result.rows.map(product => {
+        // Log para depuración de categorías
+        if (product.category_id) {
+          logger.info(`📦 Producto "${product.name}": category_id=${product.category_id}, category_name=${product.category_name || 'NULL'}`);
+        }
+        return transformProductToAPI(product, imagesMap[product.id] || []);
+      });
+
+      // Log del primer producto con categoría para verificar transformación
+      const productWithCategory = transformedProducts.find(p => p.categoryId);
+      if (productWithCategory) {
+        logger.info(`🔍 Producto con categoría transformado: categoryId=${productWithCategory.categoryId}, categoryName=${productWithCategory.categoryName || 'NULL'}`);
+      }
 
       res.json({
         success: true,
