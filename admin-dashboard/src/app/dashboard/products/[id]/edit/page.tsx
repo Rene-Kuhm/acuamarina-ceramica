@@ -340,9 +340,16 @@ export default function EditProductPage() {
                   >
                     <option value="">Sin categoría</option>
                     {categories?.map((cat) => (
-                      <option key={cat.id} value={cat.id}>
-                        {cat.name}
-                      </option>
+                      <optgroup key={cat.id} label={cat.name}>
+                        <option value={cat.id} className="font-medium">
+                          {cat.name}
+                        </option>
+                        {cat.children?.map((child) => (
+                          <option key={child.id} value={child.id}>
+                            &nbsp;&nbsp;↳ {child.name}
+                          </option>
+                        ))}
+                      </optgroup>
                     ))}
                   </select>
                 </div>
