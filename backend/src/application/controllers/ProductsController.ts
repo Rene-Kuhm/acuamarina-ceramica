@@ -11,18 +11,22 @@ const createProductSchema = z.object({
   slug: z.string().optional(),
   description: z.string().optional().nullable(),
   shortDescription: z.string().optional().nullable(),
-  categoryId: z.any()
-    .transform(val => {
-      // Si está vacío, undefined, null o no es un string, retornar null
-      if (!val || val === '' || val === 'undefined' || val === 'null') return null;
-      // Si es un string y parece un UUID válido, retornar el valor
+  categoryId: z.preprocess(
+    // Preprocesar: convertir valores vacíos/inválidos a null, UUIDs válidos se mantienen
+    (val) => {
+      // Si es undefined, mantenerlo como undefined (no se incluirá en partial)
+      if (val === undefined) return undefined;
+      // Si es null, vacío o string inválido, retornar null
+      if (val === null || val === '' || val === 'undefined' || val === 'null') return null;
+      // Si es un UUID válido, retornarlo
       if (typeof val === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val)) {
         return val;
       }
-      // Para cualquier otro caso, retornar null (permisivo)
+      // Cualquier otro caso, null
       return null;
-    })
-    .nullable(),
+    },
+    z.string().uuid().nullable()
+  ),
   price: z.union([z.number(), z.string()]).transform(val => typeof val === 'string' ? parseFloat(val) : val).refine(val => val >= 0, 'Precio no puede ser negativo'),
   comparePrice: z.union([z.number(), z.string()])
     .transform(val => {
@@ -465,8 +469,7 @@ export class ProductsController {
       const { id } = req.params;
 
       logger.info(`📝 Actualizando producto ${id}`);
-      logger.info(`📦 Body recibido: ${JSON.stringify(req.body)}`);
-      logger.info(`📦 Body keys: ${Object.keys(req.body || {}).join(', ') || 'VACÍO'}`);
+      logger.info(`📦 Body categoryId: ${JSON.stringify(req.body?.categoryId)} (tipo: ${typeof req.body?.categoryId})`);
 
       const data = updateProductSchema.parse(req.body);
       const userId = (req as any).user?.userId;
@@ -474,8 +477,8 @@ export class ProductsController {
       // Extraer images para manejar por separado (NO debe ir al UPDATE de products)
       const { images, ...productData } = data;
 
-      logger.info(`✅ Validación OK. Campos a actualizar: ${Object.keys(productData).join(', ') || 'NINGUNO'}`);
-      logger.info(`📸 Imágenes recibidas: ${images?.length || 0}`);
+      logger.info(`✅ Después de Zod - categoryId: ${JSON.stringify(productData.categoryId)} (tipo: ${typeof productData.categoryId})`);
+      logger.info(`✅ productData keys: ${Object.keys(productData).join(', ')}`);
 
       logger.info('🔍 Buscando producto existente...');
 
