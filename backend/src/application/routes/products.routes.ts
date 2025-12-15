@@ -19,6 +19,13 @@ router.get('/', ProductsController.getAll);
 router.get('/destacados', ProductsController.getFeatured);
 
 /**
+ * @route   POST /api/v1/products/fix-slugs
+ * @desc    Fix duplicate slugs in products
+ * @access  Private (Admin)
+ */
+router.post('/fix-slugs', authenticate, authorize('admin'), ProductsController.fixDuplicateSlugs);
+
+/**
  * @route   GET /api/v1/products/:id
  * @desc    Get product by ID
  * @access  Public

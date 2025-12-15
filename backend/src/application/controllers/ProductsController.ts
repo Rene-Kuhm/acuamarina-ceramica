@@ -91,6 +91,47 @@ const toJsonb = (value: any): any => {
   return JSON.stringify(value);
 };
 
+// Generar slug base a partir del nombre
+const generateBaseSlug = (name: string): string => {
+  return name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // Eliminar acentos
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
+// Generar slug único verificando en la base de datos
+const generateUniqueSlug = async (name: string, excludeProductId?: number): Promise<string> => {
+  const baseSlug = generateBaseSlug(name);
+
+  // Buscar slugs existentes que empiecen con el baseSlug
+  const result = await getPool().query(
+    `SELECT slug FROM products WHERE slug = $1 OR slug LIKE $2 ${excludeProductId ? 'AND id != $3' : ''}`,
+    excludeProductId ? [baseSlug, `${baseSlug}-%`, excludeProductId] : [baseSlug, `${baseSlug}-%`]
+  );
+
+  if (result.rows.length === 0) {
+    return baseSlug;
+  }
+
+  // Extraer los números de los slugs existentes
+  const existingSlugs = result.rows.map(r => r.slug);
+
+  // Si el slug base no existe, usarlo
+  if (!existingSlugs.includes(baseSlug)) {
+    return baseSlug;
+  }
+
+  // Encontrar el siguiente número disponible
+  let counter = 2;
+  while (existingSlugs.includes(`${baseSlug}-${counter}`)) {
+    counter++;
+  }
+
+  return `${baseSlug}-${counter}`;
+};
+
 const updateProductSchema = createProductSchema.partial();
 
 const querySchema = z.object({
@@ -390,11 +431,10 @@ export class ProductsController {
       const userId = (req as any).user?.userId;
       logger.info(`👤 Usuario: ${userId}`);
 
-      // Generate slug if not provided
-      const slug = data.slug || data.name
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
+      // Generate unique slug
+      const slug = data.slug
+        ? await generateUniqueSlug(data.slug)
+        : await generateUniqueSlug(data.name);
 
       const result = await getPool().query(
         `INSERT INTO products (
@@ -489,6 +529,13 @@ export class ProductsController {
 
       // Extraer images para manejar por separado (NO debe ir al UPDATE de products)
       const { images, ...productData } = data;
+
+      // Si se proporciona un nuevo slug o nombre, generar slug único
+      if (productData.slug || productData.name) {
+        const slugSource = productData.slug || productData.name;
+        productData.slug = await generateUniqueSlug(slugSource as string, parseInt(id));
+        logger.info(`🔗 Slug generado: ${productData.slug}`);
+      }
 
       logger.info('🔍 Buscando producto existente...');
 
@@ -668,6 +715,73 @@ export class ProductsController {
         message: 'Producto eliminado exitosamente',
       });
     } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Fix duplicate slugs
+   * POST /api/v1/products/fix-slugs
+   */
+  static async fixDuplicateSlugs(req: Request, res: Response, next: NextFunction) {
+    try {
+      logger.info('🔧 Iniciando corrección de slugs duplicados...');
+
+      // Encontrar todos los slugs duplicados
+      const duplicatesResult = await getPool().query(`
+        SELECT slug, COUNT(*) as count, array_agg(id ORDER BY id) as ids
+        FROM products
+        GROUP BY slug
+        HAVING COUNT(*) > 1
+      `);
+
+      if (duplicatesResult.rows.length === 0) {
+        return res.json({
+          success: true,
+          message: 'No se encontraron slugs duplicados',
+          fixed: 0,
+        });
+      }
+
+      let fixedCount = 0;
+      const fixes: Array<{ id: number; oldSlug: string; newSlug: string }> = [];
+
+      for (const row of duplicatesResult.rows) {
+        const ids = row.ids as number[];
+        const baseSlug = row.slug;
+
+        // El primer producto mantiene el slug original
+        // Los demás reciben un sufijo numérico
+        for (let i = 1; i < ids.length; i++) {
+          const productId = ids[i];
+          const newSlug = `${baseSlug}-${i + 1}`;
+
+          await getPool().query(
+            'UPDATE products SET slug = $1 WHERE id = $2',
+            [newSlug, productId]
+          );
+
+          fixes.push({
+            id: productId,
+            oldSlug: baseSlug,
+            newSlug: newSlug,
+          });
+
+          fixedCount++;
+          logger.info(`✅ Producto ${productId}: ${baseSlug} -> ${newSlug}`);
+        }
+      }
+
+      logger.info(`🎉 Corrección completada. ${fixedCount} slugs actualizados.`);
+
+      res.json({
+        success: true,
+        message: `Se corrigieron ${fixedCount} slugs duplicados`,
+        fixed: fixedCount,
+        details: fixes,
+      });
+    } catch (error) {
+      logger.error('❌ Error al corregir slugs:', error);
       next(error);
     }
   }
