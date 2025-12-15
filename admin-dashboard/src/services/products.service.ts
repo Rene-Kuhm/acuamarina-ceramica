@@ -1,70 +1,87 @@
 import { apiClient } from '@/lib/api/client';
 import { Product, CreateProductDTO, PaginatedResponse } from '@/types';
 
-// Backend Product interface (snake_case) - solo para RESPONSES
+// Backend Product interface - El backend ya envía en camelCase (transformProductToAPI)
+// pero algunos endpoints pueden enviar en snake_case, así que soportamos ambos
 interface BackendProduct {
   id: string;
   sku: string;
   name: string;
   slug: string;
   description?: string;
+  shortDescription?: string;
   short_description?: string;
+  categoryId?: string;
   category_id?: string;
+  categoryName?: string;
   category_name?: string;
+  categorySlug?: string;
   category_slug?: string;
   price: number;
+  comparePrice?: number;
   compare_price?: number;
+  costPrice?: number;
   cost_price?: number;
   dimensions?: string;
   weight?: number;
   material?: string;
   finish?: string;
   color?: string;
+  metaTitle?: string;
   meta_title?: string;
+  metaDescription?: string;
   meta_description?: string;
   keywords?: string;
-  is_active: boolean;
-  is_featured: boolean;
-  stock_quantity: number;
-  low_stock_threshold: number;
-  views_count: number;
-  sales_count: number;
+  isActive: boolean;
+  is_active?: boolean;
+  isFeatured: boolean;
+  is_featured?: boolean;
+  stockQuantity: number;
+  stock_quantity?: number;
+  lowStockThreshold: number;
+  low_stock_threshold?: number;
+  viewsCount?: number;
+  views_count?: number;
+  salesCount?: number;
+  sales_count?: number;
   images?: string[];
-  created_at: string;
-  updated_at: string;
+  createdAt?: string;
+  created_at?: string;
+  updatedAt?: string;
+  updated_at?: string;
 }
 
-// Transform backend (snake_case) to frontend (camelCase)
+// Transform backend to frontend - soporta tanto camelCase como snake_case
 const transformProduct = (backend: BackendProduct): Product => ({
   id: backend.id,
   sku: backend.sku,
   name: backend.name,
   slug: backend.slug,
   description: backend.description,
-  shortDescription: backend.short_description,
-  categoryId: backend.category_id,
-  categoryName: backend.category_name,
-  categorySlug: backend.category_slug,
+  shortDescription: backend.shortDescription || backend.short_description,
+  categoryId: backend.categoryId || backend.category_id,
+  categoryName: backend.categoryName || backend.category_name,
+  categorySlug: backend.categorySlug || backend.category_slug,
   price: backend.price,
-  comparePrice: backend.compare_price,
-  costPrice: backend.cost_price,
+  comparePrice: backend.comparePrice || backend.compare_price,
+  costPrice: backend.costPrice || backend.cost_price,
   dimensions: backend.dimensions,
   weight: backend.weight,
   material: backend.material,
   finish: backend.finish,
   color: backend.color,
-  metaTitle: backend.meta_title,
-  metaDescription: backend.meta_description,
+  metaTitle: backend.metaTitle || backend.meta_title,
+  metaDescription: backend.metaDescription || backend.meta_description,
   keywords: backend.keywords,
-  isActive: backend.is_active,
-  isFeatured: backend.is_featured,
-  stockQuantity: backend.stock_quantity,
-  lowStockThreshold: backend.low_stock_threshold,
-  viewsCount: backend.views_count,
-  salesCount: backend.sales_count,
+  isActive: backend.isActive ?? backend.is_active ?? true,
+  isFeatured: backend.isFeatured ?? backend.is_featured ?? false,
+  stockQuantity: backend.stockQuantity ?? backend.stock_quantity ?? 0,
+  lowStockThreshold: backend.lowStockThreshold ?? backend.low_stock_threshold ?? 5,
+  viewsCount: backend.viewsCount ?? backend.views_count ?? 0,
+  salesCount: backend.salesCount ?? backend.sales_count ?? 0,
   images: backend.images,
-  createdAt: backend.created_at,
-  updatedAt: backend.updated_at,
+  createdAt: backend.createdAt || backend.created_at || '',
+  updatedAt: backend.updatedAt || backend.updated_at || '',
 });
 
 export const productsService = {
