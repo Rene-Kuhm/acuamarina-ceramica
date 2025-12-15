@@ -55,8 +55,7 @@ export default function CheckoutPage() {
 
   const totalItems = getTotalItems();
   const subtotal = getTotalPrice();
-  const shipping = subtotal > 200000 ? 0 : 5000;
-  const total = subtotal + shipping;
+  const total = subtotal; // El envío se coordina por separado
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("es-AR", {
@@ -455,11 +454,12 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Envío</span>
-                    <span className={shipping === 0 ? "text-green-600 font-medium" : "font-medium"}>
-                      {shipping === 0 ? "¡Gratis!" : formatPrice(shipping)}
-                    </span>
+                    <span className="font-medium text-amber-600">A convenir</span>
                   </div>
                 </div>
+                <p className="text-xs text-gray-500">
+                  El costo de envío se coordinará según tu ubicación después de la compra.
+                </p>
                 <Separator />
                 <div className="flex justify-between text-lg font-bold">
                   <span>Total</span>

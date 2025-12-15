@@ -57,8 +57,7 @@ export default function CarritoPage() {
 
   const totalItems = getTotalItems();
   const subtotal = getTotalPrice();
-  const shipping = subtotal > 200000 ? 0 : 5000;
-  const total = subtotal + shipping;
+  const total = subtotal; // El envío se coordina por separado
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("es-AR", {
@@ -139,16 +138,13 @@ export default function CarritoPage() {
           )}
         </div>
 
-        {/* Free Shipping Alert */}
-        {subtotal < 200000 && (
-          <Alert className="mb-6 border-[#14b8a6] bg-[#f0fdfa]">
-            <AlertCircle className="h-4 w-4 text-[#14b8a6]" />
-            <AlertDescription className="text-gray-900">
-              Agrega {formatPrice(200000 - subtotal)} más para obtener{" "}
-              <strong>envío gratis a partir de $200.000</strong>
-            </AlertDescription>
-          </Alert>
-        )}
+        {/* Shipping Info */}
+        <Alert className="mb-6 border-[#14b8a6] bg-[#f0fdfa]">
+          <AlertCircle className="h-4 w-4 text-[#14b8a6]" />
+          <AlertDescription className="text-gray-900">
+            El costo de envío se coordina según tu ubicación. Nos contactaremos después de tu compra para acordar la mejor opción.
+          </AlertDescription>
+        </Alert>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
@@ -268,9 +264,7 @@ export default function CarritoPage() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Envío</span>
-                    <span className={shipping === 0 ? "text-green-600 font-bold" : "font-semibold text-gray-900"}>
-                      {shipping === 0 ? "¡GRATIS!" : formatPrice(shipping)}
-                    </span>
+                    <span className="font-semibold text-amber-600">A convenir</span>
                   </div>
                 </div>
 
