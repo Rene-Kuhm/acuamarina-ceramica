@@ -56,7 +56,9 @@ const transformCategory = (backendCategory: BackendCategory): Category => ({
 
 export const categoriesService = {
   getAll: async (activeOnly: boolean = false): Promise<Category[]> => {
-    const params = activeOnly ? '?activeOnly=true' : '';
+    // Por defecto obtener todas las categorías (activas e inactivas) para el admin
+    // Enviar activeOnly=false para asegurar que el backend devuelva todas
+    const params = activeOnly ? '?activeOnly=true' : '?activeOnly=false';
     const response = await apiClient.get<ApiResponse<BackendCategory[]>>(`/categories${params}`);
     return response.data.map(transformCategory);
   },

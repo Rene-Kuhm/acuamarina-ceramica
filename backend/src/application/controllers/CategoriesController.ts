@@ -31,9 +31,13 @@ export class CategoriesController {
    */
   static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const { includeInactive } = req.query;
+      const { includeInactive, activeOnly } = req.query;
 
-      const whereClause = includeInactive === 'true' ? '' : 'WHERE c.is_active = true';
+      // Soportar ambos parámetros: includeInactive=true O activeOnly=false para obtener todas
+      // Por defecto en admin: mostrar todas (incluir inactivas)
+      // activeOnly=true filtra solo activas
+      const showOnlyActive = activeOnly === 'true' || (includeInactive !== 'true' && activeOnly !== 'false');
+      const whereClause = showOnlyActive ? 'WHERE c.is_active = true' : '';
 
       const result = await getPool().query(
         `SELECT

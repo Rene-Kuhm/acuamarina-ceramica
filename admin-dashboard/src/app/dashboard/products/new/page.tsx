@@ -130,6 +130,8 @@ export default function NewProductPage() {
       const finalData = {
         ...productData,
         slug: data.slug || generateSlug(data.name),
+        // Convertir "none" a undefined para que el backend lo interprete como sin categoría
+        categoryId: data.categoryId === 'none' ? undefined : data.categoryId,
       };
 
       // 2. Crear el producto primero
@@ -415,14 +417,15 @@ export default function NewProductPage() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
+                        <SelectItem value="none">Sin categoría</SelectItem>
                         {categoriesData?.map((category) => (
                           <React.Fragment key={category.id}>
-                            <SelectItem value={category.id}>
+                            <SelectItem value={category.id} className="font-medium">
                               {category.name}
                             </SelectItem>
                             {category.children?.map((child) => (
-                              <SelectItem key={child.id} value={child.id} className="pl-6">
-                                {child.name}
+                              <SelectItem key={child.id} value={child.id} className="pl-6 text-muted-foreground">
+                                ↳ {child.name}
                               </SelectItem>
                             ))}
                           </React.Fragment>
