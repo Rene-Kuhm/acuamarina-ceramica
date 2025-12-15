@@ -154,8 +154,21 @@ export const productsService = {
   },
 
   update: async (id: string, data: Partial<CreateProductDTO>): Promise<Product> => {
+    // Log para debug
+    console.log('🔄 products.service.update - Datos a enviar:', {
+      id,
+      categoryId: data.categoryId,
+      allKeys: Object.keys(data),
+    });
+
     // Backend espera camelCase, NO transformar a snake_case
     const response = await apiClient.patch<{ success: boolean; data: BackendProduct }>(`/products/${id}`, data);
+
+    console.log('✅ products.service.update - Respuesta:', {
+      categoryId: response.data.categoryId || response.data.category_id,
+      categoryName: response.data.categoryName || response.data.category_name,
+    });
+
     return transformProduct(response.data);
   },
 
