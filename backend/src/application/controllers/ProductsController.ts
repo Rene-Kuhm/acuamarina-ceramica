@@ -356,7 +356,7 @@ export class ProductsController {
 
       // Get product images
       const imagesResult = await getPool().query(
-        `SELECT * FROM product_images WHERE product_id = $1 ORDER BY display_order, created_at`,
+        `SELECT * FROM product_images WHERE product_id = $1 ORDER BY is_primary DESC, display_order, created_at`,
         [result.rows[0].id]
       );
 
