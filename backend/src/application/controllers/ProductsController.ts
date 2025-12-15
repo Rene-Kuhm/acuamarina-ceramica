@@ -97,7 +97,8 @@ const querySchema = z.object({
   page: z.string().optional(),
   limit: z.string().optional(),
   search: z.string().optional(),
-  categoryId: z.string().uuid().optional(),
+  categoryId: z.string().optional(), // Acepta ID numérico o UUID
+  category: z.string().optional(), // Acepta slug de categoría
   isActive: z.string().optional(),
   isFeatured: z.string().optional(),
   sortBy: z.enum(['name', 'price', 'created_at', 'createdAt', 'stock_quantity', 'stockQuantity']).optional(),
@@ -130,34 +131,43 @@ export class ProductsController {
       let paramCount = 1;
 
       if (query.search) {
-        conditions.push(`(name ILIKE $${paramCount} OR sku ILIKE $${paramCount} OR description ILIKE $${paramCount})`);
+        conditions.push(`(p.name ILIKE $${paramCount} OR p.sku ILIKE $${paramCount} OR p.description ILIKE $${paramCount})`);
         params.push(`%${query.search}%`);
         paramCount++;
       }
 
+      // Filtrar por categoryId (numérico o UUID) o por category (slug)
       if (query.categoryId) {
-        conditions.push(`category_id = $${paramCount}`);
+        conditions.push(`p.category_id = $${paramCount}`);
         params.push(query.categoryId);
+        paramCount++;
+      } else if (query.category) {
+        // Buscar por slug de categoría (incluyendo subcategorías)
+        conditions.push(`(c.slug = $${paramCount} OR c.id IN (SELECT id FROM categories WHERE parent_id = (SELECT id FROM categories WHERE slug = $${paramCount})))`);
+        params.push(query.category);
         paramCount++;
       }
 
       if (query.isActive !== undefined) {
-        conditions.push(`is_active = $${paramCount}`);
+        conditions.push(`p.is_active = $${paramCount}`);
         params.push(query.isActive === 'true');
         paramCount++;
       }
 
       if (query.isFeatured !== undefined) {
-        conditions.push(`is_featured = $${paramCount}`);
+        conditions.push(`p.is_featured = $${paramCount}`);
         params.push(query.isFeatured === 'true');
         paramCount++;
       }
 
       const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
-      // Get total count
+      // Get total count (con JOIN porque puede filtrar por categoría slug)
       const countResult = await getPool().query(
-        `SELECT COUNT(*) as total FROM products ${whereClause}`,
+        `SELECT COUNT(*) as total
+         FROM products p
+         LEFT JOIN categories c ON p.category_id = c.id
+         ${whereClause}`,
         params
       );
       const total = parseInt(countResult.rows[0].total);
