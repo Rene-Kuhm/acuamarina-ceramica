@@ -82,29 +82,39 @@ export default function EditProductPage() {
       // Preparar datos incluyendo imágenes
       const imageUrls = images.map(img => img.url);
 
-      // Determinar el categoryId a enviar
-      const categoryIdToSend = formData.categoryId && formData.categoryId.trim() !== ''
-        ? formData.categoryId
-        : null; // Usar null en lugar de undefined para que se envíe al backend
+      // Construir objeto de datos limpio (solo campos con valores)
+      const dataToSend: Record<string, any> = {
+        sku: formData.sku,
+        name: formData.name,
+        slug: formData.slug,
+        price: parseFloat(formData.price),
+        stockQuantity: parseInt(formData.stockQuantity),
+        lowStockThreshold: parseInt(formData.lowStockThreshold),
+        isActive: formData.isActive,
+        isFeatured: formData.isFeatured,
+      };
 
-      console.log('📤 Enviando actualización de producto:', {
-        id,
-        categoryId: categoryIdToSend,
-        formDataCategoryId: formData.categoryId,
-      });
+      // Agregar categoryId - IMPORTANTE: enviar el valor aunque sea vacío para que el backend lo procese
+      // Si hay un UUID válido, enviarlo; si no, enviar null para limpiar la categoría
+      if (formData.categoryId && formData.categoryId.trim() !== '') {
+        dataToSend.categoryId = formData.categoryId;
+      } else {
+        dataToSend.categoryId = null;
+      }
+
+      // Agregar campos opcionales solo si tienen valor
+      if (formData.description) dataToSend.description = formData.description;
+      if (formData.shortDescription) dataToSend.shortDescription = formData.shortDescription;
+      if (formData.comparePrice) dataToSend.comparePrice = parseFloat(formData.comparePrice);
+      if (formData.dimensions) dataToSend.dimensions = formData.dimensions;
+      if (formData.material) dataToSend.material = formData.material;
+      if (formData.finish) dataToSend.finish = formData.finish;
+      if (formData.color) dataToSend.color = formData.color;
+      if (imageUrls.length > 0) dataToSend.images = imageUrls;
 
       await updateProduct.mutateAsync({
         id,
-        data: {
-          ...formData,
-          // Usar null para quitar categoría, o el UUID para asignarla
-          categoryId: categoryIdToSend,
-          price: parseFloat(formData.price),
-          comparePrice: formData.comparePrice ? parseFloat(formData.comparePrice) : undefined,
-          stockQuantity: parseInt(formData.stockQuantity),
-          lowStockThreshold: parseInt(formData.lowStockThreshold),
-          images: imageUrls.length > 0 ? imageUrls : undefined,
-        },
+        data: dataToSend,
       });
 
       router.push('/dashboard/products');

@@ -190,19 +190,9 @@ export class ProductsController {
       }
 
       // Transform products to match frontend expectations (camelCase)
-      const transformedProducts = result.rows.map(product => {
-        // Log para depuración de categorías
-        if (product.category_id) {
-          logger.info(`📦 Producto "${product.name}": category_id=${product.category_id}, category_name=${product.category_name || 'NULL'}`);
-        }
-        return transformProductToAPI(product, imagesMap[product.id] || []);
-      });
-
-      // Log del primer producto con categoría para verificar transformación
-      const productWithCategory = transformedProducts.find(p => p.categoryId);
-      if (productWithCategory) {
-        logger.info(`🔍 Producto con categoría transformado: categoryId=${productWithCategory.categoryId}, categoryName=${productWithCategory.categoryName || 'NULL'}`);
-      }
+      const transformedProducts = result.rows.map(product =>
+        transformProductToAPI(product, imagesMap[product.id] || [])
+      );
 
       res.json({
         success: true,
@@ -509,18 +499,10 @@ export class ProductsController {
       const values: any[] = [];
       let paramCount = 1;
 
-      // Log específico para categoryId
-      logger.info(`🏷️ categoryId recibido: ${JSON.stringify(productData.categoryId)} (tipo: ${typeof productData.categoryId})`);
-
       Object.entries(productData).forEach(([key, value]) => {
-        // Incluir valores que no son undefined (null es válido para quitar categoría)
+        // Incluir valores que no son undefined (null ES válido para quitar categoría)
         if (value !== undefined) {
           const snakeKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-
-          // Log para categoryId
-          if (key === 'categoryId') {
-            logger.info(`🏷️ Procesando categoryId: key=${key}, snakeKey=${snakeKey}, value=${value}`);
-          }
 
           // Manejar campos JSONB especialmente
           if (JSONB_FIELDS.includes(key)) {
@@ -530,21 +512,19 @@ export class ProductsController {
               values.push(jsonValue);
               paramCount++;
             }
-            // Si es null, no incluir en el UPDATE (mantener valor actual)
           } else {
             // Para strings vacíos en campos opcionales, convertir a null
-            const finalValue = (value === '' && ['material', 'finish', 'color', 'shortDescription', 'metaTitle', 'metaDescription', 'keywords', 'categoryId'].includes(key))
-              ? null
-              : value;
+            let finalValue = value;
+            if (value === '' && ['material', 'finish', 'color', 'shortDescription', 'metaTitle', 'metaDescription', 'keywords', 'categoryId'].includes(key)) {
+              finalValue = null;
+            }
+
             updates.push(`${snakeKey} = $${paramCount}`);
             values.push(finalValue);
             paramCount++;
           }
         }
       });
-
-      logger.info(`🔧 Updates (${updates.length}): ${updates.length > 0 ? updates.join(', ') : 'NINGUNO'}`);
-      logger.info(`📊 Values (${values.length}): ${JSON.stringify(values)}`);
 
       // Si no hay nada que actualizar, retornar el producto existente
       if (updates.length === 0 && (!images || images.length === 0)) {

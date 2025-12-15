@@ -107,31 +107,7 @@ export const productsService = {
       pagination: { page: number; limit: number; total: number; totalPages: number };
     }>(`/products?${queryParams.toString()}`);
 
-    // Log para depuración - ver qué devuelve el backend
-    if (response.data && response.data.length > 0) {
-      const firstWithCategory = response.data.find(p => p.categoryId || p.category_id);
-      if (firstWithCategory) {
-        console.log('🔍 Backend response - producto con categoría:', {
-          name: firstWithCategory.name,
-          categoryId: firstWithCategory.categoryId || firstWithCategory.category_id,
-          categoryName: firstWithCategory.categoryName || firstWithCategory.category_name,
-        });
-      } else {
-        console.log('⚠️ Ningún producto tiene categoría asignada');
-      }
-    }
-
     const transformedData = response.data.map(transformProduct);
-
-    // Log después de transformar
-    const transformedWithCategory = transformedData.find(p => p.categoryId);
-    if (transformedWithCategory) {
-      console.log('✅ Después de transformar:', {
-        name: transformedWithCategory.name,
-        categoryId: transformedWithCategory.categoryId,
-        categoryName: transformedWithCategory.categoryName,
-      });
-    }
 
     return {
       data: transformedData,
@@ -154,21 +130,8 @@ export const productsService = {
   },
 
   update: async (id: string, data: Partial<CreateProductDTO>): Promise<Product> => {
-    // Log para debug
-    console.log('🔄 products.service.update - Datos a enviar:', {
-      id,
-      categoryId: data.categoryId,
-      allKeys: Object.keys(data),
-    });
-
-    // Backend espera camelCase, NO transformar a snake_case
+    // Backend espera camelCase
     const response = await apiClient.patch<{ success: boolean; data: BackendProduct }>(`/products/${id}`, data);
-
-    console.log('✅ products.service.update - Respuesta:', {
-      categoryId: response.data.categoryId || response.data.category_id,
-      categoryName: response.data.categoryName || response.data.category_name,
-    });
-
     return transformProduct(response.data);
   },
 
