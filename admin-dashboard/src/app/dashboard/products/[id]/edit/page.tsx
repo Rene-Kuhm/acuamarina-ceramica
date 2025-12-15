@@ -112,10 +112,17 @@ export default function EditProductPage() {
       if (formData.color) dataToSend.color = formData.color;
       if (imageUrls.length > 0) dataToSend.images = imageUrls;
 
-      await updateProduct.mutateAsync({
+      console.log('📤 Datos a enviar al backend:', JSON.stringify(dataToSend, null, 2));
+      console.log('📤 categoryId específico:', dataToSend.categoryId);
+
+      const result = await updateProduct.mutateAsync({
         id,
         data: dataToSend,
       });
+
+      console.log('✅ Respuesta del backend:', result);
+      console.log('✅ categoryId en respuesta:', result.categoryId);
+      console.log('✅ categoryName en respuesta:', result.categoryName);
 
       router.push('/dashboard/products');
     } catch (error: any) {
@@ -359,7 +366,10 @@ export default function EditProductPage() {
                     id="categoryId"
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     value={formData.categoryId}
-                    onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+                    onChange={(e) => {
+                      console.log('🔄 Categoría seleccionada:', e.target.value);
+                      setFormData({ ...formData, categoryId: e.target.value });
+                    }}
                   >
                     <option value="">Sin categoría</option>
                     {categories?.map((cat) => (
