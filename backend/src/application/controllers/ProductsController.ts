@@ -514,7 +514,7 @@ export class ProductsController {
             // Si es null, no incluir en el UPDATE (mantener valor actual)
           } else {
             // Para strings vacíos en campos opcionales, convertir a null
-            const finalValue = (value === '' && ['material', 'finish', 'color', 'shortDescription', 'metaTitle', 'metaDescription', 'keywords'].includes(key))
+            const finalValue = (value === '' && ['material', 'finish', 'color', 'shortDescription', 'metaTitle', 'metaDescription', 'keywords', 'categoryId'].includes(key))
               ? null
               : value;
             updates.push(`${snakeKey} = $${paramCount}`);

@@ -86,6 +86,8 @@ export default function EditProductPage() {
         id,
         data: {
           ...formData,
+          // Convertir categoryId vacío a undefined para que el backend lo interprete como NULL
+          categoryId: formData.categoryId && formData.categoryId.trim() !== '' ? formData.categoryId : undefined,
           price: parseFloat(formData.price),
           comparePrice: formData.comparePrice ? parseFloat(formData.comparePrice) : undefined,
           stockQuantity: parseInt(formData.stockQuantity),
