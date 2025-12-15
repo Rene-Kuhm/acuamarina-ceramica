@@ -82,12 +82,23 @@ export default function EditProductPage() {
       // Preparar datos incluyendo imágenes
       const imageUrls = images.map(img => img.url);
 
+      // Determinar el categoryId a enviar
+      const categoryIdToSend = formData.categoryId && formData.categoryId.trim() !== ''
+        ? formData.categoryId
+        : null; // Usar null en lugar de undefined para que se envíe al backend
+
+      console.log('📤 Enviando actualización de producto:', {
+        id,
+        categoryId: categoryIdToSend,
+        formDataCategoryId: formData.categoryId,
+      });
+
       await updateProduct.mutateAsync({
         id,
         data: {
           ...formData,
-          // Convertir categoryId vacío a undefined para que el backend lo interprete como NULL
-          categoryId: formData.categoryId && formData.categoryId.trim() !== '' ? formData.categoryId : undefined,
+          // Usar null para quitar categoría, o el UUID para asignarla
+          categoryId: categoryIdToSend,
           price: parseFloat(formData.price),
           comparePrice: formData.comparePrice ? parseFloat(formData.comparePrice) : undefined,
           stockQuantity: parseInt(formData.stockQuantity),

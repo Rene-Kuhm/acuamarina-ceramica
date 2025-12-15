@@ -509,9 +509,18 @@ export class ProductsController {
       const values: any[] = [];
       let paramCount = 1;
 
+      // Log específico para categoryId
+      logger.info(`🏷️ categoryId recibido: ${JSON.stringify(productData.categoryId)} (tipo: ${typeof productData.categoryId})`);
+
       Object.entries(productData).forEach(([key, value]) => {
+        // Incluir valores que no son undefined (null es válido para quitar categoría)
         if (value !== undefined) {
           const snakeKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+
+          // Log para categoryId
+          if (key === 'categoryId') {
+            logger.info(`🏷️ Procesando categoryId: key=${key}, snakeKey=${snakeKey}, value=${value}`);
+          }
 
           // Manejar campos JSONB especialmente
           if (JSONB_FIELDS.includes(key)) {
