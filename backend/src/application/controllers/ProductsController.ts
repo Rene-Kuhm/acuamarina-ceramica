@@ -192,14 +192,14 @@ export class ProductsController {
         const debugQuery = await getPool().query(`
           SELECT id, name, slug, parent_id FROM categories
           WHERE LOWER(slug) = LOWER($1)
-          OR parent_id = (SELECT id FROM categories WHERE LOWER(slug) = LOWER($1))
+          OR parent_id IN (SELECT id FROM categories WHERE LOWER(slug) = LOWER($1))
         `, [query.category]);
         logger.info(`📂 Categorías encontradas: ${JSON.stringify(debugQuery.rows)}`);
 
         conditions.push(`p.category_id IN (
           SELECT id FROM categories WHERE LOWER(slug) = LOWER($${paramCount})
           UNION
-          SELECT id FROM categories WHERE parent_id = (SELECT id FROM categories WHERE LOWER(slug) = LOWER($${paramCount}))
+          SELECT id FROM categories WHERE parent_id IN (SELECT id FROM categories WHERE LOWER(slug) = LOWER($${paramCount}))
         )`);
         params.push(query.category);
         paramCount++;
