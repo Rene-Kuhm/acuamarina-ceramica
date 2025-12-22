@@ -186,6 +186,16 @@ export class ProductsController {
         // Buscar por slug de categoría (incluyendo subcategorías)
         // Si es una categoría padre, mostrar productos de ella + todas sus subcategorías
         // Si es una subcategoría, mostrar solo productos de esa subcategoría
+        logger.info(`🔍 Filtrando por categoría slug: "${query.category}"`);
+
+        // Debug: verificar qué categorías coinciden
+        const debugQuery = await getPool().query(`
+          SELECT id, name, slug, parent_id FROM categories
+          WHERE slug = $1
+          OR parent_id = (SELECT id FROM categories WHERE slug = $1)
+        `, [query.category]);
+        logger.info(`📂 Categorías encontradas: ${JSON.stringify(debugQuery.rows)}`);
+
         conditions.push(`p.category_id IN (
           SELECT id FROM categories WHERE slug = $${paramCount}
           UNION
