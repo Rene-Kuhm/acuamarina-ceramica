@@ -146,7 +146,7 @@ function ProductosContent() {
             {!productsLoading && products.length > 0 && (
               <div className="mt-6 sm:mt-8">
                 <ProductPagination
-                  currentPage={meta.page}
+                  currentPage={filters.page || 1}
                   totalPages={meta.totalPages}
                   total={meta.total}
                   limit={meta.limit}

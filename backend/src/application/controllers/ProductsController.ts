@@ -184,7 +184,13 @@ export class ProductsController {
         paramCount++;
       } else if (query.category) {
         // Buscar por slug de categoría (incluyendo subcategorías)
-        conditions.push(`(c.slug = $${paramCount} OR c.id IN (SELECT id FROM categories WHERE parent_id = (SELECT id FROM categories WHERE slug = $${paramCount})))`);
+        // Si es una categoría padre, mostrar productos de ella + todas sus subcategorías
+        // Si es una subcategoría, mostrar solo productos de esa subcategoría
+        conditions.push(`(
+          c.slug = $${paramCount}
+          OR c.parent_id = (SELECT id FROM categories WHERE slug = $${paramCount})
+          OR p.category_id = (SELECT id FROM categories WHERE slug = $${paramCount})
+        )`);
         params.push(query.category);
         paramCount++;
       }
