@@ -186,10 +186,10 @@ export class ProductsController {
         // Buscar por slug de categoría (incluyendo subcategorías)
         // Si es una categoría padre, mostrar productos de ella + todas sus subcategorías
         // Si es una subcategoría, mostrar solo productos de esa subcategoría
-        conditions.push(`(
-          c.slug = $${paramCount}
-          OR c.parent_id = (SELECT id FROM categories WHERE slug = $${paramCount})
-          OR p.category_id = (SELECT id FROM categories WHERE slug = $${paramCount})
+        conditions.push(`p.category_id IN (
+          SELECT id FROM categories WHERE slug = $${paramCount}
+          UNION
+          SELECT id FROM categories WHERE parent_id = (SELECT id FROM categories WHERE slug = $${paramCount})
         )`);
         params.push(query.category);
         paramCount++;

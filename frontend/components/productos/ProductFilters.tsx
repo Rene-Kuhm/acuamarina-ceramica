@@ -59,8 +59,12 @@ export function ProductFilters({ className, categories = [] }: ProductFiltersPro
   // Debounce search input
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (searchValue !== filters.search) {
-        updateFilters({ search: searchValue || undefined });
+      // Normalizar valores para comparación: "" y undefined son equivalentes
+      const normalizedSearchValue = searchValue || undefined;
+      const normalizedFilterSearch = filters.search || undefined;
+
+      if (normalizedSearchValue !== normalizedFilterSearch) {
+        updateFilters({ search: normalizedSearchValue });
       }
     }, 300);
 
