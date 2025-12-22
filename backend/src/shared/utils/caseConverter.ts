@@ -57,3 +57,25 @@ export function transformProductToAPI(product: any, images: string[] = []): any 
     updatedAt: product.updated_at,
   };
 }
+
+/**
+ * Transform category data from database format to API format
+ */
+export function transformCategoryToAPI(category: any): any {
+  return {
+    id: category.id,
+    name: category.name,
+    slug: category.slug,
+    description: category.description,
+    imageUrl: category.image || category.image_url,
+    parentId: category.parent_id,
+    parentName: category.parent_name,
+    displayOrder: category.display_order,
+    isActive: category.is_active,
+    productCount: parseInt(category.products_count || '0'),
+    metaTitle: category.meta_title,
+    metaDescription: category.meta_description,
+    createdAt: category.created_at,
+    updatedAt: category.updated_at,
+  };
+}

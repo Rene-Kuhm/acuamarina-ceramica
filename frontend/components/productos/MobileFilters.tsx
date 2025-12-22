@@ -15,7 +15,7 @@ import { useProductFilters } from "@/lib/hooks/useProductFilters";
 export interface MobileFiltersProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  categories?: Array<{ id: number; name: string; slug: string }>;
+  categories?: Array<{ id: number; name: string; slug: string; parentId?: number | null }>;
 }
 
 /**

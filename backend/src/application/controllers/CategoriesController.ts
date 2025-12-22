@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { getPool } from '../../infrastructure/database/connection';
 import { logger } from '../../shared/utils/logger';
 import { z } from 'zod';
+import { transformCategoryToAPI } from '../../shared/utils/caseConverter';
 
 const categorySchema = z.object({
   name: z.string().min(2, 'Nombre debe tener al menos 2 caracteres'),
@@ -50,9 +51,12 @@ export class CategoriesController {
          ORDER BY c.display_order, c.name`
       );
 
+      // Transformar los datos a formato camelCase para el frontend
+      const transformedCategories = result.rows.map(transformCategoryToAPI);
+
       res.json({
         success: true,
-        data: result.rows,
+        data: transformedCategories,
       });
     } catch (error) {
       next(error);
@@ -91,14 +95,13 @@ export class CategoriesController {
         [id]
       );
 
-      const category = {
-        ...result.rows[0],
-        subcategories: subcategoriesResult.rows,
-      };
+      // Transformar categoría y subcategorías
+      const transformedCategory = transformCategoryToAPI(result.rows[0]);
+      transformedCategory.subcategories = subcategoriesResult.rows.map(transformCategoryToAPI);
 
       res.json({
         success: true,
-        data: category,
+        data: transformedCategory,
       });
     } catch (error) {
       next(error);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, X, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils";
 
 export interface ProductFiltersProps {
   className?: string;
-  categories?: Array<{ id: number; name: string; slug: string }>;
+  categories?: Array<{ id: number; name: string; slug: string; parentId?: number | null }>;
 }
 
 /**
@@ -34,6 +34,18 @@ export interface ProductFiltersProps {
 export function ProductFilters({ className, categories = [] }: ProductFiltersProps) {
   const { filters, updateFilters, clearFilters, hasActiveFilters, activeFilterCount } =
     useProductFilters();
+
+  // Organizar categorías jerárquicamente
+  const organizedCategories = useMemo(() => {
+    const parentCategories = categories.filter(c => !c.parentId);
+    const childCategories = categories.filter(c => c.parentId);
+
+    // Crear estructura jerárquica
+    return parentCategories.map(parent => ({
+      ...parent,
+      children: childCategories.filter(child => child.parentId === parent.id)
+    }));
+  }, [categories]);
 
   // Local state for inputs to enable debouncing
   const [searchValue, setSearchValue] = useState(filters.search || "");
@@ -146,24 +158,50 @@ export function ProductFilters({ className, categories = [] }: ProductFiltersPro
               Categoría
             </AccordionTrigger>
             <AccordionContent>
-              <Select
+              <RadioGroup
                 value={filters.category || "all"}
                 onValueChange={(value) =>
                   updateFilters({ category: value === "all" ? undefined : value })
                 }
+                className="space-y-2"
               >
-                <SelectTrigger id="category">
-                  <SelectValue placeholder="Todas las categorías" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todas las categorías</SelectItem>
-                  {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.slug}>
-                      {category.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="all" id="cat-all" />
+                  <Label htmlFor="cat-all" className="font-normal cursor-pointer text-gray-700">
+                    Todas las categorías
+                  </Label>
+                </div>
+                {organizedCategories.map((parent) => (
+                  <div key={parent.id} className="space-y-2">
+                    {/* Categoría padre */}
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value={parent.slug} id={`cat-${parent.id}`} />
+                      <Label
+                        htmlFor={`cat-${parent.id}`}
+                        className="font-medium cursor-pointer text-gray-900"
+                      >
+                        {parent.name}
+                      </Label>
+                    </div>
+                    {/* Subcategorías */}
+                    {parent.children && parent.children.length > 0 && (
+                      <div className="ml-6 space-y-2 border-l-2 border-gray-200 pl-3">
+                        {parent.children.map((child) => (
+                          <div key={child.id} className="flex items-center space-x-2">
+                            <RadioGroupItem value={child.slug} id={`cat-${child.id}`} />
+                            <Label
+                              htmlFor={`cat-${child.id}`}
+                              className="font-normal cursor-pointer text-gray-600 text-sm"
+                            >
+                              {child.name}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </RadioGroup>
             </AccordionContent>
           </AccordionItem>
         )}

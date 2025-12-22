@@ -8,6 +8,9 @@ export interface Categoria {
   imageUrl?: string;
   isActive: boolean;
   productCount?: number;
+  parentId?: number | null;
+  parentName?: string | null;
+  subcategories?: Categoria[];
   createdAt: string;
   updatedAt: string;
 }
