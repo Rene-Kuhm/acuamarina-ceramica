@@ -5,7 +5,14 @@
  * Previene errores de .trim() cuando categoryId es number
  */
 
-export function safeCategoryId(categoryId: any): string {
+type CategoryValue = string | number | null | undefined | object;
+
+interface ProductWithCategory {
+  categoryId: string | number;
+  [key: string]: unknown;
+}
+
+export function safeCategoryId(categoryId: CategoryValue): string {
   // Si es null, undefined, o falsy (excepto 0), retorna string vacío
   if (!categoryId && categoryId !== 0) {
     return '';
@@ -33,7 +40,7 @@ export function safeCategoryId(categoryId: any): string {
 /**
  * Función segura para trim que no falla nunca
  */
-export function safeTrim(value: any): string {
+export function safeTrim(value: CategoryValue): string {
   const safeValue = safeCategoryId(value);
   return safeValue.trim();
 }
@@ -42,7 +49,7 @@ export function safeTrim(value: any): string {
  * Función de comparación segura para ordenamiento por categoryId en frontend
  * Reemplaza: productos.sort((a, b) => a.categoryId.trim().localeCompare(b.categoryId.trim()))
  */
-export function compareByCategoryId(a: any, b: any): number {
+export function compareByCategoryId(a: ProductWithCategory, b: ProductWithCategory): number {
   const categoryA = safeTrim(a.categoryId);
   const categoryB = safeTrim(b.categoryId);
   return categoryA.localeCompare(categoryB);
@@ -51,7 +58,7 @@ export function compareByCategoryId(a: any, b: any): number {
 /**
  * Función de filtrado seguro por categoryId en frontend
  */
-export function filterByCategoryId(productos: any[], targetCategoryId: any): any[] {
+export function filterByCategoryId(productos: ProductWithCategory[], targetCategoryId: CategoryValue): ProductWithCategory[] {
   const targetId = safeTrim(targetCategoryId);
   
   return productos.filter(producto => {
@@ -63,7 +70,7 @@ export function filterByCategoryId(productos: any[], targetCategoryId: any): any
 /**
  * Comparación segura por categoryId numérico (respeta que sea number)
  */
-export function compareByCategoryIdNumeric(a: any, b: any): number {
+export function compareByCategoryIdNumeric(a: ProductWithCategory, b: ProductWithCategory): number {
   const categoryA = typeof a.categoryId === 'number' ? a.categoryId : Number(a.categoryId) || 0;
   const categoryB = typeof b.categoryId === 'number' ? b.categoryId : Number(b.categoryId) || 0;
   return categoryA - categoryB;
