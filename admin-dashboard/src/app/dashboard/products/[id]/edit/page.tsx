@@ -52,7 +52,7 @@ export default function EditProductPage() {
         shortDescription: productData.shortDescription || '',
         price: productData.price?.toString() || '',
         comparePrice: productData.comparePrice?.toString() || '',
-        categoryId: productData.categoryId || '',
+        categoryId: String(productData.categoryId ?? ''),
         dimensions: productData.dimensions || '',
         material: productData.material || '',
         finish: productData.finish || '',
@@ -96,8 +96,9 @@ export default function EditProductPage() {
 
       // Agregar categoryId - IMPORTANTE: enviar el valor aunque sea vacío para que el backend lo procese
       // Si hay un UUID válido, enviarlo; si no, enviar null para limpiar la categoría
-      if (formData.categoryId && formData.categoryId.trim() !== '') {
-        dataToSend.categoryId = formData.categoryId;
+      const categoryIdStr = String(formData.categoryId ?? '').trim();
+      if (categoryIdStr !== '') {
+        dataToSend.categoryId = categoryIdStr;
       } else {
         dataToSend.categoryId = null;
       }
