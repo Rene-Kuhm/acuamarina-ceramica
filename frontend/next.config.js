@@ -1,43 +1,53 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  // Configuración para Railway - Fix Server Actions
-  experimental: {
-    serverActions: {
-      allowedOrigins: ['aguamarinamosaicos.com', '*.railway.app'],
-    },
-  },
-  
-  // Optimizaciones para producción en Railway
-  output: 'standalone',
-  
-  // Prevenir conflictos de caché entre deployments
-  generateBuildId: async () => {
-    return `build-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  },
-  
-  // Headers para evitar caché de Server Actions
-  async headers() {
-    return [
-      {
-        source: '/_next/static/chunks/pages/(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'no-cache, no-store, must-revalidate',
-          },
-        ],
-      },
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-        ],
-      },
-    ];
-  },
-};
-
-module.exports = nextConfig;
+ /** @type {import('next').NextConfig} */                                                                                                                                                                                                                                                 
+  const nextConfig = {                                                                                                                                                                                                                                                                     
+    // Configuración de imágenes para Cloudinary                                                                                                                                                                                                                                           
+    images: {                                                                                                                                                                                                                                                                              
+      remotePatterns: [                                                                                                                                                                                                                                                                    
+        {                                                                                                                                                                                                                                                                                  
+          protocol: 'https',                                                                                                                                                                                                                                                               
+          hostname: 'res.cloudinary.com',                                                                                                                                                                                                                                                  
+        },                                                                                                                                                                                                                                                                                 
+      ],                                                                                                                                                                                                                                                                                   
+    },                                                                                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                                                                           
+    // Configuración para Railway - Fix Server Actions                                                                                                                                                                                                                                     
+    experimental: {                                                                                                                                                                                                                                                                        
+      serverActions: {                                                                                                                                                                                                                                                                     
+        allowedOrigins: ['aguamarinamosaicos.com', '*.railway.app'],                                                                                                                                                                                                                       
+      },                                                                                                                                                                                                                                                                                   
+    },                                                                                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                                                                           
+    // Optimizaciones para producción en Railway                                                                                                                                                                                                                                           
+    output: 'standalone',                                                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                                                           
+    // Prevenir conflictos de caché entre deployments                                                                                                                                                                                                                                      
+    generateBuildId: async () => {                                                                                                                                                                                                                                                         
+      return `build-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;                                                                                                                                                                                                             
+    },                                                                                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                                                                           
+    // Headers para evitar caché de Server Actions                                                                                                                                                                                                                                         
+    async headers() {                                                                                                                                                                                                                                                                      
+      return [                                                                                                                                                                                                                                                                             
+        {                                                                                                                                                                                                                                                                                  
+          source: '/_next/static/chunks/pages/(.*)',                                                                                                                                                                                                                                       
+          headers: [                                                                                                                                                                                                                                                                       
+            {                                                                                                                                                                                                                                                                              
+              key: 'Cache-Control',                                                                                                                                                                                                                                                        
+              value: 'no-cache, no-store, must-revalidate',                                                                                                                                                                                                                                
+            },                                                                                                                                                                                                                                                                             
+          ],                                                                                                                                                                                                                                                                               
+        },                                                                                                                                                                                                                                                                                 
+        {                                                                                                                                                                                                                                                                                  
+          source: '/(.*)',                                                                                                                                                                                                                                                                 
+          headers: [                                                                                                                                                                                                                                                                       
+            {                                                                                                                                                                                                                                                                              
+              key: 'X-Frame-Options',                                                                                                                                                                                                                                                      
+              value: 'DENY',                                                                                                                                                                                                                                                               
+            },                                                                                                                                                                                                                                                                             
+          ],                                                                                                                                                                                                                                                                               
+        },                                                                                                                                                                                                                                                                                 
+      ];                                                                                                                                                                                                                                                                                   
+    },                                                                                                                                                                                                                                                                                     
+  };                                                                                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                                           
+  module.exports = nextConfig;          
